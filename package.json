@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "gulp dev",
-    "test": "mocha --require test/helper.js --compilers js:babel-register --recursive",
+    "test": "multi='dot=- spec=- html-cov=coverage.html' mocha -r test/helper.js -r blanket --reporter mocha-multi --compilers js:babel-register --recursive",
     "watch": "mocha watch --compilers js:babel-register --recursive"
   },
   "browserify": {
@@ -20,6 +20,13 @@
       ],
       "brfs"
     ]
+  },
+  "config": {
+    "blanket": {
+      "pattern": "/\/app\\.js$/",
+      "data-cover-never": "[./node_modules/,./test/,./dist/]",
+      "data-cover-adapter": "node_modules/blanket/src/adapters/mocha-blanket.js"
+    }
   },
   "dependencies": {
     "async": "^1.5.2",
@@ -74,6 +81,7 @@
     "babel-register": "^6.7.2",
     "babelify": "^7.2.0",
     "beefy": "^2.1.5",
+    "blanket": "^1.2.3",
     "brfs": "^1.4.3",
     "browserify": "^13.0.0",
     "chai": "^3.5.0",
