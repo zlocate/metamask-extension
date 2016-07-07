@@ -85,7 +85,6 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
-    "jsdom": "^8.1.0",
     "jsdom-global": "^1.7.0",
     "jshint-stylish": "~0.1.5",
     "lodash.assign": "^4.0.6",
@@ -99,7 +98,8 @@
     "uglifyify": "^3.0.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.7.0"
+    "watchify": "^3.7.0",
+    "webshot": "^0.18.0"
   },
   "engines": {
     "node": ">=0.8.0"

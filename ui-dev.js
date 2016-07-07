@@ -1,5 +1,6 @@
 const React = require('react')
-const render = require('react-dom').render
+const ReactDOM = require('react-dom')
+const render = ReactDOM.render
 const h = require('react-hyperscript')
 const Root = require('./ui/app/root')
 const configureStore = require('./development/mockStore')
@@ -46,6 +47,17 @@ const container = document.querySelector('#app-content')
 var store = configureStore(states[selectedView])
 
 class DemoRoot extends React.Component {
+
+  componentDidMount() {
+    // requestAnimationFrame ensures the browser finished rendering:
+    // http://stackoverflow.com/a/28748160/272576
+    window.requestAnimationFrame(() => {
+      if (window.callPhantom) {
+        window.callPhantom('takeShot')
+      }
+    })
+  }
+
   render() {
     return h('.super-dev-container', [
 
