@@ -1,3 +1,4 @@
+const React = require('react')
 const render = require('react-dom').render
 const h = require('react-hyperscript')
 const Root = require('./ui/app/root')
@@ -44,25 +45,28 @@ const container = document.querySelector('#app-content')
 // parse opts
 var store = configureStore(states[selectedView])
 
+class DemoRoot extends React.Component {
+  render() {
+    return h('.super-dev-container', [
+
+      h(Selector, { actions, selectedKey: selectedView, states, store }),
+
+      h('.mock-app-root', {
+        style: {
+          height: '500px',
+          width: '360px',
+          boxShadow: '2px 2px 5px grey',
+          margin: '20px',
+        },
+      }, [
+        h(Root, {
+         store: store,
+        }),
+      ]),
+    ])
+  }
+}
+
 // start app
-render(
-  h('.super-dev-container', [
-
-    h(Selector, { actions, selectedKey: selectedView, states, store }),
-
-    h('.mock-app-root', {
-      style: {
-        height: '500px',
-        width: '360px',
-        boxShadow: '2px 2px 5px grey',
-        margin: '20px',
-      },
-    }, [
-      h(Root, {
-       store: store,
-      }),
-    ]),
-
-  ]
-), container)
+render(h(DemoRoot), container)
 
