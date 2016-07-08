@@ -1,7 +1,26 @@
 const inherits = require('util').inherits
 const Component = require('react').Component
 const h = require('react-hyperscript')
-const metamaskLogo = require('metamask-logo')
+
+// Sorry very much for this horrible hack.
+// The app won't load in node for UI tests
+// unless we stub out the metamask-logo,
+// since there is no WebGL in the command line!
+let metamaskLogo
+let isNode = false
+if (typeof process === 'object') {
+  if (typeof process.versions === 'object') {
+    if (typeof process.versions.node !== 'undefined') {
+      isNode = true
+    }
+  }
+}
+if (!isNode) {
+  metamaskLogo = require('metamask-logo')
+} else {
+  metamaskLogo = function() { return { canvas: null } }
+}
+
 const debounce = require('debounce')
 
 module.exports = Mascot

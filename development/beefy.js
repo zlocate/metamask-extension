@@ -5,6 +5,11 @@ const path = require('path')
 
 const port = 8124
 
+/* THIS WORKS:
+ *
+  beefy ui-dev.js:bundle.js --live --open --index=./development/index.html --cwd ./
+*/
+
 const handler = beefy({
     entries: {'mocker.js': 'bundle.js'}
   , cwd: __dirname

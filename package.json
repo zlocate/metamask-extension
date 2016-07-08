@@ -80,6 +80,7 @@
     "chai": "^3.5.0",
     "deep-freeze-strict": "^1.1.1",
     "del": "^2.2.0",
+    "enzyme": "^2.3.0",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-livereload": "^3.8.1",
     "gulp-sourcemaps": "^1.6.0",
