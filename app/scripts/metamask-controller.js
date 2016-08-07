@@ -253,19 +253,19 @@ module.exports = class MetamaskController {
   // called from popup
   setRpcTarget (rpcTarget) {
     this.configManager.setRpcTarget(rpcTarget)
-    extension.runtime.reload()
+    browser.runtime.reload()
     this.idStore.getNetwork()
   }
 
   setProviderType (type) {
     this.configManager.setProviderType(type)
-    extension.runtime.reload()
+    browser.runtime.reload()
     this.idStore.getNetwork()
   }
 
   useEtherscanProvider () {
     this.configManager.useEtherscanProvider()
-    extension.runtime.reload()
+    browser.runtime.reload()
   }
 
   buyEth (address, amount) {

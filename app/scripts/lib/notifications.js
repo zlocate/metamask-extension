@@ -25,7 +25,7 @@ function setupListeners () {
   if (!extension.notifications) return console.error('Chrome notifications API missing...')
 
   // notification button press
-  extension.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {
+  browser.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {
     var handlers = notificationHandlers[notificationId]
     if (buttonIndex === 0) {
       handlers.confirm()

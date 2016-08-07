@@ -24,7 +24,7 @@ function setupInjection(){
 
     // inject in-page script
     var scriptTag = document.createElement('script')
-    scriptTag.src = extension.extension.getURL('scripts/inpage.js')
+    scriptTag.src = browser.extension.getURL('scripts/inpage.js')
     scriptTag.textContent = inpageText
     scriptTag.onload = function () { this.parentNode.removeChild(this) }
     var container = document.head || document.documentElement
@@ -43,20 +43,20 @@ function setupStreams(){
     name: 'contentscript',
     target: 'inpage',
   })
-  pageStream.on('error', console.error.bind(console))
-  var pluginPort = extension.runtime.connect({name: 'contentscript'})
+  pageStream.on('error', console.error)
+  var pluginPort = browser.runtime.connect({name: 'contentscript'})
   var pluginStream = new PortStream(pluginPort)
-  pluginStream.on('error', console.error.bind(console))
+  pluginStream.on('error', console.error)
 
   // forward communication plugin->inpage
   pageStream.pipe(pluginStream).pipe(pageStream)
 
   // connect contentscript->inpage reload stream
   var mx = ObjectMultiplex()
-  mx.on('error', console.error.bind(console))
+  mx.on('error', console.error)
   mx.pipe(pageStream)
   var reloadStream = mx.createStream('reload')
-  reloadStream.on('error', console.error.bind(console))
+  reloadStream.on('error', console.error)
 
   // if we lose connection with the plugin, trigger tab refresh
   pluginStream.on('close', function () {
