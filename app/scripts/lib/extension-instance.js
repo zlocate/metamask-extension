@@ -51,7 +51,17 @@ function Extension () {
 
   })
 
-  this.runtime = browser.runtime
+  try {
+    if (browser) {
+      if (browser.runtime) {
+        this.runtime = browser.runtime
+      }
+
+      if (browser.browserAction) {
+        this.browserAction = browser.browserAction
+      }
+    }
+  } catch (e) {}
 }
 
 module.exports = Extension

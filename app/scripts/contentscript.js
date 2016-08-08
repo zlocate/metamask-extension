@@ -44,7 +44,7 @@ function setupStreams(){
     target: 'inpage',
   })
   pageStream.on('error', console.error)
-  var pluginPort = browser.runtime.connect({name: 'contentscript'})
+  var pluginPort = extension.runtime.connect({name: 'contentscript'})
   var pluginStream = new PortStream(pluginPort)
   pluginStream.on('error', console.error)
 

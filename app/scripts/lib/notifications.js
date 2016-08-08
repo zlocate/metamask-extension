@@ -9,6 +9,7 @@ const PendingMsgDetails = require('../../../ui/app/components/pending-msg-detail
 const MetaMaskUiCss = require('../../../ui/css')
 const extension = require('./extension')
 var notificationHandlers = {}
+let pressHandler
 
 const notifications = {
   createUnlockRequestNotification: createUnlockRequestNotification,
@@ -21,53 +22,34 @@ window.METAMASK_NOTIFIER = notifications
 setupListeners()
 
 function setupListeners () {
-  // guard for extension bug https://github.com/MetaMask/metamask-plugin/issues/236
-  if (!extension.notifications) return console.error('Chrome notifications API missing...')
 
   // notification button press
-  browser.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {
+  pressHandler = function (notificationId, buttonIndex) {
     var handlers = notificationHandlers[notificationId]
     if (buttonIndex === 0) {
       handlers.confirm()
     } else {
       handlers.cancel()
     }
-    extension.notifications.clear(notificationId)
-  })
+  }
 
-  // notification teardown
-  extension.notifications.onClosed.addListener(function (notificationId) {
-    delete notificationHandlers[notificationId]
-  })
 }
 
 // creation helper
 function createUnlockRequestNotification (opts) {
-  // guard for extension bug https://github.com/MetaMask/metamask-plugin/issues/236
-  if (!extension.notifications) return console.error('Chrome notifications API missing...')
   var message = 'An Ethereum app has requested a signature. Please unlock your account.'
-
-  var id = createId()
-  extension.notifications.create(id, {
-    type: 'basic',
-    iconUrl: '/images/icon-128.png',
-    title: opts.title,
-    message: message,
-  })
+  return alert(message)
 }
 
 function createTxNotification (state) {
-  // guard for extension bug https://github.com/MetaMask/metamask-plugin/issues/236
-  if (!extension.notifications) return console.error('Chrome notifications API missing...')
+  var msg = 'New Unsigned Tx: ' + JSON.stringify(state.txParams, null, 2)
+  var result = confirm(msg)
 
-  renderTxNotificationSVG(state, function (err, notificationSvgSource) {
-    if (err) throw err
-
-    showNotification(extend(state, {
-      title: 'New Unsigned Transaction',
-      imageUrl: toSvgUri(notificationSvgSource),
-    }))
-  })
+  if (result || !chrome.runtime) {
+    state.onConfirm()
+  } else {
+    state.onCancel('user denied transaction')
+  }
 }
 
 function createMsgNotification (state) {

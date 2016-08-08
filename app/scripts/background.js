@@ -66,7 +66,7 @@ function showUnconfirmedTx (txParams, txData, onTxDoneCb) {
 // connect to other contexts
 //
 
-browser.runtime.onConnect.addListener(connectRemote)
+extension.runtime.onConnect.addListener(connectRemote)
 function connectRemote (remotePort) {
   var isMetaMaskInternalProcess = (remotePort.name === 'popup')
   var portStream = new PortStream(remotePort)

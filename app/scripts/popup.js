@@ -22,7 +22,7 @@ async.parallel({
 
 function connectToAccountManager (cb) {
   // setup communication with background
-  var pluginPort = browser.runtime.connect({name: 'popup'})
+  var pluginPort = extension.runtime.connect({name: 'popup'})
   var portStream = new PortStream(pluginPort)
   // setup multiplexing
   var mx = setupMultiplex(portStream)
@@ -69,14 +69,6 @@ function getCurrentDomain (cb) {
 }
 
 function clearNotifications(){
-  if (!browser.notifications) {
-    return
-  }
-  browser.notifications.getAll(function (object) {
-    for (let notification in object){
-      extension.notifications.clear(notification)
-    }
-  })
 }
 
 function setupApp (err, opts) {

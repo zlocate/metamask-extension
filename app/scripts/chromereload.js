@@ -324,7 +324,7 @@ window.LiveReloadOptions = { host: 'localhost' };
         this.pluginIdentifiers = {}
         this.console = this.window.console && this.window.console.log && this.window.console.error ? this.window.location.href.match(/LR-verbose/) ? this.window.console : {
           log: function () {},
-          error: console.error),
+          error: console.error,
         } : {
           log: function () {},
           error: function () {},
