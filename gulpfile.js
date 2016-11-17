@@ -237,9 +237,7 @@ function bundleTask(opts) {
   return performBundle
 
   function performBundle(){
-    return (
-
-      bundler.bundle()
+      let bundle = bundler.bundle()
       // log errors if they happen
       .on('error', gutil.log.bind(gutil, 'Browserify Error'))
       .pipe(source(opts.filename))
@@ -248,15 +246,19 @@ function bundleTask(opts) {
       .pipe(replace('\'GULP_METAMASK_DEBUG\'', debug))
       // optional, remove if you don't need to buffer file contents
       .pipe(buffer())
-      // optional, remove if you dont want sourcemaps
-      .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
+
+      if (debug) {
+        // optional, remove if you dont want sourcemaps
+        bundle = bundle.pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
+      }
+
       // Add transformation tasks to the pipeline here.
-      .pipe(sourcemaps.write('./')) // writes .map file
+      bundle = bundle.pipe(sourcemaps.write('./')) // writes .map file
       .pipe(gulp.dest('./dist/firefox/scripts'))
       .pipe(gulp.dest('./dist/chrome/scripts'))
       .pipe(gulp.dest('./dist/edge/scripts'))
       .pipe(gulpif(!disableLiveReload,livereload()))
 
-    )
+      return bundle
   }
 }
