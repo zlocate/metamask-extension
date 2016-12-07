@@ -3,6 +3,8 @@
 ## Current Master
 
 - Add support for synchronous RPC method "eth_uninstallFilter".
+- Add support for notices.
+- Add support for working links.
 
 ## 2.13.10 2016-11-22
 

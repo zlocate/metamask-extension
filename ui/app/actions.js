@@ -13,6 +13,13 @@ var actions = {
   // remote state
   UPDATE_METAMASK_STATE: 'UPDATE_METAMASK_STATE',
   updateMetamaskState: updateMetamaskState,
+  // notices
+  MARK_NOTICE_READ: 'MARK_NOTICE_READ',
+  markNoticeRead: markNoticeRead,
+  SHOW_NOTICE: 'SHOW_NOTICE',
+  showNotice: showNotice,
+  CLEAR_NOTICES: 'CLEAR_NOTICES',
+  clearNotices: clearNotices,
   // intialize screen
   AGREE_TO_DISCLAIMER: 'AGREE_TO_DISCLAIMER',
   agreeToDisclaimer: agreeToDisclaimer,
@@ -177,13 +184,13 @@ function tryUnlockMetamask (password) {
   }
 }
 
-function transitionForward() {
+function transitionForward () {
   return {
     type: this.TRANSITION_FORWARD,
   }
 }
 
-function transitionBackward() {
+function transitionBackward () {
   return {
     type: this.TRANSITION_BACKWARD,
   }
@@ -210,7 +217,7 @@ function createNewVaultAndRestore (password, seed) {
     background.createNewVaultAndRestore(password, seed, (err) => {
       dispatch(actions.hideLoadingIndication())
       if (err) return dispatch(actions.displayWarning(err.message))
-      dispatch(actions.showAccountsPage())
+      dispatch(actions.SHOW_ACCOUNTS_PAGE)
     })
   }
 }
@@ -536,6 +543,43 @@ function showConfigPage (transitionForward = true) {
 function goBackToInitView () {
   return {
     type: actions.BACK_TO_INIT_MENU,
+  }
+}
+
+//
+// notice
+//
+
+function markNoticeRead (notice) {
+  return (dispatch) => {
+    dispatch(this.showLoadingIndication())
+    background.markNoticeRead(notice, (err, notice) => {
+      dispatch(this.hideLoadingIndication())
+      if (err) {
+        return dispatch(actions.showWarning(err))
+      }
+      if (notice) {
+        return dispatch(actions.showNotice(notice))
+      } else {
+        dispatch(this.clearNotices())
+        return {
+          type: actions.SHOW_ACCOUNTS_PAGE,
+        }
+      }
+    })
+  }
+}
+
+function showNotice (notice) {
+  return {
+    type: actions.SHOW_NOTICE,
+    value: notice,
+  }
+}
+
+function clearNotices () {
+  return {
+    type: actions.CLEAR_NOTICES,
   }
 }
 

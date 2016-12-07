@@ -15,6 +15,8 @@ const AccountsScreen = require('./accounts')
 const AccountDetailScreen = require('./account-detail')
 const SendTransactionScreen = require('./send')
 const ConfirmTxScreen = require('./conf-tx')
+// notice
+const NoticeScreen = require('./notice')
 // other views
 const ConfigScreen = require('./config')
 const InfoScreen = require('./info')
@@ -40,6 +42,7 @@ function mapStateToProps (state) {
     // state from plugin
     isLoading: state.appState.isLoading,
     isDisclaimerConfirmed: state.metamask.isDisclaimerConfirmed,
+    noActiveNotices: state.metamask.noActiveNotices,
     isInitialized: state.metamask.isInitialized,
     isUnlocked: state.metamask.isUnlocked,
     currentView: state.appState.currentView,
@@ -370,6 +373,10 @@ App.prototype.renderPrimary = function () {
       default:
         return h(UnlockScreen, {key: 'locked'})
     }
+  }
+
+  if (!props.noActiveNotices) {
+    return h(NoticeScreen, {key: 'NoticeScreen'})
   }
 
   // show current view
