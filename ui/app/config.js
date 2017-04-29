@@ -21,9 +21,10 @@ function ConfigScreen () {
 }
 
 ConfigScreen.prototype.render = function () {
-  var state = this.props
-  var metamaskState = state.metamask
-  var warning = state.warning
+  var props = this.props
+  var metamaskState = props.metamask
+  var warning = props.warning
+  var replayProtectionActive = metamaskState.replayProtectionActive
 
   return (
     h('.flex-column.flex-grow', [
@@ -32,7 +33,7 @@ ConfigScreen.prototype.render = function () {
       h('.section-title.flex-row.flex-center', [
         h('i.fa.fa-arrow-left.fa-lg.cursor-pointer', {
           onClick: (event) => {
-            state.dispatch(actions.goHome())
+            props.dispatch(actions.goHome())
           },
         }),
         h('h2.page-subtitle', 'Settings'),
@@ -69,7 +70,7 @@ ConfigScreen.prototype.render = function () {
                 if (event.key === 'Enter') {
                   var element = event.target
                   var newRpc = element.value
-                  rpcValidation(newRpc, state)
+                  rpcValidation(newRpc, props)
                 }
               },
             }),
@@ -81,12 +82,26 @@ ConfigScreen.prototype.render = function () {
                 event.preventDefault()
                 var element = document.querySelector('input#new_rpc')
                 var newRpc = element.value
-                rpcValidation(newRpc, state)
+                rpcValidation(newRpc, props)
               },
             }, 'Save'),
           ]),
+
           h('hr.horizontal-line'),
-          currentConversionInformation(metamaskState, state),
+
+          // EIP 155 Protection Toggle
+          h('div', { style: { marginTop: '20px' } }, [
+            h('span', 'Replay Attack Protection'),
+            h(replayProtectionActive ? 'button' : 'button.btn-red', {
+              style: { float: 'right' },
+              onClick: () => {
+                props.dispatch(actions.toggleReplayProtection())
+              },
+            }, replayProtectionActive ? 'ON' : 'OFF'),
+          ]),
+
+          h('hr.horizontal-line'),
+          currentConversionInformation(metamaskState, props),
           h('hr.horizontal-line'),
 
           h('div', {
@@ -100,7 +115,7 @@ ConfigScreen.prototype.render = function () {
               },
               onClick (event) {
                 event.preventDefault()
-                state.dispatch(actions.revealSeedConfirmation())
+                props.dispatch(actions.revealSeedConfirmation())
               },
             }, 'Reveal Seed Words'),
           ]),
@@ -111,20 +126,20 @@ ConfigScreen.prototype.render = function () {
   )
 }
 
-function rpcValidation (newRpc, state) {
+function rpcValidation (newRpc, props) {
   if (validUrl.isWebUri(newRpc)) {
-    state.dispatch(actions.setRpcTarget(newRpc))
+    props.dispatch(actions.setRpcTarget(newRpc))
   } else {
     var appendedRpc = `http://${newRpc}`
     if (validUrl.isWebUri(appendedRpc)) {
-      state.dispatch(actions.displayWarning('URIs require the appropriate HTTP/HTTPS prefix.'))
+      props.dispatch(actions.displayWarning('URIs require the appropriate HTTP/HTTPS prefix.'))
     } else {
-      state.dispatch(actions.displayWarning('Invalid RPC URI'))
+      props.dispatch(actions.displayWarning('Invalid RPC URI'))
     }
   }
 }
 
-function currentConversionInformation (metamaskState, state) {
+function currentConversionInformation (metamaskState, props) {
   var currentCurrency = metamaskState.currentCurrency
   var conversionDate = metamaskState.conversionDate
   return h('div', [
@@ -135,7 +150,7 @@ function currentConversionInformation (metamaskState, state) {
         event.preventDefault()
         var element = document.getElementById('currentCurrency')
         var newCurrency = element.value
-        state.dispatch(actions.setCurrentCurrency(newCurrency))
+        props.dispatch(actions.setCurrentCurrency(newCurrency))
       },
       defaultValue: currentCurrency,
     }, currencies.map((currency) => {

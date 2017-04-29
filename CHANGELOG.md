@@ -2,6 +2,7 @@
 
 ## Current Master
 
+- Add switch to toggle EIP 155 protection off for older private chains.
 - Fix bug where error was reported in debugger console when Chrome opened a new window.
 
 ## 3.6.0 2017-4-25

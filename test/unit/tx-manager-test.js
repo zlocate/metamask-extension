@@ -238,4 +238,21 @@ describe('Transaction Manager', function() {
     })
   })
 
+  describe('#sign non-replay-protected tx when set to', function() {
+    it('prepares a tx without the chainId set', function(done) {
+      txManager.toggleReplayProtection()
+      .then((newVal) => {
+        assert.equal(newVal, false, 'toggles replay protection off')
+
+        txManager.addTx({ id: '1', status: 'unapproved', metamaskNetworkId: currentNetworkId, txParams: {} }, noop)
+        txManager.signTransaction('1', (err, rawTx) => {
+          if (err) return assert.fail('it should not fail')
+          const ethTx = new EthTx(ethUtil.toBuffer(rawTx))
+          assert.equal(ethTx.getChainId(), 0)
+          done()
+        })
+      })
+    })
+  })
+
 })

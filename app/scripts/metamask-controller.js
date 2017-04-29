@@ -291,6 +291,7 @@ module.exports = class MetamaskController extends EventEmitter {
       approveTransaction: txManager.approveTransaction.bind(txManager),
       cancelTransaction: txManager.cancelTransaction.bind(txManager),
       updateAndApproveTransaction: this.updateAndApproveTx.bind(this),
+      toggleReplayProtection: nodeify(txManager.toggleReplayProtection).bind(txManager),
 
       // messageManager
       signMessage: nodeify(this.signMessage).bind(this),

@@ -13,6 +13,7 @@ module.exports = class TransactionManager extends EventEmitter {
     super()
     this.store = new ObservableStore(extend({
       transactions: [],
+      replayProtectionActive: true,
     }, opts.initState))
     this.memStore = new ObservableStore({})
     this.networkStore = opts.networkStore || new ObservableStore({})
@@ -60,6 +61,12 @@ module.exports = class TransactionManager extends EventEmitter {
   // Returns the full tx list across all networks
   getFullTxList () {
     return this.store.getState().transactions
+  }
+
+  toggleReplayProtection () {
+    const isActive = this.store.getState().replayProtectionActive
+    this.store.updateState({ replayProtectionActive: !isActive })
+    return Promise.resolve(!isActive)
   }
 
   // Adds a tx to the txlist
@@ -219,8 +226,12 @@ module.exports = class TransactionManager extends EventEmitter {
     const txMeta = this.getTx(txId)
     const txParams = txMeta.txParams
     const fromAddress = txParams.from
+
     // add network/chain id
-    txParams.chainId = this.getChainId()
+    // const replayProtect = this.store.getState().replayProtectionActive
+    const replayProtect = true
+    txParams.chainId = replayProtect ? this.getChainId() : -1
+
     const ethTx = this.txProviderUtils.buildEthTxFromParams(txParams)
     this.signEthTx(ethTx, fromAddress).then(() => {
       this.setTxStatusSigned(txMeta.id)

@@ -115,6 +115,8 @@ var actions = {
   showConfTxPage: showConfTxPage,
   // config screen
   SHOW_CONFIG_PAGE: 'SHOW_CONFIG_PAGE',
+  toggleReplayProtection,
+  TOGGLE_REPLAY_PROTECTION: 'TOGGLE_REPLAY_PROTECTION',
   SET_RPC_TARGET: 'SET_RPC_TARGET',
   SET_DEFAULT_RPC_TARGET: 'SET_DEFAULT_RPC_TARGET',
   SET_PROVIDER_TYPE: 'SET_PROVIDER_TYPE',
@@ -612,6 +614,10 @@ function previousTx () {
   return {
     type: actions.PREVIOUS_TX,
   }
+}
+
+function toggleReplayProtection() {
+  return callBackgroundThenUpdate(background.toggleReplayProtection)
 }
 
 function showConfigPage (transitionForward = true) {
