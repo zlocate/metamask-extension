@@ -1,6 +1,5 @@
 const pipe = require('pump')
 const ProviderEngine = require('web3-provider-engine')
-const FilterSubprovider = require('web3-provider-engine/subproviders/filters')
 const StreamSubprovider = require('web3-provider-engine/subproviders/stream')
 const LocalStorageStore = require('obs-store')
 const ObjectMultiplex = require('./obj-multiplex')
@@ -31,9 +30,6 @@ function MetamaskInpageProvider (connectionStream) {
   // connect to async provider
   const engine = new ProviderEngine()
 
-  const filterSubprovider = new FilterSubprovider()
-  engine.addProvider(filterSubprovider)
-
   const streamSubprovider = new StreamSubprovider()
   engine.addProvider(streamSubprovider)
 
@@ -50,6 +46,7 @@ function MetamaskInpageProvider (connectionStream) {
   self.idMap = {}
   // handle sendAsync requests via asyncProvider
   self.sendAsync = function (payload, cb) {
+    console.log('inpage provider sending async', payload)
     // rewrite request ids
     var request = eachJsonMessage(payload, (message) => {
       var newId = createRandomId()
