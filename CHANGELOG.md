@@ -5,6 +5,11 @@
 - Now when switching networks the extension does not restart
 - Cleanup decimal bugs in our gas inputs.
 - Fix bug where submit button was enabled for invalid gas inputs.
+- Restore Filter Subprovider to inpage provider to reduce polling leaks.
+
+## 3.7.1 2017-5-24
+
+- Reverted to 3.6.5
 
 ## 3.7.0 2017-5-23
 
