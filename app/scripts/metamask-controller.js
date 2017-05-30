@@ -259,6 +259,10 @@ module.exports = class MetamaskController extends EventEmitter {
       setProviderType: this.networkController.setProviderType.bind(this.networkController),
       setCurrentCurrency: this.setCurrentCurrency.bind(this),
       markAccountsFound: this.markAccountsFound.bind(this),
+      setLocked: (cb) => {
+        this.platform.reload()
+        cb()
+      },
       // coinbase
       buyEth: this.buyEth.bind(this),
       // shapeshift
@@ -282,7 +286,6 @@ module.exports = class MetamaskController extends EventEmitter {
       setAddressBook: nodeify(addressBookController.setAddressBook).bind(addressBookController),
 
       // KeyringController
-      setLocked: nodeify(keyringController.setLocked).bind(keyringController),
       createNewVaultAndKeychain: nodeify(keyringController.createNewVaultAndKeychain).bind(keyringController),
       createNewVaultAndRestore: nodeify(keyringController.createNewVaultAndRestore).bind(keyringController),
       addNewKeyring: nodeify(keyringController.addNewKeyring).bind(keyringController),
