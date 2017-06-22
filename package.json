@@ -63,6 +63,7 @@
     "ensnare": "^1.0.0",
     "eth-bin-to-ops": "^1.0.1",
     "eth-contract-metadata": "^1.0.0",
+    "eth-gas-price-suggestor": "^1.0.1",
     "eth-hd-keyring": "^1.1.1",
     "eth-query": "^2.1.2",
     "eth-sig-util": "^1.1.1",

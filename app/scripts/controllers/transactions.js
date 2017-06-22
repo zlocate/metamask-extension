@@ -23,6 +23,7 @@ module.exports = class TransactionController extends EventEmitter {
     this.provider = opts.provider
     this.blockTracker = opts.blockTracker
     this.query = opts.ethQuery
+    this.getGasPrice = opts.getGasPrice
     this.txProviderUtils = new TxProviderUtil(this.query)
     this.blockTracker.on('rawBlock', this.checkForTxInBlock.bind(this))
     this.blockTracker.on('latest', this.resubmitPendingTxs.bind(this))
@@ -152,13 +153,9 @@ module.exports = class TransactionController extends EventEmitter {
     const txParams = txMeta.txParams
     // ensure value
     txParams.value = txParams.value || '0x0'
-    this.query.gasPrice((err, gasPrice) => {
-      if (err) return cb(err)
-      // set gasPrice
-      txParams.gasPrice = gasPrice
-      // set gasLimit
-      this.txProviderUtils.analyzeGasUsage(txMeta, cb)
-    })
+    const gasPrice = this.getGasPrice()
+    txParams.gasPrice = gasPrice
+    this.txProviderUtils.analyzeGasUsage(txMeta, cb)
   }
 
   getUnapprovedTxList () {
@@ -388,7 +385,6 @@ module.exports = class TransactionController extends EventEmitter {
     this.emit(`${txMeta.id}:${status}`, txId)
     if (status === 'submitted' || status === 'rejected') {
       this.emit(`${txMeta.id}:finished`, txMeta)
-
     }
     this.updateTx(txMeta)
     this.emit('updateBadge')

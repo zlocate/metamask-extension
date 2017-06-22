@@ -12,6 +12,7 @@ const KeyringController = require('./keyring-controller')
 const NetworkController = require('./controllers/network')
 const PreferencesController = require('./controllers/preferences')
 const CurrencyController = require('./controllers/currency')
+const GasPriceController = require('./controllers/gas-price')
 const NoticeController = require('./notice-controller')
 const ShapeShiftController = require('./controllers/shapeshift')
 const AddressBookController = require('./controllers/address-book')
@@ -63,6 +64,11 @@ module.exports = class MetamaskController extends EventEmitter {
     this.currencyController.updateConversionRate()
     this.currencyController.scheduleConversionInterval()
 
+    // gas price controller
+    this.gasPriceController = new GasPriceController({
+      blockTracker: this.provider,
+    })
+
     // rpc provider
     this.provider = this.initializeProvider()
 
@@ -103,6 +109,7 @@ module.exports = class MetamaskController extends EventEmitter {
       blockTracker: this.provider,
       ethQuery: this.ethQuery,
       ethStore: this.ethStore,
+      getGasPrice: () => { return this.gasPriceController.getState() },
     })
 
     // notices
@@ -138,6 +145,9 @@ module.exports = class MetamaskController extends EventEmitter {
     this.currencyController.store.subscribe((state) => {
       this.store.updateState({ CurrencyController: state })
     })
+    this.gasPriceController.store.subscribe((state) => {
+      this.store.updateState({ GasPriceController: state })
+    })
     this.noticeController.store.subscribe((state) => {
       this.store.updateState({ NoticeController: state })
     })
@@ -158,6 +168,7 @@ module.exports = class MetamaskController extends EventEmitter {
     this.preferencesController.store.subscribe(this.sendUpdate.bind(this))
     this.addressBookController.store.subscribe(this.sendUpdate.bind(this))
     this.currencyController.store.subscribe(this.sendUpdate.bind(this))
+    this.gasPriceController.store.subscribe(this.sendUpdate.bind(this))
     this.noticeController.memStore.subscribe(this.sendUpdate.bind(this))
     this.shapeshiftController.store.subscribe(this.sendUpdate.bind(this))
   }
@@ -236,6 +247,9 @@ module.exports = class MetamaskController extends EventEmitter {
       this.preferencesController.store.getState(),
       this.addressBookController.store.getState(),
       this.currencyController.store.getState(),
+      {
+        gasPrice: this.gasPrice.store.getState(),
+      },
       this.noticeController.memStore.getState(),
       // config manager
       this.configManager.getConfig(),
