@@ -64,13 +64,13 @@ module.exports = class MetamaskController extends EventEmitter {
     this.currencyController.updateConversionRate()
     this.currencyController.scheduleConversionInterval()
 
+        // rpc provider
+    this.provider = this.initializeProvider()
+
     // gas price controller
     this.gasPriceController = new GasPriceController({
       blockTracker: this.provider,
     })
-
-    // rpc provider
-    this.provider = this.initializeProvider()
 
     // eth data query tools
     this.ethQuery = new EthQuery(this.provider)
