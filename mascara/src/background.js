@@ -132,6 +132,14 @@ function setupController (initState, client) {
     controller.setupPublicConfig(mx.createStream('publicConfig'))
   }
 
+  function setupSemiTrustedCommunication (connectionStream, originDomain) {
+    // setup multiplexing
+    var mx = setupMultiplex(connectionStream)
+    // connect features
+    controller.setupProviderConnection(mx.createStream('provider'), originDomain)
+    controller.setupPublicConfig(mx.createStream('publicConfig'))
+  }
+
   function setupTrustedCommunication (connectionStream, originDomain) {
     // setup multiplexing
     var mx = setupMultiplex(connectionStream)

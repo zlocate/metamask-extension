@@ -27,9 +27,9 @@ const background = new SWcontroller({
   wakeUpInterval: 20000
 })
 // Setup listener for when the service worker is read
-const connectApp = function (readSw) {
+const connectApp = function (readySw) {
   let connectionStream = SwStream({
-    serviceWorker: background.controller,
+    serviceWorker: readySw,
     context: name,
   })
   startPopup({container, connectionStream}, (err, store) => {
