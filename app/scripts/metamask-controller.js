@@ -325,6 +325,29 @@ module.exports = class MetamaskController extends EventEmitter {
     }
   }
 
+  getLimitedApi () {
+    const limitedApi = {
+      setSelectedAddress: this.getApi().setSelectedAddress,
+      setProviderType: this.getApi().setProviderType(),
+      setLocked: this.getApi().setLocked,
+    }
+
+    limitedApi.getState = (cb) => {
+      let state = {
+        currency: this.currencyController.store.getState(),
+        selectedAddress: this.preferencesController.getSelectedAddress(),
+        identities: this.keyringController.memStore.getState().identities,
+        pendingTxCount: this.txController.pendingTxCount,
+        unapprovedMsgCount: this.messageManager.unapprovedMsgCount,
+        accounts: this.ethStore.getState().accounts,
+      }
+      if (!this.keyringController.memStore.getState().isUnlocked) state = {selectedAddress: 'locked'}
+      cb(null, state)
+    }
+
+    return limitedApi
+  }
+
   setupUntrustedCommunication (connectionStream, originDomain) {
     // setup multiplexing
     var mx = setupMultiplex(connectionStream)
@@ -341,6 +364,14 @@ module.exports = class MetamaskController extends EventEmitter {
     this.setupProviderConnection(mx.createStream('provider'), originDomain)
   }
 
+  setupSemiTrustedCommunication (connectionStream, originDomain) {
+    // setup multiplexing
+    var mx = setupMultiplex(connectionStream)
+    // connect features
+    this.setupLimitedControllerConnection(mx.createStream('controller'))
+    // this.setupProviderConnection(mx.createStream('provider'), originDomain)
+  }
+
   setupControllerConnection (outStream) {
     const api = this.getApi()
     const dnode = Dnode(api)
@@ -349,6 +380,18 @@ module.exports = class MetamaskController extends EventEmitter {
       // push updates to popup
       const sendUpdate = remote.sendUpdate.bind(remote)
       this.on('update', sendUpdate)
+    })
+  }
+
+  setupLimitedControllerConnection (outStream) {
+    const api = this.getLimitedApi()
+    const dnode = Dnode(api)
+    outStream.pipe(dnode).pipe(outStream)
+    dnode.on('remote', (remote) => {
+      // push updates to popup
+      const sendUpdate = remote.sendUpdate.bind(remote)
+      this.on('update', () => console.log('update'))
+      this.on('update', () => api.getState((err, state) => sendUpdate(state)))
     })
   }
 

@@ -118,6 +118,9 @@ function setupController (initState, client) {
       // communication with popup
       controller.setupTrustedCommunication(connectionStream, 'MetaMask')
       popupIsOpen = true
+    } else if (context === 'widget') {
+      console.log('hello')
+      controller.setupSemiTrustedCommunication(connectionStream, context)
     } else {
       // communication with page
       setupUntrustedCommunication(connectionStream, context)
@@ -125,14 +128,6 @@ function setupController (initState, client) {
   }
 
   function setupUntrustedCommunication (connectionStream, originDomain) {
-    // setup multiplexing
-    var mx = setupMultiplex(connectionStream)
-    // connect features
-    controller.setupProviderConnection(mx.createStream('provider'), originDomain)
-    controller.setupPublicConfig(mx.createStream('publicConfig'))
-  }
-
-  function setupSemiTrustedCommunication (connectionStream, originDomain) {
     // setup multiplexing
     var mx = setupMultiplex(connectionStream)
     // connect features

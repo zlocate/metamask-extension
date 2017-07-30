@@ -12,18 +12,17 @@ async function renderWidget (opts = {}) {
   const {
     type = 'mini-account',
     container,
-    provider
+    provider,
+    limitedAccountManager,
   } = opts
   const Widget = options[type]
-
-  const query = new EthQuery(provider)
-  provider.publicConfigStore.subscribe(console.log)
-  const publicConfigStore = provider.publicConfigStore
-
+  // const query = new EthQuery(provider)
+  const state = await limitedAccountManager.getState()
   render(
     h(Widget, {
       provider,
-      publicConfigStore,
+      limitedAccountManager,
+      state
     }
   ), container)
 }

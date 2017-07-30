@@ -12,10 +12,10 @@ const renderWidget = require('./widgets')
 global.platform = new MetamascaraPlatform()
 
 
-var css = MetaMaskUiCss()
+let css = MetaMaskUiCss()
 injectCss(css)
 const container = document.getElementById('widget')
-var name = 'widget'
+let name = 'widget'
 window.METAMASK_UI_TYPE = name
 
 const background = new SWcontroller({
@@ -23,46 +23,74 @@ const background = new SWcontroller({
   letBeIdle: false,
 })
 // Setup listener for when the service worker is read
-let provider
-const connectApp = function (readySw) {
+const connectApp = async function (readySw) {
   let connectionStream = SwStream({
     serviceWorker: readySw,
     context: name,
   })
-  provider = new MetamaskInpageProvider(connectionStream)
+  let providerStream = SwStream({
+    serviceWorker: readySw,
+    context: name,
+  })
+  const limitedAccountManager = await connectToAccountManager(connectionStream)
+  console.log('limitedAccountManager!!! ->', limitedAccountManager)
+  renderWidget({
+    container,
+    limitedAccountManager: promisisfiyAccountManager(limitedAccountManager),
+  })
 }
-background.on('ready', (sw) => {
-  connectApp(sw)
-})
+
+background.on('ready', connectApp)
 
 background.startWorker()
-.then(() => {
-  renderWidget({container, provider})
-})
 console.log('hello from MetaMascara Widget ui!')
 
 
-function setupControllerConnection (connectionStream, cb) {
+function setupControllerConnection (connectionStream) {
   // this is a really sneaky way of adding EventEmitter api
   // to a bi-directional dnode instance
-  var eventEmitter = new EventEmitter()
-  var accountManagerDnode = Dnode({
-    sendUpdate: function (state) {
-      eventEmitter.emit('update', state)
-    },
-  })
-  connectionStream.pipe(accountManagerDnode).pipe(connectionStream)
-  accountManagerDnode.once('remote', function (accountManager) {
-    // setup push events
-    accountManager.on = eventEmitter.on.bind(eventEmitter)
-    cb(null, accountManager)
+  return new Promise((resolve, reject) => {
+    let eventEmitter = new EventEmitter()
+    let accountManagerDnode = Dnode({
+      sendUpdate: function (state) {
+        console.log('update')
+        eventEmitter.emit('update', state)
+      },
+    })
+    connectionStream.pipe(accountManagerDnode).pipe(connectionStream)
+    accountManagerDnode.once('remote', function (accountManager) {
+      // setup push events
+      accountManager.on = eventEmitter.on.bind(eventEmitter)
+      resolve(accountManager)
+    })
+
   })
 }
 
-function connectToAccountManager (connectionStream, cb) {
+async function connectToAccountManager (connectionStream, cb) {
   // setup communication with background
   // setup multiplexing
-  var mx = setupMultiplex(connectionStream)
+  let mx = setupMultiplex(connectionStream)
   // connect features
-  setupControllerConnection(mx.createStream('controller'), cb)
+  const accountManager = await setupControllerConnection(mx.createStream('controller'))
+  return accountManager
+}
+
+function promisisfiyAccountManager (accountManager) {
+  return new Proxy(accountManager, {
+    get: (accountManager, key) => {
+      if (key === 'on') return accountManager.on
+      return (...args) => {
+        return new Promise((resolve, reject) => {
+          try{
+            console.log(key)
+            if  (args.length) accountManager[key](...args, (err, value) => {!err ? resolve(value) : reject(err)})
+            else accountManager[key]((err, value) => {!err ? resolve(value) : reject(err)})
+          } catch (err) {
+            reject(err)
+          }
+        })
+      }
+    }
+  })
 }

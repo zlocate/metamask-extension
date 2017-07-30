@@ -6,14 +6,16 @@ module.exports = function setupWidget (opts) {
     const frame = Iframe({
       src: opts.zeroClientProvider || 'https://zero.metamask.io/proxy/widget.html',
       container: opts.container || document.body,
-      sandboxAttributes: opts.sandboxAttributes || ['allow-scripts', 'allow-popups', 'allow-same-origin'],
+      sandboxAttributes: opts.sandboxAttributes || ['allow-scripts', 'allow-popups', 'allow-same-origin', 'allow-top-navigation'],
     })
     const iframe = frame.iframe
     iframe.style = `
     border: 0px;
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 0px;
+    top: 0px;
+    height: 10vh;
+    width: 189px;
     `
   })
 }
