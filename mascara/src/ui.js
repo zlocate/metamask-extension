@@ -43,6 +43,7 @@ const connectApp = function (readSw) {
 background.on('ready', (sw) => {
   background.removeListener('updatefound', connectApp)
   connectApp(sw)
+  removeLoadingIcon()
 })
 background.on('updatefound', () => window.location.reload())
 
@@ -54,3 +55,9 @@ background.startWorker()
   }, 2000)
 })
 console.log('hello from MetaMascara ui!')
+
+
+function removeLoadingIcon () {
+  const loading = document.getElementById('loading-container')
+  loading.remove()
+}
