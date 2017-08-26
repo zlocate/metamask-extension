@@ -385,6 +385,20 @@ module.exports = class MetamaskController extends EventEmitter {
     const providerStream = createEngineStream({ engine })
     outStream.pipe(providerStream).pipe(outStream)
     
+    console.log('new dapp stream, listening for close')
+    const eos = require('end-of-stream')
+    var cb = (err) => {
+      console.log('out stream ended', err)
+    }
+    // cb.xyz = 'herdygerdy'
+    // console.log('seeting up eos')
+    eos(outStream, cb)
+    // console.log('done seeting up eos')
+    outStream.on('close', () => console.log('close'))
+    outStream.on('end', () => console.log('end'))
+    outStream.on('error', () => console.log('error'))
+    outStream.on('finish', () => console.log('finish'))
+    
     // append dapp origin domain to request
     function originMiddleware (req, res, next, end) {
       req.origin = originDomain

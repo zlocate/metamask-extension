@@ -29,11 +29,18 @@ PortDuplexStream.prototype._onMessage = function (msg) {
 }
 
 PortDuplexStream.prototype._onDisconnect = function () {
-  try {
-    this.push(null)
-  } catch (err) {
-    this.emit('error', err)
-  }
+  // try {
+  this.push(null)
+  this.end()
+    // console.log('_onDisconnect')
+    // // this.emit('end')
+    // console.log('end')
+    // this.emit('finish')
+    // console.log('finish')
+    // this.end()
+  // } catch (err) {
+    // this.emit('error', err)
+  // }
 }
 
 // stream plumbing
