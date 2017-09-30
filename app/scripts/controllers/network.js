@@ -10,7 +10,7 @@ const RPC_ADDRESS_LIST = require('../config.js').network
 const DEFAULT_RPC = RPC_ADDRESS_LIST['rinkeby']
 
 module.exports = class NetworkController extends EventEmitter {
-  
+
   constructor (config) {
     super()
     config.provider.rpcTarget = this.getRpcAddressForType(config.provider.type, config.provider)
@@ -75,6 +75,7 @@ module.exports = class NetworkController extends EventEmitter {
   async setProviderType (type) {
     assert(type !== 'rpc', `NetworkController.setProviderType - cannot connect by type "rpc"`)
     // skip if type already matches
+    if (type === 'ipfs') return this._setIpfsProvider()
     if (type === this.getProviderConfig().type) return
     const rpcTarget = this.getRpcAddressForType(type)
     assert(rpcTarget, `NetworkController - unknown rpc address for type "${type}"`)
@@ -93,6 +94,12 @@ module.exports = class NetworkController extends EventEmitter {
   //
   // Private
   //
+
+  _setIpfsProvider() {
+    const provider = createIpfsProvider(providerParams)
+    this._setProvider(provider)
+    this.emit('networkDidChange')
+  }
 
   _switchNetwork (providerParams) {
     this.setNetworkState('loading')
@@ -117,7 +124,7 @@ module.exports = class NetworkController extends EventEmitter {
       oldProvider.removeAllListeners()
       oldProvider.stop()
     }
-    // override block tracler
+    // override block tracker
     provider._blockTracker = createEventEmitterProxy(provider._blockTracker, blockTrackerHandlers)
     // set as new provider
     this._provider = provider
