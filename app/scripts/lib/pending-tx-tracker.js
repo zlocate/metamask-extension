@@ -1,6 +1,5 @@
 const EventEmitter = require('events')
 const EthQuery = require('ethjs-query')
-const sufficientBalance = require('./util').sufficientBalance
 /*
 
   Utility class for tracking the transactions as they
@@ -12,7 +11,6 @@ const sufficientBalance = require('./util').sufficientBalance
   requires a: {
     provider: //,
     nonceTracker: //see nonce tracker,
-    getBalnce: //(address) a function for getting balances,
     getPendingTransactions: //() a function for getting an array of transactions,
     publishTransaction: //(rawTx) a async function for publishing raw transactions,
   }
@@ -24,8 +22,8 @@ module.exports = class PendingTransactionTracker extends EventEmitter {
     super()
     this.query = new EthQuery(config.provider)
     this.nonceTracker = config.nonceTracker
-
-    this.getBalance = config.getBalance
+    // default is one day
+    this.retryTimePeriod = config.retryTimePeriod || 86400000
     this.getPendingTransactions = config.getPendingTransactions
     this.publishTransaction = config.publishTransaction
   }
@@ -42,18 +40,18 @@ module.exports = class PendingTransactionTracker extends EventEmitter {
       if (!txHash) {
         const noTxHashErr = new Error('We had an error while submitting this transaction, please try again.')
         noTxHashErr.name = 'NoTxHashError'
-        this.emit('txFailed', txId, noTxHashErr)
+        this.emit('tx:failed', txId, noTxHashErr)
         return
       }
 
 
       block.transactions.forEach((tx) => {
-        if (tx.hash === txHash) this.emit('txConfirmed', txId)
+        if (tx.hash === txHash) this.emit('tx:confirmed', txId)
       })
     })
   }
 
-  queryPendingTxs ({oldBlock, newBlock}) {
+  queryPendingTxs ({ oldBlock, newBlock }) {
     // check pending transactions on start
     if (!oldBlock) {
       this._checkPendingTxs()
@@ -74,6 +72,9 @@ module.exports = class PendingTransactionTracker extends EventEmitter {
       Dont marked as failed if the error is a "known" transaction warning
       "there is already a transaction with the same sender-nonce
       but higher/same gas price"
+
+      Also don't mark as failed if it has ever been broadcast successfully.
+      A successful broadcast means it may still be mined.
       */
       const errorMessage = err.message.toLowerCase()
       const isKnownTx = (
@@ -90,31 +91,30 @@ module.exports = class PendingTransactionTracker extends EventEmitter {
       // ignore resubmit warnings, return early
       if (isKnownTx) return
       // encountered real error - transition to error state
-      this.emit('txFailed', txMeta.id, err)
+      txMeta.warning = {
+        error: errorMessage,
+        message: 'There was an error when resubmitting this transaction.',
+      }
+      this.emit('tx:warning', txMeta, err)
     }))
   }
 
   async _resubmitTx (txMeta) {
-    const address = txMeta.txParams.from
-    const balance = this.getBalance(address)
-    if (balance === undefined) return
-    if (!('retryCount' in txMeta)) txMeta.retryCount = 0
-
-    // if the value of the transaction is greater then the balance, fail.
-    if (!sufficientBalance(txMeta.txParams, balance)) {
-      const insufficientFundsError = new Error('Insufficient balance during rebroadcast.')
-      this.emit('txFailed', txMeta.id, insufficientFundsError)
-      log.error(insufficientFundsError)
-      return
+    if (Date.now() > txMeta.time + this.retryTimePeriod) {
+      const hours = (this.retryTimePeriod / 3.6e+6).toFixed(1)
+      const err = new Error(`Gave up submitting after ${hours} hours.`)
+      return this.emit('tx:failed', txMeta.id, err)
     }
 
     // Only auto-submit already-signed txs:
     if (!('rawTx' in txMeta)) return
 
-    // Increment a try counter.
-    txMeta.retryCount++
     const rawTx = txMeta.rawTx
-    return await this.publishTransaction(rawTx)
+    const txHash = await this.publishTransaction(rawTx)
+
+    // Increment successful tries:
+    this.emit('tx:retry', txMeta)
+    return txHash
   }
 
   async _checkPendingTx (txMeta) {
@@ -125,7 +125,7 @@ module.exports = class PendingTransactionTracker extends EventEmitter {
     if (!txHash) {
       const noTxHashErr = new Error('We had an error while submitting this transaction, please try again.')
       noTxHashErr.name = 'NoTxHashError'
-      this.emit('txFailed', txId, noTxHashErr)
+      this.emit('tx:failed', txId, noTxHashErr)
       return
     }
     // get latest transaction status
@@ -134,15 +134,14 @@ module.exports = class PendingTransactionTracker extends EventEmitter {
       txParams = await this.query.getTransactionByHash(txHash)
       if (!txParams) return
       if (txParams.blockNumber) {
-        this.emit('txConfirmed', txId)
+        this.emit('tx:confirmed', txId)
       }
     } catch (err) {
       txMeta.warning = {
-        error: err,
+        error: err.message,
         message: 'There was a problem loading this transaction.',
       }
-      this.emit('txWarning', txMeta)
-      throw err
+      this.emit('tx:warning', txMeta, err)
     }
   }
 
