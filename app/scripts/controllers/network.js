@@ -32,16 +32,12 @@ module.exports = class NetworkController extends EventEmitter {
     this.providerProxy = createObjectProxy()
     this.blockTrackerProxy = createEventEmitterProxy()
 
-    const ipfs = new IpfsClient()
-    this.ipfs = ipfs
-    ipfs.on('ready', () => {
-      ETH_IPFS_BRIDGES.map((address) => ipfs.swarm.connect(address))
+    const ipfs = new IpfsClient({
+      config: {
+        Bootstrap: ETH_IPFS_BRIDGES,
+      },
     })
-
-    // add "raw" codec for "base2"
-    ipfs._ipldResolver.support.add('base2',
-      dagRaw.resolver,
-      dagRaw.util)
+    this.ipfs = ipfs
 
     this.on('networkDidChange', this.lookupNetwork)
   }
