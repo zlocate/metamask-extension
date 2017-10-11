@@ -323,6 +323,23 @@ App.prototype.renderNetworkDropdown = function () {
       ]
     ),
 
+    h(
+      DropdownMenuItem,
+      {
+        key: 'ipfs',
+        closeMenu: () => this.setState({ isNetworkMenuOpen: !isOpen }),
+        onClick: () => props.dispatch(actions.setProviderType('ipfs')),
+        style: {
+          fontSize: '18px',
+        },
+      },
+      [
+        h('i.fa.fa-question-circle.fa-lg.menu-icon'),
+        'ipfs alpha',
+        providerType === 'ipfs' ? h('.check', '✓') : null,
+      ]
+    ),
+
     this.renderCustomOption(props.provider),
     this.renderCommonRpc(rpcList, props.provider),
 
