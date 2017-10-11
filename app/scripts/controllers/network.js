@@ -5,10 +5,21 @@ const ComposedStore = require('obs-store/lib/composed')
 const extend = require('xtend')
 const EthQuery = require('eth-query')
 const createEthRpcClient = require('eth-rpc-client')
+const createEthIpfsClient = require('eth-ipfs-client')
+const IpfsClient = require('ipfs')
+const dagRaw = require('ipld-raw')
 const createEventEmitterProxy = require('../lib/events-proxy.js')
 const createObjectProxy = require('../lib/obj-proxy.js')
 const RPC_ADDRESS_LIST = require('../config.js').network
 const DEFAULT_RPC = RPC_ADDRESS_LIST['rinkeby']
+const ETH_IPFS_BRIDGES = [
+  // '/dns4/ipfs.lab.metamask.io/tcp/443/wss/ipfs/QmdcCVdmHsA1s69GhQZrszpnb3wmtRwv81jojAurhsH9cz',
+  '/dns4/fox.musteka.la/tcp/443/wss/ipfs/Qmc7etyUd9tEa3ZBD3LCTMDL96qcMi8cKfHEiLt5nhVdVC',
+  '/dns4/bat.musteka.la/tcp/443/wss/ipfs/QmPaBC5Lmfj7vctVxRPcKvfZds9Zk96dgjgthvg4Dgf7at',
+  '/dns4/monkey.musteka.la/tcp/443/wss/ipfs/QmZDfxSycZxaaYyrCyHdNEiip3wmxTgriPzEYETEn9Z6K3',
+  '/dns4/panda.musteka.la/tcp/443/wss/ipfs/QmUGARsthjG4EJBCrYzkuCESjn5G2akmmuawKPbZrFM3E5',
+  '/dns4/tiger.musteka.la/tcp/443/wss/ipfs/QmXFdPj3FuVpkgmNHNTFitkp4DSmVuF6HxNX6tCZr4LFz9',
+]
 
 module.exports = class NetworkController extends EventEmitter {
 
@@ -20,6 +31,17 @@ module.exports = class NetworkController extends EventEmitter {
     this.store = new ComposedStore({ provider: this.providerStore, network: this.networkStore })
     this.providerProxy = createObjectProxy()
     this.blockTrackerProxy = createEventEmitterProxy()
+
+    const ipfs = new IpfsClient()
+    this.ipfs = ipfs
+    ipfs.on('ready', () => {
+      ETH_IPFS_BRIDGES.map((address) => ipfs.swarm.connect(address))
+    })
+
+    // add "raw" codec for "base2"
+    ipfs._ipldResolver.support.add('base2',
+      dagRaw.resolver,
+      dagRaw.util)
 
     this.on('networkDidChange', this.lookupNetwork)
   }
@@ -78,10 +100,10 @@ module.exports = class NetworkController extends EventEmitter {
     // skip if type already matches
     if (type === 'ipfs') return this._setIpfsClient()
     if (type === this.getProviderConfig().type) return
-    // lookup rpcTarget for typecreateMetamaskProvider
+    // lookup rpcTarget for type
     const rpcTarget = this.getRpcAddressForType(type)
     assert(rpcTarget, `NetworkController - unknown rpc address for type "${type}"`)
-    // update connectioncreateMetamaskProvider
+    // update connection
     this.providerStore.updateState({ type, rpcTarget })
     this._switchNetwork({ rpcUrl: rpcTarget })
   }
@@ -100,29 +122,14 @@ module.exports = class NetworkController extends EventEmitter {
   //
 
   _setIpfsClient() {
-    const createEthIpfsClient = require('eth-ipfs-client')
-    const IpfsClient = require('ipfs')
-    const ETH_IPFS_BRIDGES = [
-      // '/dns4/ipfs.lab.metamask.io/tcp/443/wss/ipfs/QmdcCVdmHsA1s69GhQZrszpnb3wmtRwv81jojAurhsH9cz',
-      '/dns4/fox.musteka.la/tcp/443/wss/ipfs/Qmc7etyUd9tEa3ZBD3LCTMDL96qcMi8cKfHEiLt5nhVdVC',
-      '/dns4/bat.musteka.la/tcp/443/wss/ipfs/QmPaBC5Lmfj7vctVxRPcKvfZds9Zk96dgjgthvg4Dgf7at',
-      '/dns4/monkey.musteka.la/tcp/443/wss/ipfs/QmZDfxSycZxaaYyrCyHdNEiip3wmxTgriPzEYETEn9Z6K3',
-      '/dns4/panda.musteka.la/tcp/443/wss/ipfs/QmUGARsthjG4EJBCrYzkuCESjn5G2akmmuawKPbZrFM3E5',
-      '/dns4/tiger.musteka.la/tcp/443/wss/ipfs/QmXFdPj3FuVpkgmNHNTFitkp4DSmVuF6HxNX6tCZr4LFz9',
-    ]
-
-    const ipfs = new IpfsClient({
-      // repo: '/tmp/ipfs' + Math.random(),
-      Bootstrap: ETH_IPFS_BRIDGES,
-    })
-    // ipfs.on('ready', start)
-
-    // // add bin codec for "base2"
-    // ipfs._ipldResolver.support.add('base2',
-    //   dagBin.resolver,
-    //   dagBin.util)
-
+    // update state
+    const type = 'ipfs'
+    const rpcTarget = this.getRpcAddressForType('mainnet')
+    this.providerStore.updateState({ type, rpcTarget })
+    // create controller
+    const ipfs = this.ipfs
     const client = createEthIpfsClient({ ipfs })
+    global.ipfsClient = client
     this._setClient(client)
     this.emit('networkDidChange')
   }
