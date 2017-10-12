@@ -334,8 +334,15 @@ App.prototype.renderNetworkDropdown = function () {
         },
       },
       [
-        h('i.fa.fa-question-circle.fa-lg.menu-icon'),
-        'ipfs alpha',
+        // h('i.fa.fa-question-circle.fa-lg.menu-icon'),
+        h('img.menu-icon', {
+          src: '/images/ipfs.svg',
+          style: {
+            height: '16px',
+            width: '16px',
+          }
+        }),
+        'Ethereum via Ipfs',
         providerType === 'ipfs' ? h('.check', '✓') : null,
       ]
     ),
@@ -621,6 +628,8 @@ App.prototype.getNetworkName = function () {
     name = 'Kovan Test Network'
   } else if (providerName === 'rinkeby') {
     name = 'Rinkeby Test Network'
+  } else if (providerName === 'ipfs') {
+    name = 'Ethereum via Ipfs'
   } else {
     name = 'Unknown Private Network'
   }

@@ -54,6 +54,9 @@ Network.prototype.render = function () {
   } else if (providerName === 'rinkeby') {
     hoverText = 'Rinkeby Test Network'
     iconName = 'rinkeby-test-network'
+  } else if (providerName === 'ipfs') {
+    hoverText = 'Mainnet via Ipfs'
+    iconName = 'ipfs-ethereum-network'
   } else {
     hoverText = 'Unknown Private Network'
     iconName = 'unknown-private-network'
@@ -104,6 +107,22 @@ Network.prototype.render = function () {
                   color: '#e7a218',
                 }},
               'Rinkeby Test Net'),
+              h('i.fa.fa-caret-down.fa-lg'),
+            ])
+          case 'ipfs-ethereum-network':
+            return h('.network-indicator', [
+              h('img.menu-icon', {
+                src: '/images/ipfs.svg',
+                style: {
+                  height: '16px',
+                  width: '16px',
+                }
+              }),
+              h('.network-name', {
+                style: {
+                  color: '#039396',
+                }},
+              'Ethereum via Ipfs'),
               h('i.fa.fa-caret-down.fa-lg'),
             ])
           default:
