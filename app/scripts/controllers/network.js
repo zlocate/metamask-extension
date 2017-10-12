@@ -7,7 +7,6 @@ const EthQuery = require('eth-query')
 const createEthRpcClient = require('eth-rpc-client')
 const createEthIpfsClient = require('eth-ipfs-client')
 const IpfsClient = require('ipfs')
-const dagRaw = require('ipld-raw')
 const createEventEmitterProxy = require('../lib/events-proxy.js')
 const createObjectProxy = require('../lib/obj-proxy.js')
 const RPC_ADDRESS_LIST = require('../config.js').network
@@ -119,7 +118,7 @@ module.exports = class NetworkController extends EventEmitter {
 
   _setIpfsClient(_providerParams) {
     const ipfs = this.ipfs
-    const providerParams = extend(this._baseProviderParams, _providerParams,  { ipfs })
+    const providerParams = extend(this._baseProviderParams, _providerParams, { ipfs })
     // update state
     const type = 'ipfs'
     const rpcTarget = this.getRpcAddressForType('mainnet')
