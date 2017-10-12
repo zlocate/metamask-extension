@@ -117,14 +117,16 @@ module.exports = class NetworkController extends EventEmitter {
   // Private
   //
 
-  _setIpfsClient() {
+  _setIpfsClient(_providerParams) {
+    const ipfs = this.ipfs
+    const providerParams = extend(this._baseProviderParams, _providerParams,  { ipfs })
     // update state
     const type = 'ipfs'
     const rpcTarget = this.getRpcAddressForType('mainnet')
     this.providerStore.updateState({ type, rpcTarget })
+    this.setNetworkState('loading')
     // create controller
-    const ipfs = this.ipfs
-    const client = createEthIpfsClient({ ipfs })
+    const client = createEthIpfsClient(providerParams)
     global.ipfsClient = client
     this._setClient(client)
     this.emit('networkDidChange')
