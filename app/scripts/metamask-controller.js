@@ -387,15 +387,26 @@ module.exports = class MetamaskController extends EventEmitter {
     }
 
     limitedApi.getState = (cb) => {
+      const wallet = this.configManager.getWallet()
+      const vault = this.keyringController.store.getState().vault
+      const isInitialized = (!!wallet || !!vault)
+
       let state = {
-        currency: this.currencyController.store.getState(),
-        selectedAddress: this.preferencesController.getSelectedAddress(),
-        identities: this.keyringController.memStore.getState().identities,
-        pendingTxCount: this.txController.pendingTxCount,
-        unapprovedMsgCount: this.messageManager.unapprovedMsgCount,
-        accounts: this.ethStore.getState().accounts,
+        isInitialized,
+        selectedAddress: 'locked',
       }
-      if (!this.keyringController.memStore.getState().isUnlocked) state = {selectedAddress: 'locked'}
+
+      if (this.keyringController.memStore.getState().isUnlocked) {
+        state = {
+          isInitialized,
+          currency: this.currencyController.store.getState(),
+          selectedAddress: this.preferencesController.getSelectedAddress(),
+          identities: this.keyringController.memStore.getState().identities,
+          pendingTxCount: this.txController.pendingTxCount,
+          unapprovedMsgCount: this.messageManager.unapprovedMsgCount,
+          accounts: this.accountTracker.store.getState().accounts,
+        }
+      }
       cb(null, state)
     }
 

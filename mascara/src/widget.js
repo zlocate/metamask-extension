@@ -24,11 +24,11 @@ const background = new SWcontroller({
 })
 // Setup listener for when the service worker is read
 const connectApp = async function (readySw) {
-  let connectionStream = SwStream({
+  const connectionStream = SwStream({
     serviceWorker: readySw,
     context: name,
   })
-  let providerStream = SwStream({
+  const providerStream = SwStream({
     serviceWorker: readySw,
     context: name,
   })
