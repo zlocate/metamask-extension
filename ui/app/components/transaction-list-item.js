@@ -4,9 +4,9 @@ const inherits = require('util').inherits
 
 const EthBalance = require('./eth-balance')
 const addressSummary = require('../util').addressSummary
-const explorerLink = require('../../lib/explorer-link')
+const explorerLink = require('etherscan-link').createExplorerLink
 const CopyButton = require('./copyButton')
-const vreme = new (require('vreme'))
+const vreme = new (require('vreme'))()
 const Tooltip = require('./tooltip')
 const numberToBN = require('number-to-bn')
 
@@ -60,21 +60,12 @@ TransactionListItem.prototype.render = function () {
     }, [
 
       h('.identicon-wrapper.flex-column.flex-center.select-none', [
-        h('.pop-hover', {
-          onClick: (event) => {
-            event.stopPropagation()
-            if (!isTx || isPending) return
-            var url = `https://metamask.github.io/eth-tx-viz/?tx=${transaction.hash}`
-            global.platform.openWindow({ url })
-          },
-        }, [
-          h(TransactionIcon, { txParams, transaction, isTx, isMsg }),
-        ]),
+        h(TransactionIcon, { txParams, transaction, isTx, isMsg }),
       ]),
 
       h(Tooltip, {
         title: 'Transaction Number',
-        position: 'bottom',
+        position: 'right',
       }, [
         h('span', {
           style: {
@@ -142,7 +133,7 @@ function recipientField (txParams, transaction, isTx, isMsg) {
     },
   }, [
     message,
-    failIfFailed(transaction),
+    renderErrorOrWarning(transaction),
   ])
 }
 
@@ -150,16 +141,35 @@ function formatDate (date) {
   return vreme.format(new Date(date), 'March 16 2014 14:30')
 }
 
-function failIfFailed (transaction) {
-  if (transaction.status === 'rejected') {
+function renderErrorOrWarning (transaction) {
+  const { status, err, warning } = transaction
+
+  // show rejected
+  if (status === 'rejected') {
     return h('span.error', ' (Rejected)')
   }
-  if (transaction.err) {
+
+  // show error
+  if (err) {
+    const message = err.message || ''
+    return (
+        h(Tooltip, {
+          title: message,
+          position: 'bottom',
+        }, [
+          h(`span.error`, ` (Failed)`),
+        ])
+    )
+  }
+
+  // show warning
+  if (warning) {
+    const message = warning.message
     return h(Tooltip, {
-      title: transaction.err.message,
+      title: message,
       position: 'bottom',
     }, [
-      h('span.error', ' (Failed)'),
+      h(`span.warning`, ` (Warning)`),
     ])
   }
 }

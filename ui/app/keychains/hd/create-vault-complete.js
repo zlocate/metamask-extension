@@ -3,6 +3,7 @@ const Component = require('react').Component
 const connect = require('react-redux').connect
 const h = require('react-hyperscript')
 const actions = require('../../actions')
+const exportAsFile = require('../../util').exportAsFile
 
 module.exports = connect(mapStateToProps)(CreateVaultCompleteScreen)
 
@@ -47,8 +48,6 @@ CreateVaultCompleteScreen.prototype.render = function () {
 
       h('div', {
         style: {
-          width: '360px',
-          height: '78px',
           fontSize: '1em',
           marginTop: '10px',
           textAlign: 'center',
@@ -67,8 +66,17 @@ CreateVaultCompleteScreen.prototype.render = function () {
         style: {
           margin: '24px',
           fontSize: '0.9em',
+          marginBottom: '10px',
         },
       }, 'I\'ve copied it somewhere safe'),
+
+      h('button.primary', {
+        onClick: () => exportAsFile(`MetaMask Seed Words`, seed),
+        style: {
+          margin: '10px',
+          fontSize: '0.9em',
+        },
+      }, 'Save Seed Words As File'),
     ])
   )
 }

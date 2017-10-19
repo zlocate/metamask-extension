@@ -17,4 +17,14 @@ describe('nodeify', function () {
       done()
     })
   })
+
+  it('should allow the last argument to not be a function', function (done) {
+    const nodified = nodeify(obj.promiseFunc, obj)
+    try {
+      nodified('baz')
+      done()
+    } catch (err) {
+      done(new Error('should not have thrown if the last argument is not a function'))
+    }
+  })
 })

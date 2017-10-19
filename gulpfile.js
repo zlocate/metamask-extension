@@ -151,7 +151,7 @@ gulp.task('copy:watch', function(){
 
 gulp.task('lint', function () {
   // Ignoring node_modules, dist/firefox, and docs folders:
-  return gulp.src(['app/**/*.js', 'ui/**/*.js', '!node_modules/**', '!dist/firefox/**', '!docs/**', '!app/scripts/chromereload.js'])
+  return gulp.src(['app/**/*.js', 'ui/**/*.js', 'mascara/src/*.js', 'mascara/server/*.js', '!node_modules/**', '!dist/firefox/**', '!docs/**', '!app/scripts/chromereload.js', '!mascara/test/jquery-3.1.0.min.js'])
     .pipe(eslint(fs.readFileSync(path.join(__dirname, '.eslintrc'))))
     // eslint.format() outputs the lint results to the console.
     // Alternatively use eslint.formatEach() (see Docs).
@@ -172,7 +172,6 @@ gulp.task('default', ['lint'], function () {
 const jsFiles = [
   'inpage',
   'contentscript',
-  'blacklister',
   'background',
   'popup',
 ]
@@ -187,8 +186,13 @@ jsFiles.forEach((jsFile) => {
   gulp.task(`build:js:${jsFile}`, bundleTask({ watch: false, label: jsFile, filename: `${jsFile}.js` }))
 })
 
-gulp.task('dev:js', gulp.parallel(...jsDevStrings))
-gulp.task('build:js',  gulp.parallel(...jsBuildStrings))
+// inpage must be built before all other scripts:
+const firstDevString = jsDevStrings.shift()
+gulp.task('dev:js', gulp.series(firstDevString, gulp.parallel(...jsDevStrings)))
+
+// inpage must be built before all other scripts:
+const firstBuildString = jsBuildStrings.shift()
+gulp.task('build:js',  gulp.series(firstBuildString, gulp.parallel(...jsBuildStrings)))
 
 // disc bundle analyzer tasks
 
@@ -249,26 +253,27 @@ function zipTask(target) {
   }
 }
 
-function generateBundler(opts) {
-  var browserifyOpts = assign({}, watchify.args, {
+function generateBundler(opts, performBundle) {
+  const browserifyOpts = assign({}, watchify.args, {
     entries: ['./app/scripts/'+opts.filename],
     plugin: 'browserify-derequire',
     debug: debug,
     fullPaths: debug,
   })
 
-  return browserify(browserifyOpts)
-}
-
-function discTask(opts) {
-  let bundler = generateBundler(opts)
+  let bundler = browserify(browserifyOpts)
 
   if (opts.watch) {
     bundler = watchify(bundler)
-    // on any dep update, runs the bundler
+    // on any file update, re-runs the bundler
     bundler.on('update', performBundle)
   }
 
+  return bundler
+}
+
+function discTask(opts) {
+  const bundler = generateBundler(opts, performBundle)
   // output build logs to terminal
   bundler.on('log', gutil.log)
 
@@ -290,14 +295,7 @@ function discTask(opts) {
 
 
 function bundleTask(opts) {
-  let bundler = generateBundler(opts)
-
-  if (opts.watch) {
-    bundler = watchify(bundler)
-    // on any file update, re-runs the bundler
-    bundler.on('update', performBundle)
-  }
-
+  const bundler = generateBundler(opts, performBundle)
   // output build logs to terminal
   bundler.on('log', gutil.log)
 
@@ -307,6 +305,17 @@ function bundleTask(opts) {
     return (
 
       bundler.bundle()
+
+      // handle errors
+      .on('error', (err) => {
+        beep()
+        if (opts.watch) {
+          console.warn(err.stack)
+        } else {
+          throw err
+        }
+      })
+
       // convert bundle stream to gulp vinyl stream
       .pipe(source(opts.filename))
       // inject variables into bundle
@@ -315,7 +324,7 @@ function bundleTask(opts) {
       .pipe(buffer())
       // sourcemaps
       // loads map from browserify file
-      .pipe(gulpif(debug, sourcemaps.init({loadMaps: true})))
+      .pipe(gulpif(debug, sourcemaps.init({ loadMaps: true })))
       // writes .map file
       .pipe(gulpif(debug, sourcemaps.write('./')))
       // write completed bundles
@@ -328,4 +337,8 @@ function bundleTask(opts) {
 
     )
   }
+}
+
+function beep () {
+  process.stdout.write('\x07')
 }

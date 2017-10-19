@@ -1,9 +1,8 @@
-const ParentStream = require('iframe-stream').ParentStream
+const createParentStream = require('iframe-stream').ParentStream
 const SWcontroller = require('client-sw-ready-event/lib/sw-client.js')
 const SwStream = require('sw-stream/lib/sw-stream.js')
-const SetupUntrustedComunication = ('./lib/setup-untrusted-connection.js')
 
-let intervalDelay =  Math.floor(Math.random() * (30000 - 1000)) + 1000
+const intervalDelay = Math.floor(Math.random() * (30000 - 1000)) + 1000
 const background = new SWcontroller({
   fileName: '/background.js',
   letBeIdle: false,
@@ -11,9 +10,9 @@ const background = new SWcontroller({
   intervalDelay,
 })
 
-const pageStream = new ParentStream()
-background.on('ready', (_) => {
-  let swStream = SwStream({
+const pageStream = createParentStream()
+background.on('ready', () => {
+  const swStream = SwStream({
     serviceWorker: background.controller,
     context: 'dapp',
   })

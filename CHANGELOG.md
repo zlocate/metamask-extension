@@ -2,6 +2,138 @@
 
 ## Current Master
 
+- Fix bug where web3 API was sometimes injected after the page loaded.
+- Fix bug where imported accounts could not use new eth_signTypedData method.
+
+## 3.11.0 2017-10-11
+
+- Add support for new eth_signTypedData method per EIP 712.
+- Fix bug where some transactions would be shown as pending forever, even after successfully mined.
+- Fix bug where a transaction might be shown as pending forever if another tx with the same nonce was mined.
+- Fix link to support article on token addresses.
+
+## 3.10.9 2017-10-5
+
+- Only rebrodcast transactions for a day not a days worth of blocks
+- Remove Slack link from info page, since it is a big phishing target.
+- Stop computing balance based on pending transactions, to avoid edge case where users are unable to send transactions.
+
+## 3.10.8 2017-9-28
+
+- Fixed usage of new currency fetching API.
+
+## 3.10.7 2017-9-28
+
+- Fixed bug where sometimes the current account was not correctly set and exposed to web apps.
+- Added AUD, HKD, SGD, IDR, PHP to currency conversion list
+
+## 3.10.6 2017-9-27
+
+- Fix bug where newly created accounts were not selected.
+- Fix bug where selected account was not persisted between lockings.
+
+## 3.10.5 2017-9-27
+
+- Fix block gas limit estimation.
+
+## 3.10.4 2017-9-27
+
+- Fix bug that could mis-render token balances when very small. (Not actually included in 3.9.9)
+- Fix memory leak warning.
+- Fix bug where new event filters would not include historical events.
+
+## 3.10.3 2017-9-21
+
+- Fix bug where metamask-dapp connections are lost on rpc error
+- Fix bug that would sometimes display transactions as failed that could be successfully mined.
+
+## 3.10.2 2017-9-18
+
+rollback to 3.10.0 due to bug
+
+## 3.10.1 2017-9-18
+
+- Add ability to export private keys as a file.
+- Add ability to export seed words as a file.
+- Changed state logs to a file download than a clipboard copy.
+- Add specific error for failed recipient address checksum.
+- Fixed a long standing memory leak associated with filters installed by dapps
+- Fix link to support center.
+- Fixed tooltip icon locations to avoid overflow.
+- Warn users when a dapp proposes a high gas limit (90% of blockGasLimit or higher
+- Sort currencies by currency name (thanks to strelok1: https://github.com/strelok1).
+
+## 3.10.0 2017-9-11
+
+- Readded loose keyring label back into the account list.
+- Remove cryptonator from chrome permissions.
+- Add info on token contract addresses.
+- Add validation preventing users from inputting their own addresses as token tracking addresses.
+- Added button to reject all transactions (thanks to davidp94! https://github.com/davidp94)
+
+
+## 3.9.13 2017-9-8
+
+- Changed the way we initialize the inpage provider to fix a bug affecting some developers.
+
+## 3.9.12 2017-9-6
+
+- Fix bug that prevented Web3 1.0 compatibility
+- Make eth_sign deprecation warning less noisy
+- Add useful link to eth_sign deprecation warning.
+- Fix bug with network version serialization over synchronous RPC
+- Add MetaMask version to state logs.
+- Add the total amount of tokens when multiple tokens are added under the token list
+- Use HTTPS links for Etherscan.
+- Update Support center link to new one with HTTPS.
+- Make web3 deprecation notice more useful by linking to a descriptive article.
+
+## 3.9.11 2017-8-24
+
+- Fix nonce calculation bug that would sometimes generate very wrong nonces.
+- Give up resubmitting a transaction after 3500 blocks.
+
+## 3.9.10 2017-8-23
+
+- Improve nonce calculation, to prevent bug where people are unable to send transactions reliably.
+- Remove link to eth-tx-viz from identicons in tx history.
+
+## 3.9.9 2017-8-18
+
+- Fix bug where some transaction submission errors would show an empty screen.
+- Fix bug that could mis-render token balances when very small.
+- Fix formatting of eth_sign "Sign Message" view.
+- Add deprecation warning to eth_sign "Sign Message" view.
+
+## 3.9.8 2017-8-16
+
+- Reenable token list.
+- Remove default tokens.
+
+## 3.9.7 2017-8-15
+
+- hotfix - disable token list
+- Added a deprecation warning for web3 https://github.com/ethereum/mist/releases/tag/v0.9.0
+
+## 3.9.6 2017-8-09
+
+- Replace account screen with an account drop-down menu.
+- Replace account buttons with a new account-specific drop-down menu.
+
+## 3.9.5 2017-8-04
+
+- Improved phishing detection configuration update rate
+
+## 3.9.4 2017-8-03
+
+- Fixed bug that prevented transactions from being rejected.
+
+## 3.9.3 2017-8-03
+
+- Add support for EGO ujo token
+- Continuously update blacklist for known phishing sites in background.
+- Automatically detect suspicious URLs too similar to common phishing targets, and blacklist them.
+
 ## 3.9.2 2017-7-26
 
 - Fix bugs that could sometimes result in failed transactions after switching networks.
@@ -72,7 +204,7 @@
 
 ## 3.7.8 2017-6-12
 
-- Add a `ethereum:` prefix to the QR code address
+- Add an `ethereum:` prefix to the QR code address
 - The default network on installation is now MainNet
 - Fix currency API URL from cryptonator.
 - Update gasLimit params with every new block seen.
@@ -228,7 +360,7 @@
 
 - Add ability to import accounts in JSON file format (used by Mist, Geth, MyEtherWallet, and more!)
 - Fix unapproved messages not being included in extension badge.
-- Fix rendering bug where the Confirm transaction view would lets you approve transactions when the account has insufficient balance.
+- Fix rendering bug where the Confirm transaction view would let you approve transactions when the account has insufficient balance.
 
 ## 3.1.2 2017-1-24
 
@@ -251,8 +383,8 @@
 ## 3.0.0 2017-1-16
 
 - Fix seed word account generation (https://medium.com/metamask/metamask-3-migration-guide-914b79533cdd#.t4i1qmmsz).
-- Fix Bug where you see a empty transaction flash by on the confirm transaction view.
-- Create visible difference in transaction history between a approved but not yet included in a block transaction and a transaction who has been confirmed.
+- Fix Bug where you see an empty transaction flash by on the confirm transaction view.
+- Create visible difference in transaction history between an approved but not yet included in a block transaction and a transaction who has been confirmed.
 - Fix memory leak in RPC Cache
 - Override RPC commands eth_syncing and web3_clientVersion
 - Remove certain non-essential permissions from certain builds.
@@ -307,7 +439,7 @@
 
 - Fix bug where gas estimate would sometimes be very high.
 - Increased our gas estimate from 100k gas to 20% of estimate.
-- Fix github link on info page to point at current repository.
+- Fix GitHub link on info page to point at current repository.
 
 ## 2.13.6 2016-10-26
 
@@ -383,7 +515,7 @@ popup notification opens up.
 - Block negative values from transactions.
 - Fixed a memory leak.
 - MetaMask logo now renders as super lightweight SVG, improving compatibility and performance.
-- Now showing loading indication during vault unlocking, to clarify behavior for users who are experience slow unlocks.
+- Now showing loading indication during vault unlocking, to clarify behavior for users who are experiencing slow unlocks.
 - Now only initially creates one wallet when restoring a vault, to reduce some users' confusion.
 
 ## 2.10.2 2016-09-02
@@ -415,7 +547,7 @@ popup notification opens up.
 - Added info link on account screen that visits Etherscan.
 - Fixed bug where a message signing request would be lost if the vault was locked.
 - Added shortcut to open MetaMask (Ctrl+Alt+M or Cmd+Opt/Alt+M)
-- Prevent API calls in  tests.
+- Prevent API calls in tests.
 - Fixed bug where sign message confirmation would sometimes render blank.
 
 ## 2.9.0 2016-08-22

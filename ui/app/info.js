@@ -20,7 +20,11 @@ InfoScreen.prototype.render = function () {
   const version = global.platform.getVersion()
 
   return (
-    h('.flex-column.flex-grow', [
+    h('.flex-column.flex-grow', {
+      style: {
+        maxWidth: '400px',
+      },
+    }, [
 
       // subtitle and nav
       h('.section-title.flex-row.flex-center', [
@@ -99,16 +103,11 @@ InfoScreen.prototype.render = function () {
             [
               h('div.fa.fa-support', [
                 h('a.info', {
-                  href: 'http://metamask.consensyssupport.happyfox.com',
+                  href: 'https://support.metamask.io',
                   target: '_blank',
                 }, 'Visit our Support Center'),
               ]),
-              h('div.fa.fa-github', [
-                h('a.info', {
-                  href: 'https://github.com/MetaMask/metamask-extension/issues/new',
-                  target: '_blank',
-                }, 'Found a bug? Report it!'),
-              ]),
+
               h('div', [
                 h('a', {
                   href: 'https://metamask.io/',
@@ -126,18 +125,14 @@ InfoScreen.prototype.render = function () {
                   h('div.info', 'Visit our web site'),
                 ]),
               ]),
-              h('div.fa.fa-slack', [
-                h('a.info', {
-                  href: 'http://slack.metamask.io',
-                  target: '_blank',
-                }, 'Join the conversation on Slack'),
-              ]),
 
-              h('div.fa.fa-twitter', [
-                h('a.info', {
-                  href: 'https://twitter.com/metamask_io',
-                  target: '_blank',
-                }, 'Follow us on Twitter'),
+              h('div', [
+                h('.fa.fa-twitter', [
+                  h('a.info', {
+                    href: 'https://twitter.com/metamask_io',
+                    target: '_blank',
+                  }, 'Follow us on Twitter'),
+                ]),
               ]),
 
               h('div.fa.fa-envelope', [
