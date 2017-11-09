@@ -9,10 +9,14 @@ class PreferencesController {
       frequentRpcList: [],
       currentAccountTab: 'history',
       tokens: [],
+      featureFlags: {
+        flatUi: false,
+      },
     }, opts.initState)
     this.store = new ObservableStore(initState)
   }
-// PUBLIC METHODS
+
+  // PUBLIC METHODS
 
   setSelectedAddress (_address) {
     return new Promise((resolve, reject) => {
@@ -45,17 +49,23 @@ class PreferencesController {
     return Promise.resolve(tokens)
   }
 
-  removeToken (rawAddress) {
+  async removeToken (rawAddress) {
     const tokens = this.store.getState().tokens
 
     const updatedTokens = tokens.filter(token => token.address !== rawAddress)
 
     this.store.updateState({ tokens: updatedTokens })
-    return Promise.resolve(updatedTokens)
+    return updatedTokens
   }
 
   getTokens () {
     return this.store.getState().tokens
+  }
+
+  async setFeatureFlag (label, value) {
+    const featureFlags = this.store.getState().featureFlags
+    featureFlags[label] = value
+    this.store.updateState({ featureFlags })
   }
 
   updateFrequentRpcList (_url) {
