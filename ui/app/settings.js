@@ -357,6 +357,7 @@ const mapDispatchToProps = dispatch => {
     setRpcTarget: newRpc => dispatch(actions.setRpcTarget(newRpc)),
     displayWarning: warning => dispatch(actions.displayWarning(warning)),
     revealSeedConfirmation: () => dispatch(actions.revealSeedConfirmation()),
+    setFeatureFlag: (key, value) => dispatch(actions.setFeatureFlag(key, value)),
   }
 }
 
