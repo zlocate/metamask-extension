@@ -93,6 +93,7 @@ var actions = {
   SHOW_CONF_MSG_PAGE: 'SHOW_CONF_MSG_PAGE',
   SET_CURRENT_FIAT: 'SET_CURRENT_FIAT',
   setCurrentCurrency: setCurrentCurrency,
+  setFeatureFlag,
   setCurrentAccountTab,
   // account detail screen
   SHOW_SEND_PAGE: 'SHOW_SEND_PAGE',
@@ -462,6 +463,10 @@ function setCurrentCurrency (currencyCode) {
       })
     })
   }
+}
+
+function setFeatureFlag (key, value) {
+  return callBackgroundThenUpdate(background.setFeatureFlag)
 }
 
 function signMsg (msgData) {
