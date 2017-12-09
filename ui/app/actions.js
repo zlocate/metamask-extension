@@ -760,10 +760,10 @@ function markAccountsFound () {
   return callBackgroundThenUpdate(background.markAccountsFound)
 }
 
-function retryTransaction (txId) {
+function retryTransaction (txId, higherGas) {
   log.debug(`background.retryTransaction`)
   return (dispatch) => {
-    background.retryTransaction(txId, (err, newState) => {
+    background.retryTransaction(txId, higherGas, (err, newState) => {
       if (err) {
         return dispatch(actions.displayWarning(err.message))
       }

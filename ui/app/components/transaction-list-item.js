@@ -28,12 +28,6 @@ function TransactionListItem () {
   Component.call(this)
 }
 
-TransactionListItem.prototype.showRetryButton = function () {
-  const { transaction = {} } = this.props
-  const { status, time } = transaction
-  return status === 'submitted' && Date.now() - time > 30000
-}
-
 TransactionListItem.prototype.render = function () {
   const { transaction, network, conversionRate, currentCurrency } = this.props
   const { status } = transaction
@@ -120,42 +114,88 @@ TransactionListItem.prototype.render = function () {
         }) : h('.flex-column'),
       ]),
 
-      this.showRetryButton() && h('.transition-list-item__retry.grow-on-hover', {
-        onClick: event => {
-          event.stopPropagation()
-          this.resubmit()
-        },
-        style: {
-          height: '22px',
-          borderRadius: '22px',
-          color: '#F9881B',
-          padding: '0 20px',
-          backgroundColor: '#FFE3C9',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: '8px',
-          cursor: 'pointer',
-        },
-      }, [
-        h('div', {
-          style: {
-            paddingRight: '2px',
-          },
-        }, 'Taking too long?'),
-        h('div', {
-          style: {
-            textDecoration: 'underline',
-          },
-        }, 'Retry with a higher gas price here'),
-      ]),
+      this.showRetryWithHigherGas() && this.renderRetryWithHigherGas(),
+      this.showRetryFailed() && this.renderRetryFailed(),
     ])
   )
 }
 
-TransactionListItem.prototype.resubmit = function () {
+TransactionListItem.prototype.showRetryFailed = function () {
+  const { transaction = {} } = this.props
+  const { status } = transaction
+  return status === 'failed'
+}
+
+TransactionListItem.prototype.renderRetryFailed = function () {
+  return h('.transition-list-item__retry.grow-on-hover', {
+    onClick: event => {
+      event.stopPropagation()
+      this.resubmit(false)
+    },
+    style: {
+      height: '22px',
+      borderRadius: '22px',
+      color: '#F9881B',
+      padding: '0 20px',
+      backgroundColor: '#FFE3C9',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: '8px',
+      cursor: 'pointer',
+    },
+  }, [
+    h('div', {
+      style: {
+        textDecoration: 'underline',
+      },
+    }, 'Retry'),
+  ])
+}
+
+
+TransactionListItem.prototype.showRetryWithHigherGas = function () {
+  const { transaction = {} } = this.props
+  const { status, time } = transaction
+  return status === 'submitted' && Date.now() - time > 30000
+}
+
+TransactionListItem.prototype.renderRetryWithHigherGas = function () {
+  return h('.transition-list-item__retry.grow-on-hover', {
+    onClick: event => {
+      event.stopPropagation()
+      this.resubmit(true)
+    },
+    style: {
+      height: '22px',
+      borderRadius: '22px',
+      color: '#F9881B',
+      padding: '0 20px',
+      backgroundColor: '#FFE3C9',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: '8px',
+      cursor: 'pointer',
+    },
+  }, [
+    h('div', {
+      style: {
+        paddingRight: '2px',
+      },
+    }, 'Taking too long?'),
+
+    h('div', {
+      style: {
+        textDecoration: 'underline',
+      },
+    }, 'Retry with a higher gas price here'),
+  ])
+}
+
+TransactionListItem.prototype.resubmit = function (higherGas) {
   const { transaction } = this.props
-  this.props.retryTransaction(transaction.id)
+  this.props.retryTransaction(transaction.id, higherGas)
 }
 
 function domainField (txParams) {

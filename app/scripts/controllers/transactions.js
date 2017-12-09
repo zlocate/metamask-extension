@@ -187,10 +187,12 @@ module.exports = class TransactionController extends EventEmitter {
     return await this.txGasUtil.analyzeGasUsage(txMeta)
   }
 
-  async retryTransaction (txId) {
+  async retryTransaction (txId, higherGas) {
     this.txStateManager.setTxStatusUnapproved(txId)
     const txMeta = this.txStateManager.getTx(txId)
-    txMeta.lastGasPrice = txMeta.txParams.gasPrice
+    if (higherGas) {
+      txMeta.lastGasPrice = txMeta.txParams.gasPrice
+    }
     this.txStateManager.updateTx(txMeta, 'retryTransaction: manual retry')
   }
 
