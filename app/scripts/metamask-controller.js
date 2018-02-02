@@ -251,6 +251,8 @@ module.exports = class MetamaskController extends EventEmitter {
       // personal_sign msg signing
       processPersonalMessage: this.newUnsignedPersonalMessage.bind(this),
       processTypedMessage: this.newUnsignedTypedMessage.bind(this),
+      // dont start the blocktracker on init
+      startBlockTracker: false,
     }
     const providerProxy = this.networkController.initializeProvider(providerOpts)
     return providerProxy

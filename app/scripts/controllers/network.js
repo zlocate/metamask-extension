@@ -175,8 +175,23 @@ module.exports = class NetworkController extends EventEmitter {
     // override block tracler
     provider._blockTracker = createEventEmitterProxy(provider._blockTracker, blockTrackerHandlers)
     // set as new provider
+    this._startProviderWithRetry(provider)
     this._provider = provider
     this._proxy.setTarget(provider)
+  }
+
+  _startProviderWithRetry (provider) {
+    provider.start()
+    .catch(() => {
+      const intrevalId = setInterval(() => {
+        provider.stop()
+        provider.start()
+        .then(() => {
+          this.lookupNetwork()
+          clearInterval(intrevalId)
+        }).catch(log.error)
+      }, 5e3)
+    })
   }
 
   _logBlock (block) {
