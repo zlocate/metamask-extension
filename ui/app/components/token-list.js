@@ -43,7 +43,7 @@ TokenList.prototype.render = function () {
   const { tokens, isLoading, error } = state
 
   if (isLoading) {
-    return this.message(t(this.props.localeMessages, 'loadingTokens'))
+    return this.message(this.t('loadingTokens'))
   }
 
   if (error) {
@@ -53,7 +53,7 @@ TokenList.prototype.render = function () {
         padding: '80px',
       },
     }, [
-      t(this.props.localeMessages, 'troubleTokenBalances'),
+      this.t('troubleTokenBalances'),
       h('span.hotFix', {
         style: {
           color: 'rgba(247, 134, 28, 1)',
@@ -64,7 +64,7 @@ TokenList.prototype.render = function () {
           url: `https://ethplorer.io/address/${userAddress}`,
         })
         },
-      }, t(this.props.localeMessages, 'here')),
+      }, this.t('here')),
     ])
   }
 

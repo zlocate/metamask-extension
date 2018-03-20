@@ -1,14 +1,13 @@
-const Component = require('react').Component
 const h = require('react-hyperscript')
-const inherits = require('util').inherits
 const connect = require('../../metamask-connect')
 const actions = require('../../actions')
-const t = require('../../../i18n-helper').getMessage
+const LocaleComponent = require('../../components/locale')
 const { getCurrentViewContext } = require('../../selectors')
 const classnames = require('classnames')
 
 const NewAccountCreateForm = require('./create-form')
 const NewAccountImportForm = require('../import')
+
 
 function mapStateToProps (state) {
   return {
@@ -28,13 +27,15 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-inherits(AccountDetailsModal, Component)
-function AccountDetailsModal (props) {
-  Component.call(this)
+class AccountDetailsModal extends LocaleComponent {
 
-  this.state = {
-    displayedForm: props.displayedForm,
+  constructor (props) {
+    super()
+    this.state = {
+      displayedForm: props.displayedForm,
+    }
   }
+
 }
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(AccountDetailsModal)
@@ -46,7 +47,7 @@ AccountDetailsModal.prototype.render = function () {
 
     h('div.new-account__header', [
 
-      h('div.new-account__title', t(this.props.localeMessages, 'newAccount')),
+      h('div.new-account__title', this.t('newAccount')),
 
       h('div.new-account__tabs', [
 
@@ -56,7 +57,7 @@ AccountDetailsModal.prototype.render = function () {
             'new-account__tabs__unselected cursor-pointer': displayedForm !== 'CREATE',
           }),
           onClick: () => displayForm('CREATE'),
-        }, t(this.props.localeMessages, 'createDen')),
+        }, this.t('createDen')),
 
         h('div.new-account__tabs__tab', {
           className: classnames('new-account__tabs__tab', {
@@ -64,7 +65,7 @@ AccountDetailsModal.prototype.render = function () {
             'new-account__tabs__unselected cursor-pointer': displayedForm !== 'IMPORT',
           }),
           onClick: () => displayForm('IMPORT'),
-        }, t(this.props.localeMessages, 'import')),
+        }, this.t('import')),
 
       ]),
 

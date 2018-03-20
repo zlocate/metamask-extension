@@ -117,7 +117,7 @@ WalletView.prototype.render = function () {
         onClick: hideSidebar,
       }),
 
-      h('div.wallet-view__keyring-label.allcaps', isLoose ? t(this.props.localeMessages, 'imported') : ''),
+      h('div.wallet-view__keyring-label.allcaps', isLoose ? this.t('imported') : ''),
 
       h('div.flex-column.flex-center.wallet-view__name-container', {
         style: { margin: '0 auto' },
@@ -134,13 +134,13 @@ WalletView.prototype.render = function () {
           selectedIdentity.name,
         ]),
 
-        h('button.btn-clear.wallet-view__details-button.allcaps', t(this.props.localeMessages, 'details')),
+        h('button.btn-clear.wallet-view__details-button.allcaps', this.t('details')),
       ]),
     ]),
 
     h(Tooltip, {
       position: 'bottom',
-      title: this.state.hasCopied ? t(this.props.localeMessages, 'copiedExclamation') : t(this.props.localeMessages, 'copyToClipboard'),
+      title: this.state.hasCopied ? this.t('copiedExclamation') : this.t('copyToClipboard'),
       wrapperClassName: 'wallet-view__tooltip',
     }, [
       h('button.wallet-view__address', {
@@ -173,7 +173,7 @@ WalletView.prototype.render = function () {
         showAddTokenPage()
         hideSidebar()
       },
-    }, t(this.props.localeMessages, 'addToken')),
+    }, this.t('addToken')),
   ])
 }
 

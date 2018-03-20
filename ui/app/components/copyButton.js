@@ -1,17 +1,12 @@
-const Component = require('react').Component
 const h = require('react-hyperscript')
-const inherits = require('util').inherits
 const copyToClipboard = require('copy-to-clipboard')
-const t = require('../../i18n-helper').getMessage
-
+const LocaleComponent = require('./locale')
 const Tooltip = require('./tooltip')
 
-module.exports = CopyButton
 
-inherits(CopyButton, Component)
-function CopyButton () {
-  Component.call(this)
-}
+class CopyButton extends LocaleComponent {}
+
+module.exports = CopyButton
 
 // As parameters, accepts:
 // "value", which is the value to copy (mandatory)
@@ -23,7 +18,7 @@ CopyButton.prototype.render = function () {
   const value = props.value
   const copied = state.copied
 
-  const message = copied ? t(this.props.localeMessages, 'copiedButton') : props.title || t(this.props.localeMessages, 'copyButton')
+  const message = copied ? this.t('copiedButton') : props.title || this.t('copyButton')
 
   return h('.copy-button', {
     style: {

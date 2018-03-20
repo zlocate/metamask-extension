@@ -127,13 +127,13 @@ HexAsDecimalInput.prototype.constructWarning = function () {
   let message = name ? name + ' ' : ''
 
   if (min && max) {
-    message += t(this.props.localeMessages, 'betweenMinAndMax', [min, max])
+    message += this.t('betweenMinAndMax', [min, max])
   } else if (min) {
-    message += t(this.props.localeMessages, 'greaterThanMin', [min])
+    message += this.t('greaterThanMin', [min])
   } else if (max) {
-    message += t(this.props.localeMessages, 'lessThanMax', [max])
+    message += this.t('lessThanMax', [max])
   } else {
-    message += t(this.props.localeMessages, 'invalidInput')
+    message += this.t('invalidInput')
   }
 
   return message

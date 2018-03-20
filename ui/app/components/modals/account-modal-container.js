@@ -60,7 +60,7 @@ AccountModalContainer.prototype.render = function () {
 
         h('i.fa.fa-angle-left.fa-lg'),
 
-        h('span.account-modal-back__text', ' ' + t(this.props.localeMessages, 'back')),
+        h('span.account-modal-back__text', ' ' + this.t('back')),
 
       ]),
 

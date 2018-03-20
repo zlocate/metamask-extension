@@ -65,12 +65,12 @@ AccountDetailsModal.prototype.render = function () {
 
       h('button.btn-clear.account-modal__button', {
         onClick: () => global.platform.openWindow({ url: genAccountLink(address, network) }),
-      }, t(this.props.localeMessages, 'etherscanView')),
+      }, this.t('etherscanView')),
 
       // Holding on redesign for Export Private Key functionality
       h('button.btn-clear.account-modal__button', {
         onClick: () => showExportPrivateKeyModal(),
-      }, t(this.props.localeMessages, 'exportPrivateKey')),
+      }, this.t('exportPrivateKey')),
 
   ])
 }

@@ -1,10 +1,8 @@
-const inherits = require('util').inherits
-const Component = require('react').Component
 const connect = require('./metamask-connect')
 const h = require('react-hyperscript')
 const actions = require('./actions')
 const classnames = require('classnames')
-const t = require('../i18n-helper').getMessage
+const LocaleComponent = require('./components/locale')
 
 // mascara
 const MascaraFirstTime = require('../../mascara/src/app/first-time').default
@@ -46,10 +44,9 @@ const QrView = require('./components/qr-code')
 // Global Modals
 const Modal = require('./components/modals/index').Modal
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(App)
+class App extends LocaleComponent {}
 
-inherits(App, Component)
-function App () { Component.call(this) }
+module.exports = connect(mapStateToProps, mapDispatchToProps)(App)
 
 function mapStateToProps (state) {
   const {
@@ -294,8 +291,8 @@ App.prototype.renderAppBar = function () {
 
             // metamask name
             h('.flex-row', [
-              h('h1', t(this.props.localeMessages, 'appName')),
-              h('div.beta-label', t(this.props.localeMessages, 'beta')),
+              h('h1', this.t('appName')),
+              h('div.beta-label', this.t('beta')),
             ]),
           ]),
 

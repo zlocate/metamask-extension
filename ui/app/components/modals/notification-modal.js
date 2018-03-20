@@ -23,12 +23,12 @@ class NotificationModal extends Component {
       }, [
 
         h('div.notification-modal__header', {}, [
-          t(this.props.localeMessages, header),
+          this.t(header),
         ]),
 
         h('div.notification-modal__message-wrapper', {}, [
           h('div.notification-modal__message', {}, [
-            t(this.props.localeMessages, message),
+            this.t(message),
           ]),
         ]),
 

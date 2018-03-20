@@ -95,13 +95,13 @@ NetworkDropdown.prototype.render = function () {
   }, [
 
     h('div.network-dropdown-header', {}, [
-      h('div.network-dropdown-title', {}, t(this.props.localeMessages, 'networks')),
+      h('div.network-dropdown-title', {}, this.t('networks')),
 
       h('div.network-dropdown-divider'),
 
       h('div.network-dropdown-content',
         {},
-        t(this.props.localeMessages, 'defaultNetwork')
+        this.t('defaultNetwork')
       ),
     ]),
 
@@ -123,7 +123,7 @@ NetworkDropdown.prototype.render = function () {
           style: {
             color: providerType === 'mainnet' ? '#ffffff' : '#9b9b9b',
           },
-        }, t(this.props.localeMessages, 'mainnet')),
+        }, this.t('mainnet')),
       ]
     ),
 
@@ -145,7 +145,7 @@ NetworkDropdown.prototype.render = function () {
           style: {
             color: providerType === 'ropsten' ? '#ffffff' : '#9b9b9b',
           },
-        }, t(this.props.localeMessages, 'ropsten')),
+        }, this.t('ropsten')),
       ]
     ),
 
@@ -167,7 +167,7 @@ NetworkDropdown.prototype.render = function () {
           style: {
             color: providerType === 'kovan' ? '#ffffff' : '#9b9b9b',
           },
-        }, t(this.props.localeMessages, 'kovan')),
+        }, this.t('kovan')),
       ]
     ),
 
@@ -189,7 +189,7 @@ NetworkDropdown.prototype.render = function () {
           style: {
             color: providerType === 'rinkeby' ? '#ffffff' : '#9b9b9b',
           },
-        }, t(this.props.localeMessages, 'rinkeby')),
+        }, this.t('rinkeby')),
       ]
     ),
 
@@ -211,7 +211,7 @@ NetworkDropdown.prototype.render = function () {
           style: {
             color: activeNetwork === 'http://localhost:8545' ? '#ffffff' : '#9b9b9b',
           },
-        }, t(this.props.localeMessages, 'localhost')),
+        }, this.t('localhost')),
       ]
     ),
 
@@ -235,7 +235,7 @@ NetworkDropdown.prototype.render = function () {
           style: {
             color: activeNetwork === 'custom' ? '#ffffff' : '#9b9b9b',
           },
-        }, t(this.props.localeMessages, 'customRPC')),
+        }, this.t('customRPC')),
       ]
     ),
 
@@ -250,15 +250,15 @@ NetworkDropdown.prototype.getNetworkName = function () {
   let name
 
   if (providerName === 'mainnet') {
-    name = t(this.props.localeMessages, 'mainnet')
+    name = this.t('mainnet')
   } else if (providerName === 'ropsten') {
-    name = t(this.props.localeMessages, 'ropsten')
+    name = this.t('ropsten')
   } else if (providerName === 'kovan') {
-    name = t(this.props.localeMessages, 'kovan')
+    name = this.t('kovan')
   } else if (providerName === 'rinkeby') {
-    name = t(this.props.localeMessages, 'rinkeby')
+    name = this.t('rinkeby')
   } else {
-    name = t(this.props.localeMessages, 'unknownNetwork')
+    name = this.t('unknownNetwork')
   }
 
   return name

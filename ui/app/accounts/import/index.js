@@ -1,29 +1,24 @@
-const inherits = require('util').inherits
-const Component = require('react').Component
 const h = require('react-hyperscript')
 const connect = require('../../metamask-connect')
-const t = require('../../../i18n-helper').getMessage
+const LocaleComponent = require('../../components/locale')
+
 import Select from 'react-select'
 
 // Subviews
 const JsonImportView = require('./json.js')
 const PrivateKeyImportView = require('./private-key.js')
 
+class AccountImportSubview extends LocaleComponent {}
 
 module.exports = connect(mapStateToProps)(AccountImportSubview)
 
 function mapStateToProps (state) {
   return {
     menuItems: [
-      t(this.props.localeMessages, 'privateKey'),
-      t(this.props.localeMessages, 'jsonFile'),
+      this.t('privateKey'),
+      this.t('jsonFile'),
     ],
   }
-}
-
-inherits(AccountImportSubview, Component)
-function AccountImportSubview () {
-  Component.call(this)
 }
 
 AccountImportSubview.prototype.render = function () {
@@ -36,7 +31,7 @@ AccountImportSubview.prototype.render = function () {
     h('div.new-account-import-form', [
 
       h('.new-account-import-disclaimer', [
-        h('span', t('importAccountMsg')),
+        h('span', this.t('importAccountMsg')),
         h('span', {
           style: {
             cursor: 'pointer',
@@ -47,12 +42,12 @@ AccountImportSubview.prototype.render = function () {
               url: 'https://metamask.helpscoutdocs.com/article/17-what-are-loose-accounts',
             })
           },
-        }, t('here')),
+        }, this.t('here')),
       ]),
 
       h('div.new-account-import-form__select-section', [
 
-        h('div.new-account-import-form__select-label', t('selectType')),
+        h('div.new-account-import-form__select-label', this.t('selectType')),
 
         h(Select, {
           className: 'new-account-import-form__select',
@@ -85,9 +80,9 @@ AccountImportSubview.prototype.renderImportView = function () {
   const current = type || menuItems[0]
 
   switch (current) {
-    case t(this.props.localeMessages, 'privateKey'):
+    case this.t('privateKey'):
       return h(PrivateKeyImportView)
-    case t(this.props.localeMessages, 'jsonFile'):
+    case this.t('jsonFile'):
       return h(JsonImportView)
     default:
       return h(JsonImportView)

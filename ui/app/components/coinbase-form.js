@@ -1,9 +1,10 @@
-const Component = require('react').Component
 const h = require('react-hyperscript')
-const inherits = require('util').inherits
 const connect = require('../metamask-connect')
 const actions = require('../actions')
-const t = require('../../i18n-helper').getMessage
+const LocaleComponent = require('./locale')
+
+
+class CoinbaseForm extends LocaleComponent {}
 
 module.exports = connect(mapStateToProps)(CoinbaseForm)
 
@@ -11,12 +12,6 @@ function mapStateToProps (state) {
   return {
     warning: state.appState.warning,
   }
-}
-
-inherits(CoinbaseForm, Component)
-
-function CoinbaseForm () {
-  Component.call(this)
 }
 
 CoinbaseForm.prototype.render = function () {
@@ -38,11 +33,11 @@ CoinbaseForm.prototype.render = function () {
     }, [
       h('button.btn-green', {
         onClick: this.toCoinbase.bind(this),
-      }, t(this.props.localeMessages, 'continueToCoinbase')),
+      }, this.t('continueToCoinbase')),
 
       h('button.btn-red', {
         onClick: () => props.dispatch(actions.goHome()),
-      }, t(this.props.localeMessages, 'cancel')),
+      }, this.t('cancel')),
     ]),
   ])
 }

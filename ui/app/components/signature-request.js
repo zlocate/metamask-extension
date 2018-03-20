@@ -55,7 +55,7 @@ SignatureRequest.prototype.renderHeader = function () {
 
     h('div.request-signature__header-background'),
 
-    h('div.request-signature__header__text', t(this.props.localeMessages, 'sigRequest')),
+    h('div.request-signature__header__text', this.t('sigRequest')),
 
     h('div.request-signature__header__tip-container', [
       h('div.request-signature__header__tip'),
@@ -76,7 +76,7 @@ SignatureRequest.prototype.renderAccountDropdown = function () {
 
   return h('div.request-signature__account', [
 
-    h('div.request-signature__account-text', [t(this.props.localeMessages, 'account') + ':']),
+    h('div.request-signature__account-text', [this.t('account') + ':']),
 
     h(AccountDropdownMini, {
       selectedAccount,
@@ -103,7 +103,7 @@ SignatureRequest.prototype.renderBalance = function () {
 
   return h('div.request-signature__balance', [
 
-    h('div.request-signature__balance-text', [t(this.props.localeMessages, 'balance')]),
+    h('div.request-signature__balance-text', [this.t('balance')]),
 
     h('div.request-signature__balance-value', `${balanceInEther} ETH`),
 
@@ -137,7 +137,7 @@ SignatureRequest.prototype.renderRequestInfo = function () {
   return h('div.request-signature__request-info', [
 
     h('div.request-signature__headline', [
-      t(this.props.localeMessages, 'yourSigRequested'),
+      this.t('yourSigRequested'),
     ]),
 
   ])
@@ -155,18 +155,18 @@ SignatureRequest.prototype.msgHexToText = function (hex) {
 
 SignatureRequest.prototype.renderBody = function () {
   let rows
-  let notice = t(this.props.localeMessages, 'youSign') + ':'
+  let notice = this.t('youSign') + ':'
 
   const { txData } = this.props
   const { type, msgParams: { data } } = txData
 
   if (type === 'personal_sign') {
-    rows = [{ name: t(this.props.localeMessages, 'message'), value: this.msgHexToText(data) }]
+    rows = [{ name: this.t('message'), value: this.msgHexToText(data) }]
   } else if (type === 'eth_signTypedData') {
     rows = data
   } else if (type === 'eth_sign') {
-    rows = [{ name: t(this.props.localeMessages, 'message'), value: data }]
-    notice = t(this.props.localeMessages, 'signNotice')
+    rows = [{ name: this.t('message'), value: data }]
+    notice = this.t('signNotice')
   }
 
   return h('div.request-signature__body', {}, [
@@ -225,10 +225,10 @@ SignatureRequest.prototype.renderFooter = function () {
   return h('div.request-signature__footer', [
     h('button.request-signature__footer__cancel-button', {
       onClick: cancel,
-    }, t(this.props.localeMessages, 'cancel')),
+    }, this.t('cancel')),
     h('button.request-signature__footer__sign-button', {
       onClick: sign,
-    }, t(this.props.localeMessages, 'sign')),
+    }, this.t('sign')),
   ])
 }
 

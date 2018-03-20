@@ -49,8 +49,8 @@ ExportPrivateKeyModal.prototype.exportAccountAndGetPrivateKey = function (passwo
 
 ExportPrivateKeyModal.prototype.renderPasswordLabel = function (privateKey) {
   return h('span.private-key-password-label', privateKey
-    ? t(this.props.localeMessages, 'copyPrivateKey')
-    : t(this.props.localeMessages, 'typePassword')
+    ? this.t('copyPrivateKey')
+    : this.t('typePassword')
   )
 }
 
@@ -87,8 +87,8 @@ ExportPrivateKeyModal.prototype.renderButtons = function (privateKey, password, 
     ),
 
     (privateKey
-      ? this.renderButton('btn-clear export-private-key__button', () => hideModal(), t(this.props.localeMessages, 'done'))
-      : this.renderButton('btn-clear export-private-key__button', () => this.exportAccountAndGetPrivateKey(this.state.password, address), t(this.props.localeMessages, 'confirm'))
+      ? this.renderButton('btn-clear export-private-key__button', () => hideModal(), this.t('done'))
+      : this.renderButton('btn-clear export-private-key__button', () => this.exportAccountAndGetPrivateKey(this.state.password, address), this.t('confirm'))
     ),
 
   ])
@@ -121,7 +121,7 @@ ExportPrivateKeyModal.prototype.render = function () {
 
       h('div.account-modal-divider'),
 
-      h('span.modal-body-title', t(this.props.localeMessages, 'showPrivateKeys')),
+      h('span.modal-body-title', this.t('showPrivateKeys')),
 
       h('div.private-key-password', {}, [
         this.renderPasswordLabel(privateKey),
@@ -131,7 +131,7 @@ ExportPrivateKeyModal.prototype.render = function () {
         !warning ? null : h('span.private-key-password-error', warning),
       ]),
 
-      h('div.private-key-password-warning', t(this.props.localeMessages, 'privateKeyWarning')),
+      h('div.private-key-password-warning', this.t('privateKeyWarning')),
 
       this.renderButtons(privateKey, this.state.password, address, hideModal),
 

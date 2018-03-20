@@ -57,7 +57,7 @@ TxList.prototype.renderTransaction = function () {
     : [h(
         'div.tx-list-item.tx-list-item--empty',
         { key: 'tx-list-none' },
-        [ t(this.props.localeMessages, 'noTransactions') ],
+        [ this.t('noTransactions') ],
       )]
 }
 
@@ -111,7 +111,7 @@ TxList.prototype.renderTransactionListItem = function (transaction, conversionRa
 
   if (isUnapproved) {
     opts.onClick = () => showConfTxPage({ id: transactionId })
-    opts.transactionStatus = t(this.props.localeMessages, 'Not Started')
+    opts.transactionStatus = this.t('Not Started')
   } else if (transactionHash) {
     opts.onClick = () => this.view(transactionHash, transactionNetworkId)
   }

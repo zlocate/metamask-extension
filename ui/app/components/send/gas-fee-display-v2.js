@@ -33,8 +33,8 @@ GasFeeDisplay.prototype.render = function () {
         readOnly: true,
       })
       : gasLoadingError
-        ? h('div.currency-display.currency-display--message', t(this.props.localeMessages, 'setGasPrice'))
-        : h('div.currency-display', t(this.props.localeMessages, 'loading')),
+        ? h('div.currency-display.currency-display--message', this.t('setGasPrice'))
+        : h('div.currency-display', this.t('loading')),
 
     h('button.sliders-icon-container', {
       onClick,

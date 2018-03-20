@@ -73,21 +73,21 @@ TxView.prototype.renderButtons = function () {
           onClick: () => showModal({
             name: 'DEPOSIT_ETHER',
           }),
-        }, t(this.props.localeMessages, 'deposit')),
+        }, this.t('deposit')),
 
         h('button.btn-clear.hero-balance-button.allcaps', {
           style: {
             marginLeft: '0.8em',
           },
           onClick: showSendPage,
-        }, t(this.props.localeMessages, 'send')),
+        }, this.t('send')),
       ])
     )
     : (
       h('div.flex-row.flex-center.hero-balance-buttons', [
         h('button.btn-clear.hero-balance-button', {
           onClick: showSendTokenPage,
-        }, t(this.props.localeMessages, 'send')),
+        }, this.t('send')),
       ])
     )
 }

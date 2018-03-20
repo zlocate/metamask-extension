@@ -1,10 +1,9 @@
-const Component = require('react').Component
 const h = require('react-hyperscript')
 const inherits = require('util').inherits
 const connect = require('../../metamask-connect')
 const actions = require('../../actions')
 const GasModalCard = require('./gas-modal-card')
-const t = require('../../../i18n-helper').getMessage
+const LocaleComponent = require('../locale')
 
 const ethUtil = require('ethereumjs-util')
 
@@ -88,11 +87,13 @@ function getOriginalState (props) {
   }
 }
 
-inherits(CustomizeGasModal, Component)
-function CustomizeGasModal (props) {
-  Component.call(this)
+class CustomizeGasModal extends LocaleComponent {
 
-  this.state = getOriginalState(props)
+  constructor (props) {
+    super()
+    this.state = getOriginalState(props)
+  }
+
 }
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(CustomizeGasModal)
@@ -150,7 +151,7 @@ CustomizeGasModal.prototype.validate = function ({ gasTotal, gasLimit }) {
   })
 
   if (!balanceIsSufficient) {
-    error = t(this.props.localeMessages, 'balanceIsInsufficientGas')
+    error = this.t('balanceIsInsufficientGas')
   }
 
   const gasLimitTooLow = gasLimit && conversionGreaterThan(
@@ -166,7 +167,7 @@ CustomizeGasModal.prototype.validate = function ({ gasTotal, gasLimit }) {
   )
 
   if (gasLimitTooLow) {
-    error = t(this.props.localeMessages, 'gasLimitTooLow')
+    error = this.t('gasLimitTooLow')
   }
 
   this.setState({ error })
@@ -259,7 +260,7 @@ CustomizeGasModal.prototype.render = function () {
     }, [
       h('div.send-v2__customize-gas__header', {}, [
 
-        h('div.send-v2__customize-gas__title', t(this.props.localeMessages, 'customGas')),
+        h('div.send-v2__customize-gas__title', this.t('customGas')),
 
         h('div.send-v2__customize-gas__close', {
           onClick: hideModal,
@@ -275,8 +276,8 @@ CustomizeGasModal.prototype.render = function () {
           // max: 1000,
           step: multiplyCurrencies(MIN_GAS_PRICE_GWEI, 10),
           onChange: value => this.convertAndSetGasPrice(value),
-          title: t(this.props.localeMessages, 'gasPrice'),
-          copy: t(this.props.localeMessages, 'gasPriceCalculation'),
+          title: this.t('gasPrice'),
+          copy: this.t('gasPriceCalculation'),
         }),
 
         h(GasModalCard, {
@@ -285,8 +286,8 @@ CustomizeGasModal.prototype.render = function () {
           // max: 100000,
           step: 1,
           onChange: value => this.convertAndSetGasLimit(value),
-          title: t(this.props.localeMessages, 'gasLimit'),
-          copy: t(this.props.localeMessages, 'gasLimitCalculation'),
+          title: this.t('gasLimit'),
+          copy: this.t('gasLimitCalculation'),
         }),
 
       ]),
@@ -299,16 +300,16 @@ CustomizeGasModal.prototype.render = function () {
 
         h('div.send-v2__customize-gas__revert', {
           onClick: () => this.revert(),
-        }, [t(this.props.localeMessages, 'revert')]),
+        }, [this.t('revert')]),
 
         h('div.send-v2__customize-gas__buttons', [
           h('div.send-v2__customize-gas__cancel.allcaps', {
             onClick: this.props.hideModal,
-          }, [t(this.props.localeMessages, 'cancel')]),
+          }, [this.t('cancel')]),
 
           h(`div.send-v2__customize-gas__save${error ? '__error' : ''}.allcaps`, {
             onClick: () => !error && this.save(newGasPrice, gasLimit, gasTotal),
-          }, [t(this.props.localeMessages, 'save')]),
+          }, [this.t('save')]),
         ]),
 
       ]),

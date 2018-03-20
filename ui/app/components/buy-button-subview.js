@@ -1,6 +1,4 @@
-const Component = require('react').Component
 const h = require('react-hyperscript')
-const inherits = require('util').inherits
 const connect = require('../metamask-connect')
 const actions = require('../actions')
 const CoinbaseForm = require('./coinbase-form')
@@ -9,7 +7,10 @@ const Loading = require('./loading')
 const AccountPanel = require('./account-panel')
 const RadioList = require('./custom-radio-list')
 const networkNames = require('../../../app/scripts/config.js').networkNames
-const t = require('../../i18n-helper.js').getMessage
+const LocaleComponent = require('./locale')
+
+
+class BuyButtonSubview extends LocaleComponent {}
 
 module.exports = connect(mapStateToProps)(BuyButtonSubview)
 
@@ -24,11 +25,6 @@ function mapStateToProps (state) {
     context: state.appState.currentView.context,
     isSubLoading: state.appState.isSubLoading,
   }
-}
-
-inherits(BuyButtonSubview, Component)
-function BuyButtonSubview () {
-  Component.call(this)
 }
 
 BuyButtonSubview.prototype.render = function () {
@@ -77,7 +73,7 @@ BuyButtonSubview.prototype.headerSubview = function () {
             paddingTop: '4px',
             paddingBottom: '4px',
           },
-        }, t(this.props.localeMessages, 'depositEth')),
+        }, this.t('depositEth')),
       ]),
 
       // loading indication
@@ -119,7 +115,7 @@ BuyButtonSubview.prototype.headerSubview = function () {
             paddingTop: '4px',
             paddingBottom: '4px',
           },
-        }, t(this.props.localeMessages, 'selectService')),
+        }, this.t('selectService')),
       ]),
 
     ])
@@ -165,14 +161,14 @@ BuyButtonSubview.prototype.primarySubview = function () {
               style: {
                 marginTop: '15px',
               },
-            }, t(this.props.localeMessages, 'borrowDharma'))
+            }, this.t('borrowDharma'))
           ) : null,
       ])
     )
 
     default:
       return (
-        h('h2.error', t(this.props.localeMessages, 'unknownNetworkId'))
+        h('h2.error', this.t('unknownNetworkId'))
       )
 
   }
@@ -205,7 +201,7 @@ BuyButtonSubview.prototype.mainnetSubview = function () {
           ],
           subtext: {
             'Coinbase': `${t('crypto')}/${t('fiat')} (${t('usaOnly')})`,
-            'ShapeShift': t(this.props.localeMessages, 'crypto'),
+            'ShapeShift': this.t('crypto'),
           },
           onClick: this.radioHandler.bind(this),
         }),

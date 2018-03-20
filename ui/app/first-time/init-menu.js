@@ -60,7 +60,7 @@ InitializeMenuScreen.prototype.renderMenu = function (state) {
           color: '#7F8082',
           marginBottom: 10,
         },
-      }, t(this.props.localeMessages, 'appName')),
+      }, this.t('appName')),
 
 
       h('div', [
@@ -70,10 +70,10 @@ InitializeMenuScreen.prototype.renderMenu = function (state) {
             color: '#7F8082',
             display: 'inline',
           },
-        }, t(this.props.localeMessages, 'encryptNewDen')),
+        }, this.t('encryptNewDen')),
 
         h(Tooltip, {
-          title: t(this.props.localeMessages, 'denExplainer'),
+          title: this.t('denExplainer'),
         }, [
           h('i.fa.fa-question-circle.pointer', {
             style: {
@@ -93,7 +93,7 @@ InitializeMenuScreen.prototype.renderMenu = function (state) {
       h('input.large-input.letter-spacey', {
         type: 'password',
         id: 'password-box',
-        placeholder: t(this.props.localeMessages, 'newPassword'),
+        placeholder: this.t('newPassword'),
         onInput: this.inputChanged.bind(this),
         style: {
           width: 260,
@@ -105,7 +105,7 @@ InitializeMenuScreen.prototype.renderMenu = function (state) {
       h('input.large-input.letter-spacey', {
         type: 'password',
         id: 'password-box-confirm',
-        placeholder: t(this.props.localeMessages, 'confirmPassword'),
+        placeholder: this.t('confirmPassword'),
         onKeyPress: this.createVaultOnEnter.bind(this),
         onInput: this.inputChanged.bind(this),
         style: {
@@ -120,7 +120,7 @@ InitializeMenuScreen.prototype.renderMenu = function (state) {
         style: {
           margin: 12,
         },
-      }, t(this.props.localeMessages, 'createDen')),
+      }, this.t('createDen')),
 
       h('.flex-row.flex-center.flex-grow', [
         h('p.pointer', {
@@ -130,7 +130,7 @@ InitializeMenuScreen.prototype.renderMenu = function (state) {
             color: 'rgb(247, 134, 28)',
             textDecoration: 'underline',
           },
-        }, t(this.props.localeMessages, 'importDen')),
+        }, this.t('importDen')),
       ]),
 
       h('.flex-row.flex-center.flex-grow', [
@@ -179,12 +179,12 @@ InitializeMenuScreen.prototype.createNewVaultAndKeychain = function () {
   var passwordConfirm = passwordConfirmBox.value
 
   if (password.length < 8) {
-    this.warning = t(this.props.localeMessages, 'passwordShort')
+    this.warning = this.t('passwordShort')
     this.props.dispatch(actions.displayWarning(this.warning))
     return
   }
   if (password !== passwordConfirm) {
-    this.warning = t(this.props.localeMessages, 'passwordMismatch')
+    this.warning = this.t('passwordMismatch')
     this.props.dispatch(actions.displayWarning(this.warning))
     return
   }

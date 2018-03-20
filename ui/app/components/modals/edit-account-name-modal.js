@@ -51,7 +51,7 @@ EditAccountNameModal.prototype.render = function () {
       ]),
 
       h('div.edit-account-name-modal-title', {
-      }, [t(this.props.localeMessages, 'editAccountName')]),
+      }, [this.t('editAccountName')]),
 
       h('input.edit-account-name-modal-input', {
         placeholder: identity.name,
@@ -70,7 +70,7 @@ EditAccountNameModal.prototype.render = function () {
         },
         disabled: this.state.inputText.length === 0,
       }, [
-        t(this.props.localeMessages, 'save'),
+        this.t('save'),
       ]),
 
     ]),

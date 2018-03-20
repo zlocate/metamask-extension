@@ -111,7 +111,7 @@ Notice.prototype.render = function () {
         style: {
           marginTop: '18px',
         },
-      }, t(this.props.localeMessages, 'accept')),
+      }, this.t('accept')),
     ])
   )
 }

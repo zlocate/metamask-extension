@@ -57,15 +57,15 @@ BuyOptions.prototype.render = function () {
       }, [
         h('div.buy-modal-content-title', {
           style: {},
-        }, t(this.props.localeMessages, 'transfers')),
-        h('div', {}, t(this.props.localeMessages, 'howToDeposit')),
+        }, this.t('transfers')),
+        h('div', {}, this.t('howToDeposit')),
       ]),
 
       h('div.buy-modal-content-options.flex-column.flex-center', {}, [
 
         isTestNetwork
-          ? this.renderModalContentOption(networkName, t(this.props.localeMessages, 'testFaucet'), () => toFaucet(network))
-          : this.renderModalContentOption('Coinbase', t(this.props.localeMessages, 'depositFiat'), () => toCoinbase(address)),
+          ? this.renderModalContentOption(networkName, this.t('testFaucet'), () => toFaucet(network))
+          : this.renderModalContentOption('Coinbase', this.t('depositFiat'), () => toCoinbase(address)),
 
         // h('div.buy-modal-content-option', {}, [
         //   h('div.buy-modal-content-option-title', {}, 'Shapeshift'),
@@ -73,8 +73,8 @@ BuyOptions.prototype.render = function () {
         // ]),,
 
         this.renderModalContentOption(
-          t(this.props.localeMessages, 'directDeposit'),
-          t(this.props.localeMessages, 'depositFromAccount'),
+          this.t('directDeposit'),
+          this.t('depositFromAccount'),
           () => this.goToAccountDetailsModal()
         ),
 
@@ -85,7 +85,7 @@ BuyOptions.prototype.render = function () {
           background: 'white',
         },
         onClick: () => { this.props.hideModal() },
-      }, h('div.buy-modal-content-footer#buy-modal-content-footer-text', {}, t(this.props.localeMessages, 'cancel'))),
+      }, h('div.buy-modal-content-footer#buy-modal-content-footer-text', {}, this.t('cancel'))),
     ]),
   ])
 }

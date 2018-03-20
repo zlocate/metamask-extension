@@ -1,10 +1,7 @@
-const Component = require('react').Component
 const h = require('react-hyperscript')
-const inherits = require('util').inherits
-
 const Tooltip = require('./tooltip')
 const copyToClipboard = require('copy-to-clipboard')
-const t = require('../../i18n-helper').getMessage
+
 
 module.exports = Copyable
 
@@ -23,7 +20,7 @@ Copyable.prototype.render = function () {
   const { copied } = state
 
   return h(Tooltip, {
-    title: copied ? t(this.props.localeMessages, 'copiedExclamation') : t(this.props.localeMessages, 'copy'),
+    title: copied ? this.t('copiedExclamation') : this.t('copy'),
     position: 'bottom',
   }, h('span', {
     style: {

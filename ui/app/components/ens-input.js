@@ -1,22 +1,17 @@
-const Component = require('react').Component
 const h = require('react-hyperscript')
-const inherits = require('util').inherits
 const extend = require('xtend')
 const debounce = require('debounce')
 const copyToClipboard = require('copy-to-clipboard')
 const ENS = require('ethjs-ens')
 const networkMap = require('ethjs-ens/lib/network-map.json')
+const LocaleComponent = require('./locale')
 const ensRE = /.+\..+$/
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
-const t = require('../../i18n-helper').getMessage
 
+
+class EnsInput extends LocaleComponent {}
 
 module.exports = EnsInput
-
-inherits(EnsInput, Component)
-function EnsInput () {
-  Component.call(this)
-}
 
 EnsInput.prototype.render = function () {
   const props = this.props
@@ -90,13 +85,13 @@ EnsInput.prototype.lookupEnsName = function () {
   log.info(`ENS attempting to resolve name: ${recipient}`)
   this.ens.lookup(recipient.trim())
   .then((address) => {
-    if (address === ZERO_ADDRESS) throw new Error(t(this.props.localeMessages, 'noAddressForName'))
+    if (address === ZERO_ADDRESS) throw new Error(this.t('noAddressForName'))
     if (address !== ensResolution) {
       this.setState({
         loadingEns: false,
         ensResolution: address,
         nickname: recipient.trim(),
-        hoverText: address + '\n' + t(this.props.localeMessages, 'clickCopy'),
+        hoverText: address + '\n' + this.t('clickCopy'),
         ensFailure: false,
       })
     }
