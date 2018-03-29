@@ -96,7 +96,7 @@ describe('Metamask popup page', function () {
       await delay(300)
       await driver.findElement(By.className('sandwich-expando')).click()
       await delay(500)
-      await driver.findElement(By.xpath('//*[@id="app-content"]/div/div[3]/span/div/li[2]')).click()
+      await driver.findElement(By.css('#app-content > div > div > div.menu.account-menu > div.menu__item.account-menu__header > button')).click()
     })
 
     it('should accept account password after lock', async () => {
@@ -109,7 +109,7 @@ describe('Metamask popup page', function () {
     it('should show QR code', async () => {
       await delay(300)
       await driver.findElement(By.className('fa-ellipsis-h')).click()
-      await driver.findElement(By.xpath('//*[@id="app-content"]/div/div[4]/div/div/div[1]/flex-column/div[1]/div/span/i/div/div/li[2]')).click()
+      await driver.findElement(By.css('#app-content > div > div > span > div.modal > div > div > div > div.div.flex-column.flex-center > div.div.qr-wrapper')).click()
       await delay(300)
     })
 
