@@ -8,6 +8,14 @@ const ObjectMultiplex = require('obj-multiplex')
 
 module.exports = MetamaskInpageProvider
 
+/**
+ * Creates the provider for the inpage script.
+ * 
+ * @param {object} connectionStream Stream that connects different window objects where the same Web3 instance is being
+ * used.
+ * @property {object} publicConfigStore Store for configuration properties such as selectedAddress and networkVersion
+ * @property {object} rpcEngine The RpcEngine that will be used to handle sendAsync requests. @see {@link https://github.com/kumavis/json-rpc-engine}
+ */
 function MetamaskInpageProvider (connectionStream) {
   const self = this
 
@@ -48,14 +56,24 @@ function MetamaskInpageProvider (connectionStream) {
   self.rpcEngine = rpcEngine
 }
 
-// handle sendAsync requests via asyncProvider
-// also remap ids inbound and outbound
+/**
+ * Handles sendAsync requests via asyncProvider and remaps inbound and outbound ids
+ *
+ * @param {object} payload The payload of the sendAsync request
+ * @param {Function} cb The callback to invoke after the sendAsync request has been handled
+ *
+ */
 MetamaskInpageProvider.prototype.sendAsync = function (payload, cb) {
   const self = this
   self.rpcEngine.handle(payload, cb)
 }
 
-
+/**
+ * Handles the current providers send requests
+ *
+ * @param {object} payload The payload of the send request
+ *
+ */
 MetamaskInpageProvider.prototype.send = function (payload) {
   const self = this
 

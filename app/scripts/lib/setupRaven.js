@@ -6,7 +6,14 @@ const DEV = 'https://f59f3dd640d2429d9d0e2445a87ea8e1@sentry.io/273496'
 
 module.exports = setupRaven
 
-// Setup raven / sentry remote error reporting
+/**
+ * Sets up raven / sentry remote error reporting
+ *
+ * @param {object} opts Configuration options for setting up raven / sentry
+ * @param {string} release The version of Metamask for which errors will be reported.
+ * @param {object} The created Raven instance.
+ *
+ */ 
 function setupRaven(opts) {
   const { release } = opts
   let ravenTarget
@@ -48,6 +55,14 @@ function setupRaven(opts) {
   return Raven
 }
 
+/**
+ * Modifies the url at which an error is recorded in sentry and updates the stacktrace to correspond with that url.
+ *
+ * A helper method for setupRaven
+ *
+ * @param {object} report The outbound error data.
+ *
+ */ 
 function rewriteReportUrls(report) {
   // update request url
   report.request.url = toMetamaskUrl(report.request.url)
@@ -59,6 +74,13 @@ function rewriteReportUrls(report) {
   })
 }
 
+/**
+ * Replaces the origin of the browsers current url with 'metamask' for sentry reporting purposes.
+ *
+ * @param {origUrl} string The url to modify
+ * @param {string} The modified url
+ *
+ */ 
 function toMetamaskUrl(origUrl) {
   const filePath = origUrl.split(location.origin)[1]
   if (!filePath) return origUrl
