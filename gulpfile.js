@@ -300,11 +300,12 @@ const buildJsFiles = [
 
 // bundle tasks
 createTasksForBuildJsExtension({ buildJsFiles, taskPrefix: 'dev:extension:js', devMode: true })
-createTasksForBuildJsExtension({ buildJsFiles, taskPrefix: 'build:extension:js'  })
+createTasksForBuildJsExtension({ buildJsFiles, taskPrefix: 'build:extension:js' })
 createTasksForBuildJsMascara({ taskPrefix: 'build:mascara:js' })
 createTasksForBuildJsMascara({ taskPrefix: 'dev:mascara:js', devMode: true })
 
 function createTasksForBuildJsExtension({ buildJsFiles, taskPrefix, devMode, bundleTaskOpts = {} }) {
+  devMode = devMode || false
   // inpage must be built before all other scripts:
   const rootDir = './app/scripts'
   const nonInpageFiles = buildJsFiles.filter(file => file !== 'inpage')
@@ -314,6 +315,7 @@ function createTasksForBuildJsExtension({ buildJsFiles, taskPrefix, devMode, bun
   bundleTaskOpts = Object.assign({
     buildSourceMaps: true,
     sourceMapDir: devMode ? './' : '../sourcemaps',
+    sourceMapRefComment: devMode,
     minifyBuild: !devMode,
     buildWithFullPaths: devMode,
     watch: devMode,
@@ -323,6 +325,7 @@ function createTasksForBuildJsExtension({ buildJsFiles, taskPrefix, devMode, bun
 }
 
 function createTasksForBuildJsMascara({ taskPrefix, devMode, bundleTaskOpts = {} }) {
+  devMode = devMode || false
   // inpage must be built before all other scripts:
   const rootDir = './mascara/src/'
   const buildPhase1 = ['ui', 'proxy', 'background', 'metamascara']
@@ -330,6 +333,7 @@ function createTasksForBuildJsMascara({ taskPrefix, devMode, bundleTaskOpts = {}
   bundleTaskOpts = Object.assign({
     buildSourceMaps: true,
     sourceMapDir: './',
+    sourceMapRefComment: true,
     minifyBuild: !devMode,
     buildWithFullPaths: devMode,
     watch: devMode,
@@ -570,7 +574,7 @@ function bundleTask(opts) {
     // Finalize Source Maps (writes .map file)
     if (opts.buildSourceMaps) {
       buildStream = buildStream
-        .pipe(sourcemaps.write(opts.sourceMapDir))
+        .pipe(sourcemaps.write(opts.sourceMapDir, { addComment: opts.sourceMapRefComment }))
     }
 
     // write completed bundles
