@@ -53,7 +53,18 @@ class Home extends Component {
       currentView,
       activeAddress,
       seedWords,
+      pendingWeb3Request,
+      approveWeb3Request,
+      rejectWeb3Request,
     } = this.props
+
+    if (pendingWeb3Request) {
+      log.debug('rendering web3 API approval screen')
+      return h('div', [
+        h('button', { onClick: approveWeb3Request }, 'APPROVE web3 access'),
+        h('button', { onClick: rejectWeb3Request }, 'REJECT web3 access'),
+      ])
+    }
 
     // notices
     if (!noActiveNotices || (lostAccounts && lostAccounts.length > 0)) {
@@ -261,6 +272,9 @@ Home.propTypes = {
   isPopup: PropTypes.bool,
   isMouseUser: PropTypes.bool,
   t: PropTypes.func,
+  pendingWeb3Request: PropTypes.bool,
+  approveWeb3Request: PropTypes.func,
+  rejectWeb3Request: PropTypes.func,
 }
 
 function mapStateToProps (state) {
@@ -281,6 +295,7 @@ function mapStateToProps (state) {
     unapprovedTxs,
     lastUnreadNotice,
     lostAccounts,
+    pendingWeb3Request,
     unapprovedMsgCount,
     unapprovedPersonalMsgCount,
     unapprovedTypedMessagesCount,
@@ -315,6 +330,7 @@ function mapStateToProps (state) {
     forgottenPassword: state.appState.forgottenPassword,
     lastUnreadNotice,
     lostAccounts,
+    pendingWeb3Request,
     frequentRpcList: state.metamask.frequentRpcList || [],
     currentCurrency: state.metamask.currentCurrency,
     isMouseUser: state.appState.isMouseUser,
@@ -327,7 +343,14 @@ function mapStateToProps (state) {
   }
 }
 
+function mapDispatchToProps (dispatch) {
+  return {
+    approveWeb3Request: () => dispatch(actions.approveWeb3Request()),
+    rejectWeb3Request: () => dispatch(actions.rejectWeb3Request()),
+  }
+}
+
 module.exports = compose(
   withRouter,
-  connect(mapStateToProps)
+  connect(mapStateToProps, mapDispatchToProps)
 )(Home)

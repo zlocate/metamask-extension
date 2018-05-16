@@ -276,6 +276,9 @@ var actions = {
   UPDATE_NETWORK_ENDPOINT_TYPE: 'UPDATE_NETWORK_ENDPOINT_TYPE',
 
   retryTransaction,
+
+  approveWeb3Request,
+  rejectWeb3Request,
 }
 
 module.exports = actions
@@ -1945,5 +1948,17 @@ function updateNetworkEndpointType (networkEndpointType) {
   return {
     type: actions.UPDATE_NETWORK_ENDPOINT_TYPE,
     value: networkEndpointType,
+  }
+}
+
+function approveWeb3Request () {
+  return (dispatch) => {
+    return background.approveWeb3Request()
+  }
+}
+
+function rejectWeb3Request () {
+  return (dispatch) => {
+    return background.rejectWeb3Request()
   }
 }

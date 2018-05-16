@@ -302,6 +302,7 @@ module.exports = class MetamaskController extends EventEmitter {
     const isInitialized = (!!wallet || !!vault)
 
     return {
+      pendingWeb3Request: this.memStore.getState().pendingWeb3Request,
       ...{ isInitialized },
       ...this.memStore.getFlatState(),
       ...this.configManager.getConfig(),
@@ -399,6 +400,9 @@ module.exports = class MetamaskController extends EventEmitter {
       // notices
       checkNotices: noticeController.updateNoticesList.bind(noticeController),
       markNoticeRead: noticeController.markNoticeRead.bind(noticeController),
+
+      approveWeb3Request: this.approveWeb3Request.bind(this),
+      rejectWeb3Request: this.rejectWeb3Request.bind(this),
     }
   }
 
@@ -1239,5 +1243,22 @@ module.exports = class MetamaskController extends EventEmitter {
    */
   set isClientOpenAndUnlocked (active) {
     this.tokenRatesController.isActive = active
+  }
+
+  handleWeb3Request () {
+    const { showUnconfirmedMessage } = this.opts
+    this.memStore.updateState({ pendingWeb3Request: true })
+    showUnconfirmedMessage && showUnconfirmedMessage()
+  }
+
+  approveWeb3Request () {
+    // TODO: Iteratate over all tabs besides this one, delete web3
+    // TODO: Inject web3 in this tab by messaging contentscript
+    this.memStore.updateState({ pendingWeb3Request: false })
+  }
+
+  rejectWeb3Request () {
+    // TODO: Bubble error to user by messaging contentscript
+    this.memStore.updateState({ pendingWeb3Request: false })
   }
 }

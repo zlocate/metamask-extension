@@ -19,19 +19,31 @@ const inpageBundle = inpageContent + inpageSuffix
 // MetaMask will be much faster loading and performant on Firefox.
 
 if (shouldInjectWeb3()) {
-  setupInjection()
-  setupStreams()
+  listenForWeb3Request()
+}
+
+function listenForWeb3Request () {
+  window.addEventListener('message', (event) => {
+    if (event.source !== window) { return }
+    if (!event.data || !event.data.type || event.data.type !== 'WEB3_API_REQUEST') { return }
+    extension.runtime.sendMessage({ action: 'trigger-ui' })
+    // setupStreams()
+    // setupInjection()
+    // window.postMessage({ type: 'WEB3_API_SUCCESS' }, '*')
+  })
 }
 
 /**
  * Creates a script tag that injects inpage.js
  */
-function setupInjection () {
+function setupInjection (cb) {
   try {
     // inject in-page script
     var scriptTag = document.createElement('script')
     scriptTag.textContent = inpageBundle
-    scriptTag.onload = function () { this.parentNode.removeChild(this) }
+    scriptTag.onload = function () {
+      this.parentNode.removeChild(this)
+    }
     var container = document.head || document.documentElement
     // append as first child
     container.insertBefore(scriptTag, container.children[0])
