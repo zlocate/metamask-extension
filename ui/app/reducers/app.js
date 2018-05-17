@@ -670,6 +670,11 @@ function reduceApp (state, action) {
         isMouseUser: action.value,
       })
 
+    case actions.CLOSE_POPUP:
+      return extend(appState, {
+        shouldClose: true,
+      })
+
     default:
       return appState
   }

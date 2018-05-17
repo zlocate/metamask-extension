@@ -279,6 +279,7 @@ var actions = {
 
   approveWeb3Request,
   rejectWeb3Request,
+  CLOSE_POPUP: 'CLOSE_POPUP',
 }
 
 module.exports = actions
@@ -1959,6 +1960,7 @@ function approveWeb3Request () {
 
 function rejectWeb3Request () {
   return (dispatch) => {
-    return background.rejectWeb3Request()
+    background.rejectWeb3Request()
+    dispatch({ type: actions.CLOSE_POPUP })
   }
 }

@@ -23,13 +23,43 @@ if (shouldInjectWeb3()) {
 }
 
 function listenForWeb3Request () {
+  extension.runtime.onMessage.addListener(
+    ({ action }) => {
+      action && (action === 'reject-web3-request') && window.postMessage({
+        type: 'WEB3_API_ERROR',
+        message: 'User rejected web3 access.',
+      }, '*')
+    }
+  )
+
+  extension.runtime.onMessage.addListener(
+    ({ action }) => {
+      if (action && (action === 'revoke-web3-request')) {
+        try {
+          var scriptTag = document.createElement('script')
+          // TODO: Figure out a graceful way to "sign out" dapps
+          scriptTag.textContent = 'typeof window.Web3 !== "undefined" && window.location.reload()'
+          var container = document.head || document.documentElement
+          container.insertBefore(scriptTag, container.children[0])
+        } catch (e) { }
+      }
+    }
+  )
+
+  extension.runtime.onMessage.addListener(
+    ({ action }) => {
+      if (action && (action === 'approve-web3-request')) {
+        setupStreams()
+        setupInjection()
+        window.postMessage({ type: 'WEB3_API_SUCCESS' }, '*')
+      }
+    }
+  )
+
   window.addEventListener('message', (event) => {
     if (event.source !== window) { return }
     if (!event.data || !event.data.type || event.data.type !== 'WEB3_API_REQUEST') { return }
     extension.runtime.sendMessage({ action: 'trigger-ui' })
-    // setupStreams()
-    // setupInjection()
-    // window.postMessage({ type: 'WEB3_API_SUCCESS' }, '*')
   })
 }
 
