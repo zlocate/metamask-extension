@@ -1252,24 +1252,19 @@ module.exports = class MetamaskController extends EventEmitter {
 
   handleWeb3Request () {
     const { showUnconfirmedMessage } = this.opts
+    // TODO: This should be per-tab and in appState somehow
     this.memStore.updateState({ pendingWeb3Request: true })
     showUnconfirmedMessage && showUnconfirmedMessage()
   }
 
   approveWeb3Request () {
-    // TODO: Iteratate over all tabs besides this one, delete web3
-    // TODO: Inject web3 in this tab by messaging contentscript
     extension.tabs.query({ active: false }, tabs => {
-      console.log('\n1. Found tabs, iterating')
       tabs.forEach(tab => {
-        console.log('\n2. Remove web3 from tab', tab)
         extension.tabs.sendMessage(tab.id, { action: 'revoke-web3-request' })
       })
     })
     extension.tabs.query({ active: true }, tabs => {
-      console.log('\n3. Found tab, iterating', tabs)
       tabs.forEach(tab => {
-        console.log('\n4. Inject web3 in tab', tab)
         extension.tabs.sendMessage(tab.id, { action: 'approve-web3-request' })
       })
     })

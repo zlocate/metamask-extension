@@ -23,62 +23,55 @@ if (shouldInjectWeb3()) {
 }
 
 function listenForWeb3Request () {
-  extension.runtime.onMessage.addListener(
-    ({ action }) => {
-      action && (action === 'reject-web3-request') && window.postMessage({
+  // Triggered by the background upon user approval of web3 access for this tab.
+  extension.runtime.onMessage.addListener(({ action }) => {
+    if (action && action === 'approve-web3-request') {
+      setupStreams()
+      injectScript(inpageBundle)
+      window.postMessage({ type: 'WEB3_API_SUCCESS' }, '*')
+    }
+  })
+
+  // Triggered by the background upon user rejection of web3 access for this tab.
+  extension.runtime.onMessage.addListener(({ action }) => {
+    if (action && action === 'reject-web3-request') {
+      window.postMessage({
         type: 'WEB3_API_ERROR',
         message: 'User rejected web3 access.',
       }, '*')
     }
-  )
+  })
 
-  extension.runtime.onMessage.addListener(
-    ({ action }) => {
-      if (action && (action === 'revoke-web3-request')) {
-        try {
-          var scriptTag = document.createElement('script')
-          // TODO: Figure out a graceful way to "sign out" dapps
-          scriptTag.textContent = 'typeof window.Web3 !== "undefined" && window.location.reload()'
-          var container = document.head || document.documentElement
-          container.insertBefore(scriptTag, container.children[0])
-        } catch (e) { }
-      }
+  // Triggered by the background upon user approval of web3 access on a different tab.
+  extension.runtime.onMessage.addListener(({ action }) => {
+    if (action && (action === 'revoke-web3-request')) {
+      // TODO: Figure out a more graceful way to "sign out" dapps
+      injectScript('typeof window.Web3 !== "undefined" && window.location.reload()')
     }
-  )
+  })
 
-  extension.runtime.onMessage.addListener(
-    ({ action }) => {
-      if (action && (action === 'approve-web3-request')) {
-        setupStreams()
-        setupInjection()
-        window.postMessage({ type: 'WEB3_API_SUCCESS' }, '*')
-      }
-    }
-  )
-
+  // Triggered by the current document upon dapp request for web3 access on this tab.
   window.addEventListener('message', (event) => {
     if (event.source !== window) { return }
     if (!event.data || !event.data.type || event.data.type !== 'WEB3_API_REQUEST') { return }
+    // Notify the background that the
     extension.runtime.sendMessage({ action: 'init-web3-request' })
   })
 }
 
 /**
- * Creates a script tag that injects inpage.js
+ * Injects a script tag into the current document
+ *
+ * @param {string} content - Code to be executed in the current document
  */
-function setupInjection (cb) {
+function injectScript (content) {
   try {
-    // inject in-page script
-    var scriptTag = document.createElement('script')
-    scriptTag.textContent = inpageBundle
-    scriptTag.onload = function () {
-      this.parentNode.removeChild(this)
-    }
-    var container = document.head || document.documentElement
-    // append as first child
+    const container = document.head || document.documentElement
+    const scriptTag = document.createElement('script')
+    scriptTag.textContent = content
     container.insertBefore(scriptTag, container.children[0])
   } catch (e) {
-    console.error('Metamask injection failed.', e)
+    console.error('Metamask script injection failed.', e)
   }
 }
 
