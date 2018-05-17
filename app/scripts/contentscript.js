@@ -59,7 +59,7 @@ function listenForWeb3Request () {
   window.addEventListener('message', (event) => {
     if (event.source !== window) { return }
     if (!event.data || !event.data.type || event.data.type !== 'WEB3_API_REQUEST') { return }
-    extension.runtime.sendMessage({ action: 'trigger-ui' })
+    extension.runtime.sendMessage({ action: 'init-web3-request' })
   })
 }
 

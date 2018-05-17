@@ -152,14 +152,8 @@ setupMetamaskMeshMetrics()
 async function initialize () {
   const initState = await loadStateFromPersistence()
   const initLangCode = await getFirstPreferredLangCode()
-  const controller = setupController(initState, initLangCode)
+  await setupController(initState, initLangCode)
   log.debug('MetaMask initialization complete.')
-
-  extension.runtime.onMessage.addListener(
-    ({ action }) => {
-      action && (action === 'trigger-ui') && controller.handleWeb3Request()
-    }
-  )
 }
 
 //
@@ -241,7 +235,7 @@ async function loadStateFromPersistence () {
  *
  * @param {Object} initState - The initial state to start the controller with, matches the state that is emitted from the controller.
  * @param {String} initLangCode - The region code for the language preferred by the current user.
- * @returns {Object} MetaMask controller instance
+ * @returns {Promise} After setup is complete.
  */
 function setupController (initState, initLangCode) {
   //
@@ -409,7 +403,7 @@ function setupController (initState, initLangCode) {
     extension.browserAction.setBadgeBackgroundColor({ color: '#506F8B' })
   }
 
-  return controller
+  return Promise.resolve()
 }
 
 //

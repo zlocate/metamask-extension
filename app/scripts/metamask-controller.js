@@ -223,6 +223,10 @@ module.exports = class MetamaskController extends EventEmitter {
       InfuraController: this.infuraController.store,
     })
     this.memStore.subscribe(this.sendUpdate.bind(this))
+
+    extension.runtime.onMessage.addListener(({ action }) => {
+      action && action === 'init-web3-request' && this.handleWeb3Request()
+    })
   }
 
   /**
