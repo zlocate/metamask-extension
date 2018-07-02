@@ -42,6 +42,18 @@ class ExtensionPlatform {
     }
   }
 
+  addMessageListener (cb) {
+    extension.runtime.onMessage.addListener(cb)
+  }
+
+  sendMessage (message, query = {}) {
+    extension.tabs.query(query, tabs => {
+      tabs.forEach(tab => {
+        extension.tabs.sendMessage(tab.id, message)
+      })
+    })
+  }
+
   showTransactionNotification (txMeta) {
 
     const status = txMeta.status

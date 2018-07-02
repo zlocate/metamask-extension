@@ -242,7 +242,7 @@ module.exports = class MetamaskController extends EventEmitter {
     })
     this.memStore.subscribe(this.sendUpdate.bind(this))
 
-    extension.runtime.onMessage.addListener(({ action, origin }) => {
+    this.platform.addMessageListener(({ action, origin }) => {
       action && action === 'init-web3-request' && this.handleWeb3Request(origin)
     })
   }
@@ -459,13 +459,7 @@ module.exports = class MetamaskController extends EventEmitter {
   approveWeb3Request (requestedOrigin) {
     const { closePopup } = this.opts
     closePopup && closePopup()
-
-    extension.tabs.query({ active: true }, tabs => {
-      tabs.forEach(tab => {
-        extension.tabs.sendMessage(tab.id, { action: 'approve-web3-request' })
-      })
-    })
-
+    this.platform.sendMessage({ action: 'approve-web3-request' }, { active: true })
     const requests = this.memStore.getState().pendingWeb3Requests || []
     const pendingWeb3Requests = requests.filter(origin => origin !== requestedOrigin)
     this.memStore.updateState({ pendingWeb3Requests })
