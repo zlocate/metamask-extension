@@ -1,4 +1,19 @@
 {
+  "approve": {
+    "message": "Goedkeuren"
+  },
+  "reject": {
+    "message": "Afwijzen"
+  },
+  "web3APIRequest": {
+    "message": "Web3 API-aanvraag"
+  },
+  "pleaseReviewWeb3Request": {
+    "message": "Bekijk deze web3 API-aanvraag."
+  },
+  "web3RequestInfo": {
+    "message": "Het onderstaande domein probeert toegang tot de web3 API te vragen zodat deze kan communiceren met de Ethereum-blockchain. Controleer altijd eerst of u op de juiste site bent voordat u web3-toegang goedkeurt."
+  },
   "accept": {
     "message": "Aanvaarden"
   },

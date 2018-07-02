@@ -1,4 +1,19 @@
 {
+  "approve": {
+    "message": "Phê duyệt"
+  },
+  "reject": {
+    "message": "Từ chối"
+  },
+  "web3APIRequest": {
+    "message": "Yêu cầu API Web3"
+  },
+  "pleaseReviewWeb3Request": {
+    "message": "Vui lòng xem lại yêu cầu API web3 này."
+  },
+  "web3RequestInfo": {
+    "message": "Miền được liệt kê bên dưới đang cố gắng yêu cầu quyền truy cập vào API web3 để nó có thể tương tác với chuỗi khối Ethereum. Luôn kiểm tra kỹ xem bạn có đang ở đúng trang web trước khi phê duyệt quyền truy cập web3 hay không."
+  },
   "accept": {
     "message": "Chấp nhận"
   },

@@ -1,4 +1,19 @@
 {
+  "approve": {
+    "message": "อนุมัติ"
+  },
+  "reject": {
+    "message": "ปฏิเสธ"
+  },
+  "web3APIRequest": {
+    "message": "คำขอ Web3 API"
+  },
+  "pleaseReviewWeb3Request": {
+    "message": "โปรดอ่านคำขอ web3 API นี้"
+  },
+  "web3RequestInfo": {
+    "message": "โดเมนที่แสดงด้านล่างกำลังพยายามขอเข้าถึง API ของ web3 เพื่อให้สามารถโต้ตอบกับบล็อค Ethereum ได้ ตรวจสอบว่าคุณอยู่ในไซต์ที่ถูกต้องก่อนที่จะอนุมัติการเข้าถึง web3 เสมอ"
+  },
   "accept": {
     "message": "ยอมรับ"
   },

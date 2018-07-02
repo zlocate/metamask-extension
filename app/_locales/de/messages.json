@@ -1,4 +1,19 @@
 {
+  "approve": {
+    "message": "Genehmigen"
+  },
+  "reject": {
+    "message": "Ablehnen"
+  },
+  "web3APIRequest": {
+    "message": "Web3-API-Anfrage"
+  },
+  "pleaseReviewWeb3Request": {
+    "message": "Bitte lesen Sie diese web3-API-Anfrage."
+  },
+  "web3RequestInfo": {
+    "message": "Die unten aufgeführte Domäne versucht, Zugriff auf die web3-API anzufordern, damit sie mit der Ethereum-Blockchain interagieren kann. Überprüfen Sie immer, dass Sie sich auf der richtigen Website befinden, bevor Sie den Web3-Zugriff genehmigen."
+  },
   "accept": {
     "message": "Annehmen"
   },
@@ -384,7 +399,7 @@
   "infoHelp": {
     "message": "Info & Hilfe"
   },
-  "insufficientFunds": { 
+  "insufficientFunds": {
     "message": "Nicht genügend Guthaben."
   },
   "insufficientTokens": {
@@ -572,7 +587,7 @@
     "description": "Wähle diesen Dateityp um damit einen Account zu importieren"
   },
   "privateKeyWarning": {
-    "message": "Warnung: Niemals jemanden deinen Private Key mitteilen. Jeder der im Besitz deines Private Keys ist, kann jegliches Guthaben deines Accounts stehlen."  
+    "message": "Warnung: Niemals jemanden deinen Private Key mitteilen. Jeder der im Besitz deines Private Keys ist, kann jegliches Guthaben deines Accounts stehlen."
   },
   "privateNetwork": {
     "message": "Privates Netzwerk"

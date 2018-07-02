@@ -304,6 +304,10 @@ var actions = {
   CLEAR_PENDING_TOKENS: 'CLEAR_PENDING_TOKENS',
   setPendingTokens,
   clearPendingTokens,
+
+  approveWeb3Request,
+  rejectWeb3Request,
+  CLOSE_POPUP: 'CLOSE_POPUP',
 }
 
 module.exports = actions
@@ -2247,5 +2251,17 @@ function setPendingTokens (pendingTokens) {
 function clearPendingTokens () {
   return {
     type: actions.CLEAR_PENDING_TOKENS,
+  }
+}
+
+function approveWeb3Request (origin) {
+  return (dispatch) => {
+    background.approveWeb3Request(origin)
+  }
+}
+
+function rejectWeb3Request (origin) {
+  return (dispatch) => {
+    background.rejectWeb3Request(origin)
   }
 }

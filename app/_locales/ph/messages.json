@@ -1,4 +1,19 @@
 {
+  "approve": {
+    "message": "Aprubahan"
+  },
+  "reject": {
+    "message": "Tanggihan"
+  },
+  "web3APIRequest": {
+    "message": "Kahilingan sa Web3 API"
+  },
+  "pleaseReviewWeb3Request": {
+    "message": "Mangyaring suriin ang kahilingan sa web3 API na ito."
+  },
+  "web3RequestInfo": {
+    "message": "Ang domain na nakalista sa ibaba ay sinusubukang humiling ng access sa web3 API upang maaari itong makipag-ugnayan sa Ethereum blockchain. Laging i-double check na ikaw ay nasa tamang site bago aprubahan ang web3 access."
+  },
   "accept": {
     "message": "Tanggapin"
   },
@@ -268,7 +283,7 @@
     "message": "i-click ito",
     "description": "tulad ng -i-click dito- para sa mas maraming impormasyon (kasama ng troubleTokenBalances)"
   },
-  "hide": { 
+  "hide": {
     "message": "Itago"
   },
   "hideToken": {

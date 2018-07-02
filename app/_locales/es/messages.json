@@ -1,4 +1,19 @@
 {
+  "approve": {
+    "message": "Aprobar"
+  },
+  "reject": {
+    "message": "Rechazar"
+  },
+  "web3APIRequest": {
+    "message": "Solicitud de API Web3"
+  },
+  "pleaseReviewWeb3Request": {
+    "message": "Por favor, revise esta solicitud API web3."
+  },
+  "web3RequestInfo": {
+    "message": "El dominio que se muestra a continuación intenta solicitar acceso a la API web3 para que pueda interactuar con la cadena de bloques de Ethereum. Siempre verifique que esté en el sitio correcto antes de aprobar el acceso web3."
+  },
   "accept": {
     "message": "Aceptar"
   },

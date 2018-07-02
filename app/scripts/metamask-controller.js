@@ -241,6 +241,10 @@ module.exports = class MetamaskController extends EventEmitter {
       InfuraController: this.infuraController.store,
     })
     this.memStore.subscribe(this.sendUpdate.bind(this))
+
+    extension.runtime.onMessage.addListener(({ action, origin }) => {
+      action && action === 'init-web3-request' && this.handleWeb3Request(origin)
+    })
   }
 
   /**
@@ -321,6 +325,7 @@ module.exports = class MetamaskController extends EventEmitter {
     const isInitialized = (!!wallet || !!vault)
 
     return {
+      pendingWeb3Requests: this.memStore.getState().pendingWeb3Requests,
       ...{ isInitialized },
       ...this.memStore.getFlatState(),
       ...this.configManager.getConfig(),
@@ -429,9 +434,61 @@ module.exports = class MetamaskController extends EventEmitter {
       // notices
       checkNotices: noticeController.updateNoticesList.bind(noticeController),
       markNoticeRead: noticeController.markNoticeRead.bind(noticeController),
+
+      approveWeb3Request: this.approveWeb3Request.bind(this),
+      rejectWeb3Request: this.rejectWeb3Request.bind(this),
     }
   }
 
+  /**
+   * Called when a tab requests web3 access
+   *
+   * @param {string} requestedOrigin - Origin of the window requesting web3 access
+   */
+  handleWeb3Request (requestedOrigin) {
+    const { openPopup } = this.opts
+    this.memStore.updateState({ pendingWeb3Requests: [requestedOrigin] })
+    openPopup && openPopup()
+  }
+
+  /**
+   * Called when a user approves web3 access
+   *
+   * @param {string} requestedOrigin - Origin of the target window to approve web3 access
+   */
+  approveWeb3Request (requestedOrigin) {
+    const { closePopup } = this.opts
+    closePopup && closePopup()
+
+    extension.tabs.query({ active: false }, tabs => {
+      tabs.forEach(tab => {
+        extension.tabs.sendMessage(tab.id, { action: 'revoke-web3-request' })
+      })
+    })
+
+    extension.tabs.query({ active: true }, tabs => {
+      tabs.forEach(tab => {
+        extension.tabs.sendMessage(tab.id, { action: 'approve-web3-request' })
+      })
+    })
+
+    const requests = this.memStore.getState().pendingWeb3Requests || []
+    const pendingWeb3Requests = requests.filter(origin => origin !== requestedOrigin)
+    this.memStore.updateState({ pendingWeb3Requests })
+  }
+
+  /**
+   * Called when a tab rejects web3 access
+   *
+   * @param {string} requestedOrigin - Origin of the target window to reject web3 access
+   */
+  rejectWeb3Request (requestedOrigin) {
+    const { closePopup } = this.opts
+    closePopup && closePopup()
+    const requests = this.memStore.getState().pendingWeb3Requests || []
+    const pendingWeb3Requests = requests.filter(origin => origin !== requestedOrigin)
+    this.memStore.updateState({ pendingWeb3Requests })
+  }
 
 //=============================================================================
 // VAULT / KEYRING RELATED METHODS
