@@ -30,7 +30,7 @@ function listenForWeb3Request () {
   // Triggered by the current document upon dapp request for web3 in this tab
   window.addEventListener('message', (event) => {
     if (event.source !== window) { return }
-    if (!event.data || !event.data.type || event.data.type !== 'WEB3_API_REQUEST') { return }
+    if (!event.data || !event.data.type || event.data.type !== 'ETHEREUM_PROVIDER_REQUEST') { return }
     extension.runtime.sendMessage({ action: 'init-web3-request', origin: event.source.origin })
   })
 
@@ -39,7 +39,7 @@ function listenForWeb3Request () {
     if (!action || action !== 'approve-web3-request') { return }
     setupStreams()
     injectScript(inpageBundle)
-    window.postMessage({ type: 'WEB3_API_SUCCESS' }, '*')
+    window.postMessage({ type: 'ETHEREUM_PROVIDER_SUCCESS' }, '*')
   })
 }
 
