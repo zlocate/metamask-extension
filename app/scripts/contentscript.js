@@ -11,6 +11,11 @@ const inpageContent = fs.readFileSync(path.join(__dirname, '..', '..', 'dist', '
 const inpageSuffix = '//# sourceURL=' + extension.extension.getURL('inpage.js') + '\n'
 const inpageBundle = inpageContent + inpageSuffix
 
+
+const inpageWeb3Content = fs.readFileSync(path.join(__dirname, '..', '..', 'dist', 'chrome', 'inpage-web3.js')).toString()
+const inpageWeb3Suffix = '//# sourceURL=' + extension.extension.getURL('inpage-web3.js') + '\n'
+const inpageWeb3Bundle = inpageWeb3Content + inpageWeb3Suffix
+
 // Eventually this streaming injection could be replaced with:
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Language_Bindings/Components.utils.exportFunction
 //
@@ -31,14 +36,18 @@ function listenForWeb3Request () {
   window.addEventListener('message', (event) => {
     if (event.source !== window) { return }
     if (!event.data || !event.data.type || event.data.type !== 'ETHEREUM_PROVIDER_REQUEST') { return }
-    extension.runtime.sendMessage({ action: 'init-web3-request', origin: event.source.origin })
+    extension.runtime.sendMessage({
+      action: 'init-web3-request',
+      origin: event.source.origin,
+      web3: event.data.web3,
+    })
   })
 
   // Triggered by the background upon user approval of web3 in this tab
-  extension.runtime.onMessage.addListener(({ action }) => {
+  extension.runtime.onMessage.addListener(({ action, web3 }) => {
     if (!action || action !== 'approve-web3-request') { return }
     setupStreams()
-    injectScript(inpageBundle)
+    injectScript(web3 ? inpageWeb3Bundle : inpageBundle)
     window.postMessage({ type: 'ETHEREUM_PROVIDER_SUCCESS' }, '*')
   })
 }
