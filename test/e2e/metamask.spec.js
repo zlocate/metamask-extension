@@ -8,7 +8,7 @@ const { By, Key, until } = webdriver
 const { delay, buildChromeWebDriver, buildFirefoxWebdriver, installWebExt, getExtensionIdChrome, getExtensionIdFirefox } = require('./func')
 
 describe('Metamask popup page', function () {
-  let driver, accountAddress, tokenAddress, extensionId
+  let driver, accountAddress, extensionId
 
   this.timeout(0)
 
