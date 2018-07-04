@@ -5,13 +5,13 @@
   "reject": {
     "message": "ปฏิเสธ"
   },
-  "web3APIRequest": {
+  "providerAPIRequest": {
     "message": "คำขอ Web3 API"
   },
-  "pleaseReviewWeb3Request": {
+  "reviewProviderRequest": {
     "message": "โปรดอ่านคำขอ web3 API นี้"
   },
-  "web3RequestInfo": {
+  "providerRequestInfo": {
     "message": "โดเมนที่แสดงด้านล่างกำลังพยายามขอเข้าถึง API ของ web3 เพื่อให้สามารถโต้ตอบกับบล็อค Ethereum ได้ ตรวจสอบว่าคุณอยู่ในไซต์ที่ถูกต้องก่อนที่จะอนุมัติการเข้าถึง web3 เสมอ"
   },
   "accept": {

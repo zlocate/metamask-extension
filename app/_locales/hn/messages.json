@@ -5,13 +5,13 @@
   "reject": {
     "message": "अस्वीकार"
   },
-  "web3APIRequest": {
+  "providerAPIRequest": {
     "message": "वेब 3 एपीआई अनुरोध"
   },
-  "pleaseReviewWeb3Request": {
+  "reviewProviderRequest": {
     "message": "कृपया इस वेब 3 एपीआई अनुरोध की समीक्षा करें।"
   },
-  "web3RequestInfo": {
+  "providerRequestInfo": {
     "message": "नीचे सूचीबद्ध डोमेन वेब 3 एपीआई तक पहुंच का अनुरोध करने का प्रयास कर रहा है ताकि यह एथेरियम ब्लॉकचेन से बातचीत कर सके। वेब 3 एक्सेस को मंजूरी देने से पहले हमेशा सही जांच करें कि आप सही साइट पर हैं।"
   },
   "accept": {

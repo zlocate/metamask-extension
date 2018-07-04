@@ -5,13 +5,13 @@
   "reject": {
     "message": "Tanggihan"
   },
-  "web3APIRequest": {
+  "providerAPIRequest": {
     "message": "Kahilingan sa Web3 API"
   },
-  "pleaseReviewWeb3Request": {
+  "reviewProviderRequest": {
     "message": "Mangyaring suriin ang kahilingan sa web3 API na ito."
   },
-  "web3RequestInfo": {
+  "providerRequestInfo": {
     "message": "Ang domain na nakalista sa ibaba ay sinusubukang humiling ng access sa web3 API upang maaari itong makipag-ugnayan sa Ethereum blockchain. Laging i-double check na ikaw ay nasa tamang site bago aprubahan ang web3 access."
   },
   "accept": {

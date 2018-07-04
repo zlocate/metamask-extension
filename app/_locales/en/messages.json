@@ -5,13 +5,13 @@
   "reject": {
     "message": "Reject"
   },
-  "web3APIRequest": {
+  "providerAPIRequest": {
     "message": "Web3 API Request"
   },
-  "pleaseReviewWeb3Request": {
+  "reviewProviderRequest": {
     "message": "Please review this web3 API request."
   },
-  "web3RequestInfo": {
+  "providerRequestInfo": {
     "message": "The domain listed below is requesting access to the Ethereum blockchain and to view your current account. Always double check that you're on the correct site before approving access."
   },
   "accept": {

@@ -5,13 +5,13 @@
   "reject": {
     "message": "拒否"
   },
-  "web3APIRequest": {
+  "providerAPIRequest": {
     "message": "Web3 APIリクエスト"
   },
-  "pleaseReviewWeb3Request": {
+  "reviewProviderRequest": {
     "message": "このweb3 APIリクエストを確認してください。"
   },
-  "web3RequestInfo": {
+  "providerRequestInfo": {
     "message": "下記のドメインは、Ethereumブロックチェーンとやり取りできるようにweb3 APIへのアクセスをリクエストしようとしています。 Web3アクセスを承認する前に、正しいサイトにいることを常に確認してください。"
   },
   "accept": {
