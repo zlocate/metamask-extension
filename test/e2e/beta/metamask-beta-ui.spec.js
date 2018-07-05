@@ -604,7 +604,7 @@ describe('MetaMask', function () {
 
       const txListItem = await findElement(driver, By.css('.tx-list-item'))
       await txListItem.click()
-      await delay(regularDelayMs)
+      await delay(5000)
 
       const confirmButton = await findElement(driver, By.xpath(`//button[contains(text(), 'Confirm')]`))
       await confirmButton.click()
