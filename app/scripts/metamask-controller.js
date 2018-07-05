@@ -246,6 +246,7 @@ module.exports = class MetamaskController extends EventEmitter {
       NoticeController: this.noticeController.memStore,
       ShapeshiftController: this.shapeshiftController.store,
       InfuraController: this.infuraController.store,
+      ProviderApprovalController: this.providerApprovalController.store,
     })
     this.memStore.subscribe(this.sendUpdate.bind(this))
   }
@@ -328,7 +329,6 @@ module.exports = class MetamaskController extends EventEmitter {
     const isInitialized = (!!wallet || !!vault)
 
     return {
-      providerRequests: this.providerApprovalController.store.getState().providerRequests,
       ...{ isInitialized },
       ...this.memStore.getFlatState(),
       ...this.configManager.getConfig(),
