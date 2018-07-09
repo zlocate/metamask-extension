@@ -77,13 +77,15 @@ async function openNewPage (driver, url) {
   const handles = await driver.getAllWindowHandles()
   const lastHandle = handles[handles.length - 1]
   await driver.switchTo().window(lastHandle)
-
   await driver.get(url)
   await delay(1000)
+  const title = await driver.getTitle()
+  console.log(`1 openNewPage title`, title);
 }
 
 async function waitUntilXWindowHandles (driver, x) {
   let windowHandles = await driver.getAllWindowHandles()
+  console.log(`waitUntilXWindowHandles windowHandles`, windowHandles);
   if (windowHandles.length === x) return
   await delay(1000)
   return await waitUntilXWindowHandles(driver, x)
