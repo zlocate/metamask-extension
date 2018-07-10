@@ -15,7 +15,7 @@ class ProviderApprovalController {
     this.openPopup = openPopup
     this.platform = platform
 
-    platform && platform.addMessageListener(({ action, origin, web3 }) => {
+    platform && platform.addMessageListener && platform.addMessageListener(({ action, origin, web3 }) => {
       action && action === 'init-provider-request' && this.handleProviderRequest(origin, web3)
     })
   }
