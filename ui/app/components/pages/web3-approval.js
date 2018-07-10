@@ -11,7 +11,12 @@ class Web3Approval extends Component {
       <PageContainerContent
         title={this.context.t('web3APIRequest')}
         subtitle={this.context.t('pleaseReviewWeb3Request')}
-        ContentComponent={() => <div>{this.context.t('web3RequestInfo')}</div>}
+        ContentComponent={() => (
+          <div className="web3_approval_content">
+            {this.context.t('web3RequestInfo')}
+            <div className="web3_approval_origin">{origin}</div>
+          </div>
+        )}
         submitText={this.context.t('approve')}
         cancelText={this.context.t('reject')}
         onSubmit={() => { approveWeb3Request(origin) }}
