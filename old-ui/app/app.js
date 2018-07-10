@@ -35,6 +35,7 @@ const HDCreateVaultComplete = require('./keychains/hd/create-vault-complete')
 const HDRestoreVaultScreen = require('./keychains/hd/restore-vault')
 const RevealSeedConfirmation = require('./keychains/hd/recover-seed/confirmation')
 const AccountDropdowns = require('./components/account-dropdowns').AccountDropdowns
+const Web3Approval = require('./web3-approval')
 
 module.exports = connect(mapStateToProps)(App)
 
@@ -51,6 +52,7 @@ function mapStateToProps (state) {
     noActiveNotices,
     seedWords,
     featureFlags,
+    pendingWeb3Requests,
   } = state.metamask
   const selected = address || Object.keys(accounts)[0]
 
@@ -77,6 +79,7 @@ function mapStateToProps (state) {
     lostAccounts: state.metamask.lostAccounts,
     frequentRpcList: state.metamask.frequentRpcList || [],
     featureFlags,
+    pendingWeb3Requests,
 
     // state needed to get account dropdown temporarily rendering from app bar
     identities,
@@ -447,7 +450,7 @@ App.prototype.renderBackButton = function (style, justArrow = false) {
 App.prototype.renderPrimary = function () {
   log.debug('rendering primary')
   var props = this.props
-  const {isMascara, isOnboarding} = props
+  const {isMascara, isOnboarding, pendingWeb3Requests} = props
 
   if (isMascara && isOnboarding) {
     return h(MascaraFirstTime)
@@ -529,6 +532,11 @@ App.prototype.renderPrimary = function () {
   if (props.seedWords) {
     log.debug('rendering seed words')
     return h(HDCreateVaultComplete, {key: 'HDCreateVaultComplete'})
+  }
+
+  if (pendingWeb3Requests && pendingWeb3Requests.length > 0) {
+    log.debug('rendering web3 API approval screen')
+    return h(Web3Approval, { origin: pendingWeb3Requests[0] })
   }
 
   // show current view
