@@ -72,7 +72,7 @@ async function openNewPage (driver, url) {
   await delay(1000)
 
   const handles = await driver.getAllWindowHandles()
-  const secondHandle = handles[1]
+  const secondHandle = handles[handles.length - 1]
   await driver.switchTo().window(secondHandle)
 
   await driver.get(url)

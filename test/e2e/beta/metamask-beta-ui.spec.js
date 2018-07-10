@@ -25,7 +25,7 @@ describe('MetaMask', function () {
   let tokenAddress
 
   const testSeedPhrase = 'phrase upgrade clock rough situate wedding elder clever doctor stamp excess tent'
-  const tinyDelayMs = 1000
+  const tinyDelayMs = 200
   const regularDelayMs = tinyDelayMs * 2
   const largeDelayMs = regularDelayMs * 2
 
@@ -417,15 +417,61 @@ describe('MetaMask', function () {
     })
   })
 
+  describe('Send ETH from Faucet', () => {
+    it('starts a send transaction inside Faucet', async () => {
+      // await openNewPage(driver, 'https://faucet.metamask.io')
+      // TODO: Switch off of this custom-hosted faucet instace
+      // once EIP-1102 support lands upstream
+      await openNewPage(driver, 'https://eth-faucet-licnvruull.now.sh/')
+      await delay(regularDelayMs)
+
+      let windowHandles = await driver.getAllWindowHandles()
+      await driver.switchTo().window(windowHandles[windowHandles.length - 1])
+      const approve = await findElement(driver, By.css('.btn-primary'))
+      await approve.click()
+      await delay(regularDelayMs)
+      windowHandles = await driver.getAllWindowHandles()
+      await driver.switchTo().window(windowHandles[windowHandles.length - 1])
+
+      const [extension, faucet] = await driver.getAllWindowHandles()
+      await driver.switchTo().window(faucet)
+
+      const faucetPageTitle = await findElement(driver, By.css('.container-fluid'))
+      await driver.wait(until.elementTextMatches(faucetPageTitle, /MetaMask/))
+      await delay(regularDelayMs)
+
+      const send1eth = await findElement(driver, By.xpath(`//button[contains(text(), '10 ether')]`), 14000)
+      await send1eth.click()
+      await delay(regularDelayMs)
+
+      await driver.switchTo().window(extension)
+      await loadExtension(driver, extensionId)
+      await delay(regularDelayMs)
+
+      const confirmButton = await findElement(driver, By.xpath(`//button[contains(text(), 'Confirm')]`), 14000)
+      await confirmButton.click()
+      await delay(regularDelayMs)
+
+      await driver.switchTo().window(faucet)
+      await delay(regularDelayMs)
+      await driver.close()
+      await delay(regularDelayMs)
+      await driver.switchTo().window(extension)
+      await delay(regularDelayMs)
+      await loadExtension(driver, extensionId)
+      await delay(regularDelayMs)
+    })
+  })
+
   describe('Deploy contract and call contract methods', () => {
     let extension
     let contractTestPage
     it('confirms a deploy contract transaction', async () => {
       await openNewPage(driver, 'http://127.0.0.1:8080/')
-      await delay(regularDelayMs)
+      await delay(3000)
 
       let windowHandles = await driver.getAllWindowHandles()
-      await driver.switchTo().window(windowHandles[windowHandles.length - 1])
+      await driver.switchTo().window(windowHandles[windowHandles.length - 2])
       const approve = await findElement(driver, By.css('.btn-primary'))
       await approve.click()
       await delay(regularDelayMs)
@@ -539,7 +585,7 @@ describe('MetaMask', function () {
 
     it('renders the correct ETH balance', async () => {
       const balance = await findElement(driver, By.css('.tx-view .balance-display .token-amount'))
-      await delay(20000)
+      await delay(regularDelayMs)
       await driver.wait(until.elementTextMatches(balance, /^86.*ETH.*$/), 10000)
       const tokenAmount = await balance.getText()
       assert.ok(/^86.*ETH.*$/.test(tokenAmount))
@@ -549,10 +595,20 @@ describe('MetaMask', function () {
 
   describe('Add a custom token from TokenFactory', () => {
     it('creates a new token', async () => {
-      openNewPage(driver, 'https://tokenfactory.surge.sh/#/factory')
+      openNewPage(driver, 'https://token-factory-akfgedomci.now.sh/#/factory')
+      await delay(3000)
+
+      let windowHandles = await driver.getAllWindowHandles()
+      await driver.switchTo().window(windowHandles[windowHandles.length - 2])
+      const approve = await findElement(driver, By.css('.btn-primary'))
+      await approve.click()
+      await delay(regularDelayMs)
+      windowHandles = await driver.getAllWindowHandles()
+      const factory = windowHandles[windowHandles.length - 1]
+      await driver.switchTo().window(factory)
 
       await delay(regularDelayMs * 10)
-      const [extension, tokenFactory] = await driver.getAllWindowHandles()
+      const [extension] = await driver.getAllWindowHandles()
 
       const [
         totalSupply,
@@ -578,8 +634,8 @@ describe('MetaMask', function () {
       await confirmButton.click()
       await delay(regularDelayMs)
 
-      await driver.switchTo().window(tokenFactory)
-      await delay(regularDelayMs)
+      await driver.switchTo().window(factory)
+      await delay(5000)
 
       const tokenContactAddress = await driver.findElement(By.css('div > div > div:nth-child(2) > span:nth-child(3)'))
       tokenAddress = await tokenContactAddress.getText()
@@ -689,7 +745,17 @@ describe('MetaMask', function () {
   describe('Send a custom token from TokenFactory', () => {
     let gasModal
     it('sends an already created token', async () => {
-     openNewPage(driver, `https://tokenfactory.surge.sh/#/token/${tokenAddress}`)
+      openNewPage(driver, `https://token-factory-akfgedomci.now.sh/#/token/${tokenAddress}`)
+      await delay(3000)
+
+      let windowHandles = await driver.getAllWindowHandles()
+      await driver.switchTo().window(windowHandles[windowHandles.length - 2])
+      const approve = await findElement(driver, By.css('.btn-primary'))
+      await approve.click()
+      await delay(regularDelayMs)
+      windowHandles = await driver.getAllWindowHandles()
+      const factory = windowHandles[windowHandles.length - 1]
+      await driver.switchTo().window(factory)
 
       const [extension] = await driver.getAllWindowHandles()
 
