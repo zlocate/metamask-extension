@@ -1,4 +1,19 @@
 {
+  "approve": {
+    "message": "Schvaľovať"
+  },
+  "reject": {
+    "message": "Odmietnuť"
+  },
+  "web3APIRequest": {
+    "message": "Žiadosť API Web3"
+  },
+  "pleaseReviewWeb3Request": {
+    "message": "Prečítajte si túto žiadosť rozhrania API web3."
+  },
+  "web3RequestInfo": {
+    "message": "Doména uvedená nižšie sa pokúša požiadať o prístup k rozhraniu API web3, aby mohla komunikovať s blokom Ethereum. Pred schválením prístupu na web3 vždy skontrolujte, či ste na správnom mieste."
+  },
   "accept": {
     "message": "Sprejmi"
   },
@@ -173,7 +188,7 @@
   },
   "decimal": {
     "message": "Decimalke natančnosti"
-  }, 
+  },
   "defaultNetwork": {
     "message": "Privzeto omrežje za transakcije je Main Net."
   },
@@ -800,7 +815,7 @@
   },
   "visitWebSite": {
     "message": "Obiščite našo spletno stran"
-  }, 
+  },
   "warning": {
     "message": "Opozorilo"
   },

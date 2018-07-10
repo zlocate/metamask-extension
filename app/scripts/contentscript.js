@@ -19,24 +19,49 @@ const inpageBundle = inpageContent + inpageSuffix
 // MetaMask will be much faster loading and performant on Firefox.
 
 if (shouldInjectWeb3()) {
-  setupInjection()
-  setupStreams()
+  listenForWeb3Request()
 }
 
 /**
- * Creates a script tag that injects inpage.js
+ * Establishes listeners for web3 injection requests from the browser context
+ * and for web3 approvals and rejections from the background script context
  */
-function setupInjection () {
+function listenForWeb3Request () {
+  // Triggered by the current document upon dapp request for web3 in this tab
+  window.addEventListener('message', (event) => {
+    if (event.source !== window) { return }
+    if (!event.data || !event.data.type || event.data.type !== 'WEB3_API_REQUEST') { return }
+    extension.runtime.sendMessage({ action: 'init-web3-request', origin: event.source.origin })
+  })
+
+  // Triggered by the background upon user approval of web3 in this tab
+  extension.runtime.onMessage.addListener(({ action }) => {
+    if (!action || action !== 'approve-web3-request') { return }
+    setupStreams()
+    injectScript(inpageBundle)
+    window.postMessage({ type: 'WEB3_API_SUCCESS' }, '*')
+  })
+
+  // Triggered by the background upon user approval of web3 in a different tab
+  extension.runtime.onMessage.addListener(({ action }) => {
+    if (!action || action !== 'revoke-web3-request') { return }
+    injectScript('typeof window.Web3 !== "undefined" && window.location.reload()')
+  })
+}
+
+/**
+ * Injects a script tag into the current document
+ *
+ * @param {string} content - Code to be executed in the current document
+ */
+function injectScript (content) {
   try {
-    // inject in-page script
-    var scriptTag = document.createElement('script')
-    scriptTag.textContent = inpageBundle
-    scriptTag.onload = function () { this.parentNode.removeChild(this) }
-    var container = document.head || document.documentElement
-    // append as first child
+    const container = document.head || document.documentElement
+    const scriptTag = document.createElement('script')
+    scriptTag.textContent = content
     container.insertBefore(scriptTag, container.children[0])
   } catch (e) {
-    console.error('Metamask injection failed.', e)
+    console.error('Metamask script injection failed.', e)
   }
 }
 

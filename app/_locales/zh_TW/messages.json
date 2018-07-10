@@ -1,4 +1,19 @@
 {
+  "approve": {
+    "message": "批准"
+  },
+  "reject": {
+    "message": "拒絕"
+  },
+  "web3APIRequest": {
+    "message": "Web3 API請求"
+  },
+  "pleaseReviewWeb3Request": {
+    "message": "請查看此web3 API請求。"
+  },
+  "web3RequestInfo": {
+    "message": "下面列出的域正在嘗試請求訪問web3 API，以便它可以與以太坊區塊鏈進行交互。在批准web3訪問之前，請務必仔細檢查您是否在正確的站點上。"
+  },
   "accept": {
     "message": "接受"
   },
