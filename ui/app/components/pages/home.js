@@ -87,7 +87,7 @@ class Home extends Component {
 
     if (pendingWeb3Requests && pendingWeb3Requests.length > 0) {
       log.debug('rendering web3 API approval screen')
-      return h(Web3Approval, { origin: pendingWeb3Requests[0] })
+      return h(Web3Approval, { origin: pendingWeb3Requests[0].origin })
     }
 
     // if (!props.noActiveNotices) {

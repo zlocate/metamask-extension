@@ -264,6 +264,7 @@ gulp.task('fmt-scss', function () {
 
 const buildJsFiles = [
   'inpage',
+  'inpage-web3',
   'contentscript',
   'background',
   'ui',
@@ -278,8 +279,8 @@ createTasksForBuildJsMascara({ taskPrefix: 'dev:mascara:js', devMode: true })
 function createTasksForBuildJsExtension ({ buildJsFiles, taskPrefix, devMode, bundleTaskOpts = {} }) {
   // inpage must be built before all other scripts:
   const rootDir = './app/scripts'
-  const nonInpageFiles = buildJsFiles.filter(file => file !== 'inpage')
-  const buildPhase1 = ['inpage']
+  const nonInpageFiles = buildJsFiles.filter(file => file !== 'inpage' && file !== 'inpage-web3')
+  const buildPhase1 = ['inpage', 'inpage-web3']
   const buildPhase2 = nonInpageFiles
   const destinations = browserPlatforms.map(platform => `./dist/${platform}`)
   bundleTaskOpts = Object.assign({

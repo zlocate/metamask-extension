@@ -224,8 +224,8 @@ module.exports = class MetamaskController extends EventEmitter {
     })
     this.memStore.subscribe(this.sendUpdate.bind(this))
 
-    this.platform && this.platform.addMessageListener(({ action, origin }) => {
-      action && action === 'init-web3-request' && this.handleWeb3Request(origin)
+    this.platform && this.platform.addMessageListener(({ action, origin, web3 }) => {
+      action && action === 'init-web3-request' && this.handleWeb3Request(origin, web3)
     })
   }
 
@@ -416,38 +416,42 @@ module.exports = class MetamaskController extends EventEmitter {
   /**
    * Called when a tab requests web3 access
    *
-   * @param {string} requestedOrigin - Origin of the window requesting web3 access
+   * @param {string} origin - Origin of the window requesting web3 access
+   * @param {boolean} web3 - Whether or not this tab requested web3.js injection
    */
-  handleWeb3Request (requestedOrigin) {
+  handleWeb3Request (origin, web3) {
     const { openPopup } = this.opts
-    this.memStore.updateState({ pendingWeb3Requests: [requestedOrigin] })
+    this.memStore.updateState({ pendingWeb3Requests: [{ origin, web3 }] })
     openPopup && openPopup()
   }
 
   /**
    * Called when a user approves web3 access
    *
-   * @param {string} requestedOrigin - Origin of the target window to approve web3 access
+   * @param {string} origin - Origin of the target window to approve web3 access
    */
-  approveWeb3Request (requestedOrigin) {
+  approveWeb3Request (origin) {
     const { closePopup } = this.opts
     closePopup && closePopup()
-    this.platform && this.platform.sendMessage({ action: 'approve-web3-request' }, { active: true })
     const requests = this.memStore.getState().pendingWeb3Requests || []
-    const pendingWeb3Requests = requests.filter(origin => origin !== requestedOrigin)
+    this.platform && this.platform.sendMessage({
+      action: 'approve-web3-request',
+      web3: requests[0] && requests[0].web3,
+    }, { active: true })
+    const pendingWeb3Requests = requests.filter(request => request.origin !== origin)
     this.memStore.updateState({ pendingWeb3Requests })
   }
 
   /**
    * Called when a tab rejects web3 access
    *
-   * @param {string} requestedOrigin - Origin of the target window to reject web3 access
+   * @param {string} origin - Origin of the target window to reject web3 access
    */
-  rejectWeb3Request (requestedOrigin) {
+  rejectWeb3Request (origin) {
     const { closePopup } = this.opts
     closePopup && closePopup()
     const requests = this.memStore.getState().pendingWeb3Requests || []
-    const pendingWeb3Requests = requests.filter(origin => origin !== requestedOrigin)
+    const pendingWeb3Requests = requests.filter(request => request.origin !== origin)
     this.memStore.updateState({ pendingWeb3Requests })
   }
 
