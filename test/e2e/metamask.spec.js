@@ -8,7 +8,7 @@ const { By, Key, until } = webdriver
 const { delay, buildChromeWebDriver, buildFirefoxWebdriver, installWebExt, getExtensionIdChrome, getExtensionIdFirefox } = require('./func')
 
 describe('Metamask popup page', function () {
-  let driver, accountAddress, extensionId, tokenAddress
+  let driver, accountAddress, tokenAddress, extensionId
 
   this.timeout(0)
 
@@ -185,7 +185,6 @@ describe('Metamask popup page', function () {
     })
 
     it('restores from seed phrase', async function () {
-      await delay(1000)
       const restoreSeedLink = await driver.findElement(By.css('#app-content > div > div.app-primary.from-left > div > div.flex-row.flex-center.flex-grow > p'))
       assert.equal(await restoreSeedLink.getText(), 'Restore from seed phrase')
       await restoreSeedLink.click()
@@ -247,18 +246,7 @@ describe('Metamask popup page', function () {
   describe('Token Factory', function () {
 
     it('navigates to token factory', async function () {
-      // await driver.get('http://tokenfactory.surge.sh/')
-      // TODO: Switch off of this custom-hosted Token Factory instace
-      // once EIP-1102 support lands upstream
-      await driver.get('https://token-factory-akfgedomci.now.sh')
-      await delay(5000)
-      let windowHandles = await driver.getAllWindowHandles()
-      await driver.switchTo().window(windowHandles[windowHandles.length - 1])
-      const approve = await driver.findElement(By.css('.provider_approval_actions > .btn-green'))
-      await approve.click()
-      await delay(1000)
-      windowHandles = await driver.getAllWindowHandles()
-      await driver.switchTo().window(windowHandles[0])
+      await driver.get('http://tokenfactory.surge.sh/')
     })
 
     it('navigates to create token contract link', async function () {
@@ -312,7 +300,6 @@ describe('Metamask popup page', function () {
   describe('Add Token', function () {
 
     it('switches to the add token screen', async function () {
-      await delay(1000)
       const tokensTab = await driver.findElement(By.css('#app-content > div > div.app-primary.from-right > div > section > div > div.inactiveForm.pointer'))
       assert.equal(await tokensTab.getText(), 'TOKENS')
       await tokensTab.click()
