@@ -416,40 +416,6 @@ describe('MetaMask', function () {
     })
   })
 
-  // describe('Send ETH from Faucet', () => {
-  //   it('starts a send transaction inside Faucet', async () => {
-  //     await openNewPage(driver, 'https://faucet.metamask.io')
-
-  //     const [extension, faucet] = await driver.getAllWindowHandles()
-  //     await driver.switchTo().window(faucet)
-
-  //     const faucetPageTitle = await findElement(driver, By.css('.container-fluid'))
-  //     await driver.wait(until.elementTextMatches(faucetPageTitle, /MetaMask/))
-  //     await delay(regularDelayMs)
-
-  //     const send1eth = await findElement(driver, By.xpath(`//button[contains(text(), '10 ether')]`), 14000)
-  //     await send1eth.click()
-  //     await delay(regularDelayMs)
-
-  //     await driver.switchTo().window(extension)
-  //     await loadExtension(driver, extensionId)
-  //     await delay(regularDelayMs)
-
-  //     const confirmButton = await findElement(driver, By.xpath(`//button[contains(text(), 'Confirm')]`), 14000)
-  //     await confirmButton.click()
-  //     await delay(regularDelayMs)
-
-  //     await driver.switchTo().window(faucet)
-  //     await delay(regularDelayMs)
-  //     await driver.close()
-  //     await delay(regularDelayMs)
-  //     await driver.switchTo().window(extension)
-  //     await delay(regularDelayMs)
-  //     await loadExtension(driver, extensionId)
-  //     await delay(regularDelayMs)
-  //   })
-  // })
-
   describe('Deploy contract and call contract methods', () => {
     let extension
     let contractTestPage
