@@ -250,7 +250,7 @@ describe('Metamask popup page', function () {
       // await driver.get('http://tokenfactory.surge.sh/')
       // TODO: Switch off of this custom-hosted Token Factory instace
       // once EIP-1102 support lands upstream
-      await driver.get('https://token-factory-uzslubmdhk.now.sh')
+      await driver.get('https://token-factory-akfgedomci.now.sh')
       await delay(1000)
       let windowHandles = await driver.getAllWindowHandles()
       await driver.switchTo().window(windowHandles[windowHandles.length - 1])
