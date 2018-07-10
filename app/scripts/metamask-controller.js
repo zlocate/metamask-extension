@@ -223,8 +223,8 @@ module.exports = class MetamaskController extends EventEmitter {
       InfuraController: this.infuraController.store,
     })
     this.memStore.subscribe(this.sendUpdate.bind(this))
- 
-    this.platform.addMessageListener(({ action, origin }) => {
+
+    this.platform && this.platform.addMessageListener(({ action, origin }) => {
       action && action === 'init-web3-request' && this.handleWeb3Request(origin)
     })
   }
@@ -432,7 +432,7 @@ module.exports = class MetamaskController extends EventEmitter {
   approveWeb3Request (requestedOrigin) {
     const { closePopup } = this.opts
     closePopup && closePopup()
-    this.platform.sendMessage({ action: 'approve-web3-request' }, { active: true })
+    this.platform && this.platform.sendMessage({ action: 'approve-web3-request' }, { active: true })
     const requests = this.memStore.getState().pendingWeb3Requests || []
     const pendingWeb3Requests = requests.filter(origin => origin !== requestedOrigin)
     this.memStore.updateState({ pendingWeb3Requests })
