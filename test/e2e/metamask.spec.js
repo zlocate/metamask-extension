@@ -251,7 +251,7 @@ describe('Metamask popup page', function () {
       // TODO: Switch off of this custom-hosted Token Factory instace
       // once EIP-1102 support lands upstream
       await driver.get('https://token-factory-akfgedomci.now.sh')
-      await delay(1000)
+      await delay(5000)
       let windowHandles = await driver.getAllWindowHandles()
       await driver.switchTo().window(windowHandles[windowHandles.length - 1])
       const approve = await driver.findElement(By.css('.provider_approval_actions > .btn-green'))
