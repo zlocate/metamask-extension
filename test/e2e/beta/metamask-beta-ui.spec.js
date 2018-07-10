@@ -366,6 +366,7 @@ describe('MetaMask', function () {
 
     it('balance renders', async () => {
       const balance = await findElement(driver, By.css('.balance-display .token-amount'))
+      await delay(regularDelayMs)
       const tokenAmount = await balance.getText()
       assert.equal(tokenAmount, '100.000 ETH')
       await delay(regularDelayMs)
@@ -420,7 +421,16 @@ describe('MetaMask', function () {
     let extension
     let contractTestPage
     it('confirms a deploy contract transaction', async () => {
-      await openNewPage(driver, 'http://127.0.0.1:8080/');
+      await openNewPage(driver, 'http://127.0.0.1:8080/')
+      await delay(regularDelayMs)
+
+      let windowHandles = await driver.getAllWindowHandles()
+      await driver.switchTo().window(windowHandles[windowHandles.length - 1])
+      const approve = await findElement(driver, By.css('.btn-primary'))
+      await approve.click()
+      await delay(regularDelayMs)
+      windowHandles = await driver.getAllWindowHandles()
+      await driver.switchTo().window(windowHandles[windowHandles.length - 1]);
 
       [extension, contractTestPage] = await driver.getAllWindowHandles()
       await delay(regularDelayMs)
@@ -529,6 +539,7 @@ describe('MetaMask', function () {
 
     it('renders the correct ETH balance', async () => {
       const balance = await findElement(driver, By.css('.tx-view .balance-display .token-amount'))
+      await delay(20000)
       await driver.wait(until.elementTextMatches(balance, /^86.*ETH.*$/), 10000)
       const tokenAmount = await balance.getText()
       assert.ok(/^86.*ETH.*$/.test(tokenAmount))
