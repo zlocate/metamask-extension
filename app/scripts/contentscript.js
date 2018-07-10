@@ -41,12 +41,6 @@ function listenForWeb3Request () {
     injectScript(inpageBundle)
     window.postMessage({ type: 'WEB3_API_SUCCESS' }, '*')
   })
-
-  // Triggered by the background upon user approval of web3 in a different tab
-  extension.runtime.onMessage.addListener(({ action }) => {
-    if (!action || action !== 'revoke-web3-request') { return }
-    injectScript('typeof window.Web3 !== "undefined" && window.location.reload()')
-  })
 }
 
 /**

@@ -434,12 +434,6 @@ module.exports = class MetamaskController extends EventEmitter {
     const { closePopup } = this.opts
     closePopup && closePopup()
 
-    extension.tabs.query({ active: false }, tabs => {
-      tabs.forEach(tab => {
-        extension.tabs.sendMessage(tab.id, { action: 'revoke-web3-request' })
-      })
-    })
-
     extension.tabs.query({ active: true }, tabs => {
       tabs.forEach(tab => {
         extension.tabs.sendMessage(tab.id, { action: 'approve-web3-request' })
