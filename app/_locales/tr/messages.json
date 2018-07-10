@@ -5,13 +5,13 @@
     "reject": {
       "message": "Reddetmek"
     },
-    "web3APIRequest": {
+    "providerAPIRequest": {
       "message": "Web3 API İsteği"
     },
-    "pleaseReviewWeb3Request": {
+    "reviewProviderRequest": {
       "message": "Lütfen bu web3 API isteğini inceleyin."
     },
-    "web3RequestInfo": {
+    "providerRequestInfo": {
       "message": "Aşağıda listelenen etki alanı, web3 API'sine erişim talep etmeye çalışmaktadır, böylece Ethereum blockchain ile etkileşime girebilir. Web3 erişimini onaylamadan önce her zaman doğru sitede olduğunuzu kontrol edin."
     },
     "accept": {

@@ -291,8 +291,8 @@ var actions = {
   setPendingTokens,
   clearPendingTokens,
 
-  approveWeb3Request,
-  rejectWeb3Request,
+  approveProviderRequest,
+  rejectProviderRequest,
   CLOSE_POPUP: 'CLOSE_POPUP',
 }
 
@@ -2035,14 +2035,14 @@ function clearPendingTokens () {
   }
 }
 
-function approveWeb3Request (origin) {
+function approveProviderRequest (origin) {
   return (dispatch) => {
-    background.approveWeb3Request(origin)
+    background.approveProviderRequest(origin)
   }
 }
 
-function rejectWeb3Request (origin) {
+function rejectProviderRequest (origin) {
   return (dispatch) => {
-    background.rejectWeb3Request(origin)
+    background.rejectProviderRequest(origin)
   }
 }

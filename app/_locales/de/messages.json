@@ -5,13 +5,13 @@
   "reject": {
     "message": "Ablehnen"
   },
-  "web3APIRequest": {
+  "providerAPIRequest": {
     "message": "Web3-API-Anfrage"
   },
-  "pleaseReviewWeb3Request": {
+  "reviewProviderRequest": {
     "message": "Bitte lesen Sie diese web3-API-Anfrage."
   },
-  "web3RequestInfo": {
+  "providerRequestInfo": {
     "message": "Die unten aufgeführte Domäne versucht, Zugriff auf die web3-API anzufordern, damit sie mit der Ethereum-Blockchain interagieren kann. Überprüfen Sie immer, dass Sie sich auf der richtigen Website befinden, bevor Sie den Web3-Zugriff genehmigen."
   },
   "accept": {

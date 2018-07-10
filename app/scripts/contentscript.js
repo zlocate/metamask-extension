@@ -23,29 +23,27 @@ const inpageWeb3Bundle = inpageWeb3Content + inpageWeb3Suffix
 // If we create a FireFox-only code path using that API,
 // MetaMask will be much faster loading and performant on Firefox.
 
-if (shouldInjectWeb3()) {
-  listenForWeb3Request()
+if (shouldInjectProvider()) {
+  listenForProviderRequest()
 }
 
 /**
- * Establishes listeners for web3 injection requests from the browser context
- * and for web3 approvals and rejections from the background script context
+ * Establishes listeners for provider injection requests from the browser context
+ * and for provider approvals and rejections from the background script context
  */
-function listenForWeb3Request () {
-  // Triggered by the current document upon dapp request for web3 in this tab
+function listenForProviderRequest () {
   window.addEventListener('message', (event) => {
     if (event.source !== window) { return }
     if (!event.data || !event.data.type || event.data.type !== 'ETHEREUM_PROVIDER_REQUEST') { return }
     extension.runtime.sendMessage({
-      action: 'init-web3-request',
+      action: 'init-provider-request',
       origin: event.source.origin,
       web3: event.data.web3,
     })
   })
 
-  // Triggered by the background upon user approval of web3 in this tab
   extension.runtime.onMessage.addListener(({ action, web3 }) => {
-    if (!action || action !== 'approve-web3-request') { return }
+    if (!action || action !== 'approve-provider-request') { return }
     setupStreams()
     injectScript(web3 ? inpageWeb3Bundle : inpageBundle)
     window.postMessage({ type: 'ETHEREUM_PROVIDER_SUCCESS' }, '*')
@@ -138,11 +136,11 @@ function logStreamDisconnectWarning (remoteLabel, err) {
 }
 
 /**
- * Determines if Web3 should be injected
+ * Determines if a provider API should be injected
  *
- * @returns {boolean} {@code true} if Web3 should be injected
+ * @returns {boolean} {@code true} if a provider should be injected
  */
-function shouldInjectWeb3 () {
+function shouldInjectProvider () {
   return doctypeCheck() && suffixCheck() &&
     documentElementCheck() && !blacklistedDomainCheck()
 }

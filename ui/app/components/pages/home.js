@@ -18,7 +18,7 @@ const MainContainer = require('../../main-container')
 // other views
 const BuyView = require('../../components/buy-button-subview')
 const QrView = require('../../components/qr-code')
-const Web3Approval = require('./web3-approval')
+const ProviderApproval = require('./provider-approval')
 
 // Routes
 const {
@@ -54,7 +54,7 @@ class Home extends Component {
       currentView,
       activeAddress,
       seedWords,
-      pendingWeb3Requests,
+      providerRequests,
     } = this.props
 
     // notices
@@ -85,9 +85,9 @@ class Home extends Component {
       })
     }
 
-    if (pendingWeb3Requests && pendingWeb3Requests.length > 0) {
-      log.debug('rendering web3 API approval screen')
-      return h(Web3Approval, { origin: pendingWeb3Requests[0].origin })
+    if (providerRequests && providerRequests.length > 0) {
+      log.debug('rendering provider API approval screen')
+      return h(ProviderApproval, { origin: providerRequests[0].origin })
     }
 
     // if (!props.noActiveNotices) {
@@ -268,7 +268,7 @@ Home.propTypes = {
   isPopup: PropTypes.bool,
   isMouseUser: PropTypes.bool,
   t: PropTypes.func,
-  pendingWeb3Requests: PropTypes.array,
+  providerRequests: PropTypes.array,
 }
 
 function mapStateToProps (state) {
@@ -292,7 +292,7 @@ function mapStateToProps (state) {
     unapprovedMsgCount,
     unapprovedPersonalMsgCount,
     unapprovedTypedMessagesCount,
-    pendingWeb3Requests,
+    providerRequests,
   } = metamask
   const selected = address || Object.keys(accounts)[0]
 
@@ -330,7 +330,7 @@ function mapStateToProps (state) {
     isRevealingSeedWords: state.metamask.isRevealingSeedWords,
     Qr: state.appState.Qr,
     welcomeScreenSeen: state.metamask.welcomeScreenSeen,
-    pendingWeb3Requests,
+    providerRequests,
 
     // state needed to get account dropdown temporarily rendering from app bar
     selected,

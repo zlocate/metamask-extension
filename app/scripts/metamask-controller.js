@@ -35,6 +35,7 @@ const TypedMessageManager = require('./lib/typed-message-manager')
 const TransactionController = require('./controllers/transactions')
 const BalancesController = require('./controllers/computed-balances')
 const TokenRatesController = require('./controllers/token-rates')
+const ProviderApprovalController = require('./controllers/provider-approval')
 const ConfigManager = require('./lib/config-manager')
 const nodeify = require('./lib/nodeify')
 const accountImporter = require('./account-import-strategies')
@@ -186,6 +187,12 @@ module.exports = class MetamaskController extends EventEmitter {
       initState: initState.ShapeShiftController,
     })
 
+    this.providerApprovalController = new ProviderApprovalController({
+      closePopup: opts.closePopup,
+      openPopup: opts.openPopup,
+      platform: opts.platform,
+    })
+
     this.networkController.lookupNetwork()
     this.messageManager = new MessageManager()
     this.personalMessageManager = new PersonalMessageManager()
@@ -223,10 +230,6 @@ module.exports = class MetamaskController extends EventEmitter {
       InfuraController: this.infuraController.store,
     })
     this.memStore.subscribe(this.sendUpdate.bind(this))
-
-    this.platform && this.platform.addMessageListener(({ action, origin, web3 }) => {
-      action && action === 'init-web3-request' && this.handleWeb3Request(origin, web3)
-    })
   }
 
   /**
@@ -307,7 +310,7 @@ module.exports = class MetamaskController extends EventEmitter {
     const isInitialized = (!!wallet || !!vault)
 
     return {
-      pendingWeb3Requests: this.memStore.getState().pendingWeb3Requests,
+      providerRequests: this.providerApprovalController.store.getState().providerRequests,
       ...{ isInitialized },
       ...this.memStore.getFlatState(),
       ...this.configManager.getConfig(),
@@ -333,6 +336,7 @@ module.exports = class MetamaskController extends EventEmitter {
     const noticeController = this.noticeController
     const addressBookController = this.addressBookController
     const networkController = this.networkController
+    const providerApprovalController = this.providerApprovalController
 
     return {
       // etc
@@ -408,51 +412,9 @@ module.exports = class MetamaskController extends EventEmitter {
       checkNotices: noticeController.updateNoticesList.bind(noticeController),
       markNoticeRead: noticeController.markNoticeRead.bind(noticeController),
 
-      approveWeb3Request: this.approveWeb3Request.bind(this),
-      rejectWeb3Request: this.rejectWeb3Request.bind(this),
+      approveProviderRequest: providerApprovalController.approveProviderRequest.bind(providerApprovalController),
+      rejectProviderRequest: providerApprovalController.rejectProviderRequest.bind(providerApprovalController),
     }
-  }
-
-  /**
-   * Called when a tab requests web3 access
-   *
-   * @param {string} origin - Origin of the window requesting web3 access
-   * @param {boolean} web3 - Whether or not this tab requested web3.js injection
-   */
-  handleWeb3Request (origin, web3) {
-    const { openPopup } = this.opts
-    this.memStore.updateState({ pendingWeb3Requests: [{ origin, web3 }] })
-    openPopup && openPopup()
-  }
-
-  /**
-   * Called when a user approves web3 access
-   *
-   * @param {string} origin - Origin of the target window to approve web3 access
-   */
-  approveWeb3Request (origin) {
-    const { closePopup } = this.opts
-    closePopup && closePopup()
-    const requests = this.memStore.getState().pendingWeb3Requests || []
-    this.platform && this.platform.sendMessage({
-      action: 'approve-web3-request',
-      web3: requests[0] && requests[0].web3,
-    }, { active: true })
-    const pendingWeb3Requests = requests.filter(request => request.origin !== origin)
-    this.memStore.updateState({ pendingWeb3Requests })
-  }
-
-  /**
-   * Called when a tab rejects web3 access
-   *
-   * @param {string} origin - Origin of the target window to reject web3 access
-   */
-  rejectWeb3Request (origin) {
-    const { closePopup } = this.opts
-    closePopup && closePopup()
-    const requests = this.memStore.getState().pendingWeb3Requests || []
-    const pendingWeb3Requests = requests.filter(request => request.origin !== origin)
-    this.memStore.updateState({ pendingWeb3Requests })
   }
 
 //=============================================================================

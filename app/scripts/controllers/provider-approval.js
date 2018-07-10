@@ -1,11 +1,11 @@
 const ObservableStore = require('obs-store')
 
 /**
- * A controller that services Ethereum provider API requests
+ * A controller that services user-approved requests for an Ethereum provider API
  */
-class APIApprovalController {
+class ProviderApprovalController {
   /**
-   * Creates an APIApprovalController
+   * Creates an ProviderApprovalController
    *
    * @param {Object} [config] - Options to configure controller
    */
@@ -16,7 +16,7 @@ class APIApprovalController {
     this.platform = platform
 
     platform && platform.addMessageListener(({ action, origin, web3 }) => {
-      action && action === 'init-api-request' && this.handleAPIRequest(origin, web3)
+      action && action === 'init-provider-request' && this.handleProviderRequest(origin, web3)
     })
   }
 
@@ -26,39 +26,38 @@ class APIApprovalController {
    * @param {string} origin - Origin of the window requesting provider access
    * @param {boolean} web3 - Whether or not this tab requested web3.js injection
    */
-  handleAPIRequest (origin, web3) {
-    this.store.updateState({ pendingWeb3Requests: [{ origin, web3 }] })
+  handleProviderRequest (origin, web3) {
+    this.store.updateState({ providerRequests: [{ origin, web3 }] })
     this.openPopup && this.openPopup()
   }
 
   /**
-   * Called when a user approves web3 access
+   * Called when a user approves access to an Ethereum provider API
    *
-   * @param {string} origin - Origin of the target window to approve web3 access
+   * @param {string} origin - Origin of the target window to approve provider access
    */
-  approveAPIRequest (origin) {
+  approveProviderRequest (origin) {
     this.closePopup && this.closePopup()
-    const requests = this.store.getState().pendingWeb3Requests || []
+    const requests = this.store.getState().providerRequests || []
     this.platform && this.platform.sendMessage({
-      action: 'approve-api-request',
+      action: 'approve-provider-request',
       web3: requests[0] && requests[0].web3,
     }, { active: true })
-    const pendingWeb3Requests = requests.filter(request => request.origin !== origin)
-    this.store.updateState({ pendingWeb3Requests })
+    const providerRequests = requests.filter(request => request.origin !== origin)
+    this.store.updateState({ providerRequests })
   }
 
   /**
-   * Called when a tab rejects web3 access
+   * Called when a tab rejects access to an Ethereum provider API
    *
-   * @param {string} origin - Origin of the target window to reject web3 access
+   * @param {string} origin - Origin of the target window to reject provider access
    */
-  rejectWeb3Request (origin) {
-    const { closePopup } = this.opts
-    closePopup && closePopup()
-    const requests = this.store.getState().pendingWeb3Requests || []
-    const pendingWeb3Requests = requests.filter(request => request.origin !== origin)
-    this.store.updateState({ pendingWeb3Requests })
+  rejectProviderRequest (origin) {
+    this.closePopup && this.closePopup()
+    const requests = this.store.getState().providerRequests || []
+    const providerRequests = requests.filter(request => request.origin !== origin)
+    this.store.updateState({ providerRequests })
   }
 }
 
-module.exports = APIApprovalController
+module.exports = ProviderApprovalController
