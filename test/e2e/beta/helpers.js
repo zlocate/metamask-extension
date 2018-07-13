@@ -16,6 +16,7 @@ module.exports = {
   switchToWindowWithTitle,
   verboseReportOnFailure,
   waitUntilXWindowHandles,
+  switchToWindowWithUrlThatMatches,
 }
 
 async function loadExtension (driver, extensionId) {
@@ -84,11 +85,18 @@ async function openNewPage (driver, url) {
   await delay(1000)
 }
 
-async function waitUntilXWindowHandles (driver, x) {
+async function waitUntilXWindowHandles (driver, x, startTime = null) {
+  if (!startTime) {
+    startTime = (new Date()).getTime()
+  }
   const windowHandles = await driver.getAllWindowHandles()
-  if (windowHandles.length === x) return
+  if (windowHandles.length >= x) return
   await delay(1000)
-  return await waitUntilXWindowHandles(driver, x)
+  const currentTime = (new Date()).getTime()
+  if (currentTime - startTime > 15000) {
+    throw new Error(`Waiting for ${x} window handles, but only ${windowHandles.length} can be found.`)
+  }
+  return await waitUntilXWindowHandles(driver, x, startTime)
 }
 
 async function switchToWindowWithTitle (driver, title, windowHandles) {
@@ -105,6 +113,23 @@ async function switchToWindowWithTitle (driver, title, windowHandles) {
     return firstHandle
   } else {
     return await switchToWindowWithTitle(driver, title, windowHandles.slice(1))
+  }
+}
+
+async function switchToWindowWithUrlThatMatches (driver, regexp, windowHandles) {
+  if (!windowHandles) {
+    windowHandles = await driver.getAllWindowHandles()
+  } else if (windowHandles.length === 0) {
+    throw new Error('No window that matches: ' + regexp)
+  }
+  const firstHandle = windowHandles[0]
+  await driver.switchTo().window(firstHandle)
+  const windowUrl = await driver.getCurrentUrl()
+  if (windowUrl.match(regexp)) {
+    return firstHandle
+  } else {
+
+    return await switchToWindowWithUrlThatMatches(driver, regexp, windowHandles.slice(1))
   }
 }
 
