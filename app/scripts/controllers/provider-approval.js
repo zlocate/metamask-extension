@@ -5,7 +5,7 @@ const ObservableStore = require('obs-store')
  */
 class ProviderApprovalController {
   /**
-   * Creates an ProviderApprovalController
+   * Creates a ProviderApprovalController
    *
    * @param {Object} [config] - Options to configure controller
    */
