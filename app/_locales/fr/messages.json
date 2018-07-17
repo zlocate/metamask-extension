@@ -1,4 +1,16 @@
 {
+  "clearApprovalDataSuccess": {
+    "message": "Les données de site Web approuvées ont été supprimées."
+  },
+  "approvalData": {
+    "message": "Données d'approbation"
+  },
+  "approvalDataDescription": {
+    "message": "Effacer les données de site Web approuvées afin que tous les sites doivent à nouveau demander l'approbation."
+  },
+  "clearApprovalData": {
+    "message": "Effacer les données d'approbation"
+  },
   "approve": {
     "message": "Approuver"
   },

@@ -307,6 +307,7 @@ var actions = {
 
   approveProviderRequest,
   rejectProviderRequest,
+  clearApprovedOrigins,
   CLOSE_POPUP: 'CLOSE_POPUP',
 }
 
@@ -2263,5 +2264,11 @@ function approveProviderRequest (origin) {
 function rejectProviderRequest (origin) {
   return (dispatch) => {
     background.rejectProviderRequest(origin)
+  }
+}
+
+function clearApprovedOrigins () {
+  return (dispatch) => {
+    background.clearApprovedOrigins()
   }
 }

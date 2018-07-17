@@ -1,4 +1,16 @@
 {
+  "clearApprovalDataSuccess": {
+    "message": "Утвержденные данные веб-сайта успешно удалены."
+  },
+  "approvalData": {
+    "message": "Данные об утверждении"
+  },
+  "approvalDataDescription": {
+    "message": "Очистите утвержденные данные веб-сайта, чтобы все сайты снова запросили подтверждение."
+  },
+  "clearApprovalData": {
+    "message": "Четкие данные об утверждении"
+  },
   "approve": {
     "message": "Одобрить"
   },

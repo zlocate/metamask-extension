@@ -1,4 +1,16 @@
 {
+  "clearApprovalDataSuccess": {
+    "message": "Schválené údaje webových stránek byly úspěšně zrušeny."
+  },
+  "approvalData": {
+    "message": "Údaje o schválení"
+  },
+  "approvalDataDescription": {
+    "message": "Vymažte schválené údaje webových stránek, aby všechny weby znovu požádaly o schválení."
+  },
+  "clearApprovalData": {
+    "message": "Jasné údaje o schválení"
+  },
   "approve": {
     "message": "Schválit"
   },

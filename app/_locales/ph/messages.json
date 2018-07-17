@@ -1,4 +1,16 @@
 {
+  "clearApprovalDataSuccess": {
+    "message": "Matagumpay na na-clear ang data ng aprubadong website."
+  },
+  "approvalData": {
+    "message": "Data ng Pag-apruba"
+  },
+  "approvalDataDescription": {
+    "message": "I-clear ang naaprubahang data ng website upang ang lahat ng site ay dapat humiling muli ng pag-apruba"
+  },
+  "clearApprovalData": {
+    "message": "Tanggalin ang data ng pag-apruba"
+  },
   "approve": {
     "message": "Aprubahan"
   },

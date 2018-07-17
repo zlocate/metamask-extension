@@ -1,4 +1,16 @@
 {
+  "clearApprovalDataSuccess": {
+    "message": "அங்கீகரிக்கப்பட்ட வலைத்தள தரவு வெற்றிகரமாக அழிக்கப்பட்டது."
+  },
+  "approvalData": {
+    "message": "ஒப்புதல் தரவு"
+  },
+  "approvalDataDescription": {
+    "message": "அங்கீகரிக்கப்பட்ட வலைத்தள தரவை அழிக்கவும், அனைத்து தளங்களும் ஒப்புதல் மீண்டும் கோர வேண்டும்."
+  },
+  "clearApprovalData": {
+    "message": "ஒப்புதல் தரவை அழி"
+  },
   "approve": {
     "message": "ஒப்புதல்"
   },

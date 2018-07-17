@@ -1,4 +1,16 @@
 {
+  "clearApprovalDataSuccess": {
+    "message": "已批准的網站數據已成功清除。"
+  },
+  "approvalData": {
+    "message": "審批數據"
+  },
+  "approvalDataDescription": {
+    "message": "清除已批准的網站數據，以便所有網站都必須再次申請"
+  },
+  "clearApprovalData": {
+    "message": "清除批准數據"
+  },
   "approve": {
     "message": "批准"
   },

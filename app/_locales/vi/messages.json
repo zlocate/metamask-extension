@@ -1,4 +1,16 @@
 {
+  "clearApprovalDataSuccess": {
+    "message": "Đã xóa thành công dữ liệu trang web được phê duyệt."
+  },
+  "approvalData": {
+    "message": "Dữ liệu phê duyệt"
+  },
+  "approvalDataDescription": {
+    "message": "Xóa dữ liệu trang web được phê duyệt để tất cả các trang web phải yêu cầu phê duyệt lại."
+  },
+  "clearApprovalData": {
+    "message": "Xóa dữ liệu phê duyệt"
+  },
   "approve": {
     "message": "Phê duyệt"
   },

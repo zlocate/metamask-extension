@@ -1,4 +1,16 @@
 {
+  "clearApprovalDataSuccess": {
+    "message": "Genehmigte Website-Daten wurden erfolgreich gelöscht."
+  },
+  "approvalData": {
+    "message": "Genehmigungsdaten"
+  },
+  "approvalDataDescription": {
+    "message": "Löschen Sie die genehmigten Website-Daten, damit alle Websites erneut eine Genehmigung anfordern müssen."
+  },
+  "clearApprovalData": {
+    "message": "Genehmigungsdaten löschen"
+  },
   "approve": {
     "message": "Genehmigen"
   },

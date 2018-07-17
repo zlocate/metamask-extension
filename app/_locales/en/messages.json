@@ -1,4 +1,16 @@
 {
+  "clearApprovalDataSuccess": {
+    "message": "Approved website data cleared successfully."
+  },
+  "approvalData": {
+    "message": "Approval Data"
+  },
+  "approvalDataDescription": {
+    "message": "Clear approved website data so all sites must request approval again."
+  },
+  "clearApprovalData": {
+    "message": "Clear Approval Data"
+  },
   "approve": {
     "message": "Approve"
   },

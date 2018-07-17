@@ -1,4 +1,16 @@
 {
+  "clearApprovalDataSuccess": {
+    "message": "Los datos aprobados del sitio web se borraron con éxito."
+  },
+  "approvalData": {
+    "message": "Datos de aprobación"
+  },
+  "approvalDataDescription": {
+    "message": "Borre los datos del sitio web aprobado para que todos los sitios deban volver a solicitar la aprobación."
+  },
+  "clearApprovalData": {
+    "message": "Borrar datos de aprobación"
+  },
   "approve": {
     "message": "Aprobar"
   },

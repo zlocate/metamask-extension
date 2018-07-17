@@ -1,4 +1,16 @@
 {
+  "clearApprovalDataSuccess": {
+    "message": "承認されたウェブサイトデータが正常に消去されました。"
+  },
+  "approvalData": {
+    "message": "承認データ"
+  },
+  "approvalDataDescription": {
+    "message": "承認されたウェブサイトのデータをクリアすると、すべてのサイトで承認を再度要求する必要があります"
+  },
+  "clearApprovalData": {
+    "message": "承認データのクリア"
+  },
   "approve": {
     "message": "承認する"
   },

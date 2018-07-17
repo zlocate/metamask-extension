@@ -14,6 +14,7 @@ class ProviderApprovalController {
     this.closePopup = closePopup
     this.openPopup = openPopup
     this.platform = platform
+    this.approvedOrigins = {}
 
     platform && platform.addMessageListener && platform.addMessageListener(({ action, origin, web3 }) => {
       action && action === 'init-provider-request' && this.handleProviderRequest(origin, web3)
@@ -28,6 +29,10 @@ class ProviderApprovalController {
    */
   handleProviderRequest (origin, web3) {
     this.store.updateState({ providerRequests: [{ origin, web3 }] })
+    if (this.approvedOrigins[origin]) {
+      this.approveProviderRequest(origin)
+      return
+    }
     this.openPopup && this.openPopup()
   }
 
@@ -45,6 +50,7 @@ class ProviderApprovalController {
     }, { active: true })
     const providerRequests = requests.filter(request => request.origin !== origin)
     this.store.updateState({ providerRequests })
+    this.approvedOrigins[origin] = true
   }
 
   /**
@@ -57,6 +63,13 @@ class ProviderApprovalController {
     const requests = this.store.getState().providerRequests || []
     const providerRequests = requests.filter(request => request.origin !== origin)
     this.store.updateState({ providerRequests })
+  }
+
+  /**
+   * Clears any cached approvals for user-approved origins
+   */
+  clearApprovedOrigins () {
+    this.approvedOrigins = {}
   }
 }
 

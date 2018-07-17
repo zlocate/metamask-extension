@@ -23,6 +23,7 @@ const ConfirmResetAccount = require('./confirm-reset-account')
 const ConfirmRemoveAccount = require('./confirm-remove-account')
 const TransactionConfirmed = require('./transaction-confirmed')
 const WelcomeBeta = require('./welcome-beta')
+const ClearApprovedOrigins = require('./clear-approved-origins')
 const Notification = require('./notification')
 
 import ConfirmCustomizeGasModal from './customize-gas'
@@ -201,6 +202,23 @@ const MODALS = {
     contents: [
       h(Notification, [
         h(WelcomeBeta),
+      ]),
+    ],
+    mobileModalStyle: {
+      ...modalContainerMobileStyle,
+    },
+    laptopModalStyle: {
+      ...modalContainerLaptopStyle,
+    },
+    contentStyle: {
+      borderRadius: '8px',
+    },
+  },
+
+  CLEAR_APPROVED_ORIGINS_SUCCESS: {
+    contents: [
+      h(Notification, [
+        h(ClearApprovedOrigins),
       ]),
     ],
     mobileModalStyle: {
