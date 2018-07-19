@@ -30,15 +30,13 @@ module.exports = class TypedMessageManager extends EventEmitter {
    * Controller in charge of managing - storing, adding, removing, updating - TypedMessage.
    *
    * @typedef {Object} TypedMessage
-   * @param {Object} opts @deprecated
-   * @property {Object} memStore The observable store where TypedMessage are saved.
-   * @property {Object} memStore.unapprovedTypedMessages A collection of all TypedMessages in the 'unapproved' state
-   * @property {number} memStore.unapprovedTypedMessagesCount The count of all TypedMessages in this.memStore.unapprobedMsgs
-   * @property {array} messages Holds all messages that have been created by this TypedMessage
+   * @param {Object} opts
+   * @property {Object} networkController Reference to the network controller
    *
    */
   constructor (opts) {
     super()
+    this.networkController = opts.networkController
     this.memStore = new ObservableStore({
       unapprovedTypedMessages: {},
       unapprovedTypedMessagesCount: 0,
@@ -115,6 +113,9 @@ module.exports = class TypedMessageManager extends EventEmitter {
     const validation = jsonschema.validate(data, TYPED_MESSAGE_SCHEMA)
     assert.ok(data.primaryType in data.types, `Primary type of "${data.primaryType}" has no type definition.`)
     assert.equal(validation.errors.length, 0, 'Data must conform to EIP-712 schema. See https://git.io/fNtcx.')
+    const chainId = data.domain.chainId
+    const activeChainId = parseInt(this.networkController.getNetworkState())
+    chainId && assert.equal(chainId, activeChainId, `Provided chainId (${activeChainId}) must match the active chainId (${activeChainId})`)
   }
 
   /**

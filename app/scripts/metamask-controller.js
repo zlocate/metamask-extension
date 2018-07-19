@@ -207,7 +207,9 @@ module.exports = class MetamaskController extends EventEmitter {
     this.networkController.lookupNetwork()
     this.messageManager = new MessageManager()
     this.personalMessageManager = new PersonalMessageManager()
-    this.typedMessageManager = new TypedMessageManager()
+    this.typedMessageManager = new TypedMessageManager({
+      networkController: this.networkController,
+    })
     this.publicConfigStore = this.initPublicConfigStore()
 
     this.store.updateStructure({
