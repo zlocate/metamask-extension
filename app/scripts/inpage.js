@@ -20,7 +20,7 @@ var metamaskStream = new LocalMessageDuplexStream({
 })
 
 // setup background connection for QR
-var metamaskStream = new LocalMessageDuplexStream({
+var qrStream = new LocalMessageDuplexStream({
   name: 'qr-reader',
   target: 'contentscript',
 })
