@@ -27,6 +27,12 @@ const EdgeEncryptor = require('./edge-encryptor')
 const getFirstPreferredLangCode = require('./lib/get-first-preferred-lang-code')
 const getObjStructure = require('./lib/getObjStructure')
 const ipfsContent = require('./lib/ipfsContent.js')
+const setupMultiplex = require('./lib/stream-utils.js').setupMultiplex
+
+function setupQrReaderStream (pageStream) {
+  const qrMux = setupMultiplex(pageStream)
+  const qrStream = qrMux.createStream('qr-reader')
+}
 
 const {
   ENVIRONMENT_TYPE_POPUP,

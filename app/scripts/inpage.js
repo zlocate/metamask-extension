@@ -19,6 +19,12 @@ var metamaskStream = new LocalMessageDuplexStream({
   target: 'contentscript',
 })
 
+// setup background connection for QR
+var metamaskStream = new LocalMessageDuplexStream({
+  name: 'qr-reader',
+  target: 'contentscript',
+})
+
 // compose the inpage provider
 var inpageProvider = new MetamaskInpageProvider(metamaskStream)
 
