@@ -146,7 +146,7 @@ describe('GasModalPageContainer Component', function () {
     it('should render', () => {
       const renderBasicTabContentResult = wrapper.instance().renderBasicTabContent()
       const renderedBasicTabContent = shallow(renderBasicTabContentResult)
-      assert.equal(renderedBasicTabContent.props().className, 'gas-modal-content__basic-tab')
+      assert.equal(renderedBasicTabContent.props().className, 'basic-tab-content')
     })
   })
 
