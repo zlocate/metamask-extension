@@ -146,6 +146,7 @@
     "json-rpc-engine": "^3.6.1",
     "json-rpc-middleware-stream": "^1.0.1",
     "lodash.debounce": "^4.0.8",
+    "lodash.mapvalues": "^4.6.0",
     "lodash.memoize": "^4.1.2",
     "lodash.shuffle": "^4.2.0",
     "lodash.uniqby": "^4.7.0",

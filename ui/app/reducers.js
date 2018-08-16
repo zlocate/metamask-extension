@@ -10,6 +10,7 @@ const reduceLocale = require('./reducers/locale')
 const reduceSend = require('./ducks/send.duck').default
 import reduceConfirmTransaction from './ducks/confirm-transaction.duck'
 import reduceCustomGas from './ducks/custom-gas'
+import reduceGasEstimates from './ducks/gas-estimates.duck'
 
 window.METAMASK_CACHED_LOG_STATE = null
 
@@ -50,6 +51,7 @@ function rootReducer (state, action) {
   state.confirmTransaction = reduceConfirmTransaction(state, action)
 
   state.customGas = reduceCustomGas(state, action)
+  state.gasEstimates = reduceGasEstimates(state, action)
 
   window.METAMASK_CACHED_LOG_STATE = state
   return state

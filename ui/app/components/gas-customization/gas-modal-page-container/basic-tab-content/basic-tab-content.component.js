@@ -16,9 +16,7 @@ export default class BasicTabContent extends Component {
     return (
       <div className="basic-tab-content">
         <div className="basic-tab-content__title">Suggest gas fee increases</div>
-        <GasPriceButtonGroup
-          onFeeSelection={selectedFeeGasPrice => this.props.setGasPrice(selectedFeeGasPrice)}
-        />
+        <GasPriceButtonGroup />
       </div>
     )
   }
