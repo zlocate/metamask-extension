@@ -21,6 +21,7 @@ const inpageBundle = inpageContent + inpageSuffix
 if (shouldInjectWeb3()) {
   setupInjection()
   setupStreams()
+  listenForProviderRequest()
 }
 
 /**
@@ -94,6 +95,27 @@ function setupStreams () {
   // ignore unused channels (handled by background, inpage)
   mux.ignoreStream('provider')
   mux.ignoreStream('publicConfig')
+}
+
+/**
+ * Establishes listeners for requests to fully-enable the provider from the dapp context
+ * and for full-provider approvals and rejections from the background script context
+ */
+function listenForProviderRequest () {
+  window.addEventListener('message', (event) => {
+    if (event.source !== window) { return }
+    if (!event.data || !event.data.type || event.data.type !== 'ETHEREUM_ENABLE_PROVIDER') { return }
+    extension.runtime.sendMessage({
+      action: 'init-provider-request',
+      origin: event.source.origin,
+    })
+  })
+
+  extension.runtime.onMessage.addListener(({ action }) => {
+    if (!action || action !== 'approve-provider-request') { return }
+    window.postMessage({ type: 'ETHEREUM_PROVIDER_SUCCESS' }, '*')
+    window.emit(new CustomEvent('ethereumprovider'))
+  })
 }
 
 

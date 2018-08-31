@@ -258,6 +258,32 @@ class Settings extends Component {
     )
   }
 
+  renderClearApproval () {
+    const { clearApprovedOrigins, showClearSuccessModal } = this.props
+    return (
+      h('div.settings__content-row', [
+        h('div.settings__content-item', [
+          h('div', this.context.t('approvalData')),
+          h(
+            'div.settings__content-description',
+            this.context.t('approvalDataDescription')
+          ),
+        ]),
+        h('div.settings__content-item', [
+          h('div.settings__content-item-col', [
+            h('button.btn-primary.btn--large.settings__button--orange', {
+              onClick (event) {
+                event.preventDefault()
+                clearApprovedOrigins()
+                showClearSuccessModal()
+              },
+            }, this.context.t('clearApprovalData')),
+          ]),
+        ]),
+      ])
+    )
+  }
+
   renderSeedWords () {
     const { history } = this.props
 
@@ -328,6 +354,7 @@ class Settings extends Component {
         this.renderNewRpcUrl(),
         this.renderStateLogs(),
         this.renderSeedWords(),
+        this.renderClearApproval(),
         !isMascara && this.renderOldUI(),
         this.renderResetAccount(),
         this.renderBlockieOptIn(),
@@ -346,6 +373,8 @@ Settings.propTypes = {
   displayWarning: PropTypes.func,
   revealSeedConfirmation: PropTypes.func,
   setFeatureFlagToBeta: PropTypes.func,
+  clearApprovedOrigins: PropTypes.func,
+  showClearSuccessModal: PropTypes.func,
   showResetAccountConfirmationModal: PropTypes.func,
   warning: PropTypes.string,
   history: PropTypes.object,
@@ -380,6 +409,12 @@ const mapDispatchToProps = dispatch => {
     },
     showResetAccountConfirmationModal: () => {
       return dispatch(actions.showModal({ name: 'CONFIRM_RESET_ACCOUNT' }))
+    },
+    clearApprovedOrigins: () => {
+      return dispatch(actions.clearApprovedOrigins())
+    },
+    showClearSuccessModal: () => {
+      return dispatch(actions.showModal({ name: 'CLEAR_APPROVED_ORIGINS_SUCCESS' }))
     },
   }
 }
