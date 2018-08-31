@@ -112,9 +112,10 @@ function listenForProviderRequest () {
   })
 
   extension.runtime.onMessage.addListener(({ action }) => {
-    if (!action || action !== 'approve-provider-request') { return }
+    if (!action || (action !== 'approve-provider-request' && action !== 'reject-provider-request')) { return }
+    const error = action === 'reject-provider-request' ? 'User reject provider access' : undefined
     window.postMessage({ type: 'ETHEREUM_PROVIDER_SUCCESS' }, '*')
-    window.emit(new CustomEvent('ethereumprovider'))
+    window.dispatchEvent(new CustomEvent('ethereumprovider', { detail: { error }}))
   })
 }
 

@@ -68,6 +68,7 @@ export default class PageContainer extends PureComponent {
 
   renderContent () {
     const { contentComponent, tabsComponent } = this.props
+    console.log('1', contentComponent)
 
     if (contentComponent) {
       return contentComponent

@@ -204,7 +204,7 @@ module.exports = class MetamaskController extends EventEmitter {
     })
 
     this.providerApprovalController = new ProviderApprovalController({
-      closePopup: opts.openPopup,
+      closePopup: opts.closePopup,
       openPopup: opts.openPopup,
       platform: opts.platform,
     })

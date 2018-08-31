@@ -56,6 +56,7 @@ class ProviderApprovalController {
   rejectProviderRequest (origin) {
     this.closePopup && this.closePopup()
     const requests = this.store.getState().providerRequests || []
+    this.platform && this.platform.sendMessage({ action: 'reject-provider-request' }, { active: true })
     const providerRequests = requests.filter(request => request.origin !== origin)
     this.store.updateState({ providerRequests })
   }

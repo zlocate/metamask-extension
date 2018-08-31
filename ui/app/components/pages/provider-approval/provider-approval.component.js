@@ -19,7 +19,7 @@ export default class ProviderApproval extends Component {
       <PageContainerContent
         title={this.context.t('providerAPIRequest')}
         subtitle={this.context.t('reviewProviderRequest')}
-        ContentComponent={() => (
+        contentComponent={(
           <div className="provider_approval_content">
             {this.context.t('providerRequestInfo')}
             <div className="provider_approval_origin">{origin}</div>
