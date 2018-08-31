@@ -259,7 +259,8 @@ module.exports = class MetamaskController extends EventEmitter {
         web3_clientVersion: `MetaMask/v${version}`,
       },
       // account mgmt
-      getAccounts: async () => {
+      getAccounts: async ({ origin }) => {
+        if (!this.providerApprovalController.isApproved(origin)) { return [] }
         const isUnlocked = this.keyringController.memStore.getState().isUnlocked
         const selectedAddress = this.preferencesController.getSelectedAddress()
         // only show address if account is unlocked

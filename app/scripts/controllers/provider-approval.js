@@ -67,6 +67,16 @@ class ProviderApprovalController {
   clearApprovedOrigins () {
     this.approvedOrigins = {}
   }
+
+  /**
+   * Determines if a given origin has been approved
+   *
+   * @param {string} origin - Domain origin to check for approval status
+   * @returns {boolean} - True if the origin has been approved
+   */
+  isApproved (origin) {
+    return this.approvedOrigins[origin];
+  }
 }
 
 module.exports = ProviderApprovalController
