@@ -62,11 +62,6 @@ global.web3 = new Proxy(web3, {
 })
 */
 
-// set web3 defaultAccount
-inpageProvider.publicConfigStore.subscribe(function (state) {
-  web3.eth.defaultAccount = state.selectedAddress
-})
-
 // need to make sure we aren't affected by overlapping namespaces
 // and that we dont affect the app with our namespace
 // mostly a fix for web3's BigNumber if AMD's "define" is defined...

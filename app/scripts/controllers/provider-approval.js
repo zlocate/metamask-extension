@@ -75,7 +75,7 @@ class ProviderApprovalController {
    * @returns {boolean} - True if the origin has been approved
    */
   isApproved (origin) {
-    return this.approvedOrigins[origin];
+    return this.approvedOrigins[origin]
   }
 }
 

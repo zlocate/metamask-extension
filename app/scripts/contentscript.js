@@ -19,25 +19,24 @@ const inpageBundle = inpageContent + inpageSuffix
 // MetaMask will be much faster loading and performant on Firefox.
 
 if (shouldInjectWeb3()) {
-  setupInjection()
+  injectScript(inpageBundle)
   setupStreams()
   listenForProviderRequest()
 }
 
 /**
- * Creates a script tag that injects inpage.js
+ * Injects a script tag into the current document
+ *
+ * @param {string} content - Code to be executed in the current document
  */
-function setupInjection () {
+function injectScript (content) {
   try {
-    // inject in-page script
-    var scriptTag = document.createElement('script')
-    scriptTag.textContent = inpageBundle
-    scriptTag.onload = function () { this.parentNode.removeChild(this) }
-    var container = document.head || document.documentElement
-    // append as first child
+    const container = document.head || document.documentElement
+    const scriptTag = document.createElement('script')
+    scriptTag.textContent = content
     container.insertBefore(scriptTag, container.children[0])
   } catch (e) {
-    console.error('Metamask injection failed.', e)
+    console.error('Metamask script injection failed.', e)
   }
 }
 
@@ -114,7 +113,12 @@ function listenForProviderRequest () {
   extension.runtime.onMessage.addListener(({ action }) => {
     if (!action || (action !== 'approve-provider-request' && action !== 'reject-provider-request')) { return }
     const error = action === 'reject-provider-request' ? 'User reject provider access' : undefined
-    window.postMessage({ type: 'ETHEREUM_PROVIDER_SUCCESS' }, '*')
+    !error && injectScript(`
+      web3.eth.defaultAccount = web3.currentProvider.publicConfigStore.getState().selectedAddress
+      web3.currentProvider.publicConfigStore.subscribe(function (state) {
+        web3.eth.defaultAccount = state.selectedAddress
+      })
+    `)
     window.dispatchEvent(new CustomEvent('ethereumprovider', { detail: { error }}))
   })
 }

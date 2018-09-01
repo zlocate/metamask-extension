@@ -260,6 +260,8 @@ module.exports = class MetamaskController extends EventEmitter {
       },
       // account mgmt
       getAccounts: async ({ origin }) => {
+        // Expose no accounts if this origin has not been approved, preventing
+        // account-requring RPC methods from completing successfully
         if (!this.providerApprovalController.isApproved(origin)) { return [] }
         const isUnlocked = this.keyringController.memStore.getState().isUnlocked
         const selectedAddress = this.preferencesController.getSelectedAddress()
