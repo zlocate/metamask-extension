@@ -115,7 +115,7 @@ function listenForProviderRequest () {
     if (!event.data || !event.data.type || event.data.type !== 'ETHEREUM_ENABLE_PROVIDER') { return }
     extension.runtime.sendMessage({
       action: 'init-provider-request',
-      origin: event.source.location.host,
+      origin: event.source.location.hostname,
     })
   })
 
