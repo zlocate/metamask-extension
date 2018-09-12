@@ -415,14 +415,26 @@ describe('MetaMask', function () {
   })
 
   describe('Send ETH from dapp', () => {
+    let windowHandles
+    let extension
+    let popup
+    let dapp
+
     it('starts a send transaction inside the dapp', async () => {
       await openNewPage(driver, 'http://127.0.0.1:8080/')
       await delay(regularDelayMs)
 
-      await waitUntilXWindowHandles(driver, 2)
-      let windowHandles = await driver.getAllWindowHandles()
-      const extension = windowHandles[0]
-      const dapp = windowHandles[1]
+      await waitUntilXWindowHandles(driver, 3)
+      windowHandles = await driver.getAllWindowHandles()
+       extension = windowHandles[0]
+      popup = await switchToWindowWithTitle(driver, 'MetaMask Notification', windowHandles)
+      dapp = windowHandles.find(handle => handle !== extension && handle !== popup)
+       await delay(regularDelayMs)
+      const approveButton = await findElement(driver, By.xpath(`//button[contains(text(), 'Approve')]`), 10000)
+      await approveButton.click()
+    })
+
+    it('initiates a send from the dapp', async () => {
 
       await driver.switchTo().window(dapp)
       await delay(regularDelayMs)
