@@ -203,17 +203,18 @@ module.exports = class MetamaskController extends EventEmitter {
       initState: initState.ShapeShiftController,
     })
 
-    this.providerApprovalController = new ProviderApprovalController({
-      closePopup: opts.closePopup,
-      openPopup: opts.openPopup,
-      platform: opts.platform,
-    })
-
     this.networkController.lookupNetwork()
     this.messageManager = new MessageManager()
     this.personalMessageManager = new PersonalMessageManager()
     this.typedMessageManager = new TypedMessageManager()
     this.publicConfigStore = this.initPublicConfigStore()
+
+    this.providerApprovalController = new ProviderApprovalController({
+      closePopup: opts.closePopup,
+      openPopup: opts.openPopup,
+      platform: opts.platform,
+      publicConfigStore: this.publicConfigStore,
+    })
 
     this.store.updateStructure({
       TransactionController: this.txController.store,

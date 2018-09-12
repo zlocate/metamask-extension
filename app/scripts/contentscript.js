@@ -10,6 +10,7 @@ const PortStream = require('extension-port-stream')
 const inpageContent = fs.readFileSync(path.join(__dirname, '..', '..', 'dist', 'chrome', 'inpage.js')).toString()
 const inpageSuffix = '//# sourceURL=' + extension.extension.getURL('inpage.js') + '\n'
 const inpageBundle = inpageContent + inpageSuffix
+let originApproved = false
 
 // Eventually this streaming injection could be replaced with:
 // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Language_Bindings/Components.utils.exportFunction
@@ -52,6 +53,14 @@ function setupStreams () {
   })
   const pluginPort = extension.runtime.connect({ name: 'contentscript' })
   const pluginStream = new PortStream(pluginPort)
+
+  pageStream._write = function (data, encoding, cb) {
+    if (typeof data === 'object' && data.name && data.name === 'publicConfig' && !originApproved) {
+      cb()
+      return
+    }
+    LocalMessageDuplexStream.prototype._write.apply(pageStream, arguments)
+  }
 
   // forward communication plugin->inpage
   pump(
@@ -113,12 +122,7 @@ function listenForProviderRequest () {
   extension.runtime.onMessage.addListener(({ action }) => {
     if (!action || (action !== 'approve-provider-request' && action !== 'reject-provider-request')) { return }
     const error = action === 'reject-provider-request' ? 'User reject provider access' : undefined
-    !error && injectScript(`
-      web3.eth.defaultAccount = web3.currentProvider.publicConfigStore.getState().selectedAddress
-      web3.currentProvider.publicConfigStore.subscribe(function (state) {
-        web3.eth.defaultAccount = state.selectedAddress
-      })
-    `)
+    originApproved = action === 'approve-provider-request'
     window.dispatchEvent(new CustomEvent('ethereumprovider', { detail: { error }}))
   })
 }

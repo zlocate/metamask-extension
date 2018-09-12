@@ -9,11 +9,12 @@ class ProviderApprovalController {
    *
    * @param {Object} [config] - Options to configure controller
    */
-  constructor ({ closePopup, openPopup, platform } = {}) {
+  constructor ({ closePopup, openPopup, platform, publicConfigStore } = {}) {
     this.store = new ObservableStore()
     this.closePopup = closePopup
     this.openPopup = openPopup
     this.platform = platform
+    this.publicConfigStore = publicConfigStore
     this.approvedOrigins = {}
      platform && platform.addMessageListener && platform.addMessageListener(({ action, origin }) => {
       action && action === 'init-provider-request' && this.handleProviderRequest(origin)
@@ -43,6 +44,7 @@ class ProviderApprovalController {
     this.closePopup && this.closePopup()
     const requests = this.store.getState().providerRequests || []
     this.platform && this.platform.sendMessage({ action: 'approve-provider-request' }, { active: true })
+    this.publicConfigStore.emit('update', this.publicConfigStore.getState())
     const providerRequests = requests.filter(request => request.origin !== origin)
     this.store.updateState({ providerRequests })
     this.approvedOrigins[origin] = true
