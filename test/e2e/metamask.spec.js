@@ -208,10 +208,10 @@ describe('Metamask popup page', function () {
     })
 
     it('balance renders', async function () {
-      await delay(200)
+      await delay(1000)
       const balance = await driver.findElement(By.css('#app-content > div > div.app-primary.from-right > div > div > div.flex-row > div.ether-balance.ether-balance-amount > div > div > div:nth-child(1) > div:nth-child(1)'))
       assert.equal(await balance.getText(), '100.000')
-      await delay(200)
+      await delay(1000)
     })
 
     it('sends transaction', async function () {

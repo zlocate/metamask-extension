@@ -444,7 +444,7 @@ describe('MetaMask', function () {
       await delay(regularDelayMs)
 
       windowHandles = await driver.getAllWindowHandles()
-      await driver.switchTo().window(windowHandles[2])
+      await switchToWindowWithTitle(driver, 'MetaMask Notification', windowHandles)
       await delay(regularDelayMs)
 
       await assertElementNotPresent(webdriver, driver, By.xpath(`//li[contains(text(), 'Data')]`))

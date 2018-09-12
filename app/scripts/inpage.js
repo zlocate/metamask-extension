@@ -49,6 +49,7 @@ if (typeof window.web3 !== 'undefined') {
      and try again.`)
 }
 var web3 = new Web3(inpageProvider)
+window.ethereum = inpageProvider // eslint-disable-line no-unused-vars
 web3.setProvider = function () {
   log.debug('MetaMask - overrode web3.setProvider')
 }
