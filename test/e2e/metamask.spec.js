@@ -2,6 +2,12 @@ const path = require('path')
 const assert = require('assert')
 const { By, Key, until } = require('selenium-webdriver')
 const { delay, createModifiedTestBuild, setupBrowserAndExtension, verboseReportOnFailure } = require('./func')
+const {
+  closeAllWindowHandlesExcept,
+  waitUntilXWindowHandles,
+  switchToWindowWithTitle,
+  switchToWindowWithUrlThatMatches,
+} = require('./beta/helpers')
 
 describe('Metamask popup page', function () {
   const browser = process.env.SELENIUM_BROWSER
@@ -183,6 +189,7 @@ describe('Metamask popup page', function () {
     })
 
     it('restores from seed phrase', async function () {
+      await delay(1000)
       const restoreSeedLink = await driver.findElement(By.css('#app-content > div > div.app-primary.from-left > div > div.flex-row.flex-center.flex-grow > p'))
       assert.equal(await restoreSeedLink.getText(), 'Restore from seed phrase')
       await restoreSeedLink.click()
@@ -242,12 +249,34 @@ describe('Metamask popup page', function () {
   })
 
   describe('Token Factory', function () {
+    let windowHandles
+    let extension
+    let dapp
 
     it('navigates to token factory', async function () {
-      await driver.get('http://tokenfactory.surge.sh/')
+      await driver.get('https://token-factory-qwyoijhnvt.now.sh')
+
+      await delay(1000)
+
+      await waitUntilXWindowHandles(driver, 2)
+      windowHandles = await driver.getAllWindowHandles()
+
+      dapp = await switchToWindowWithTitle(driver, 'Token Factory', windowHandles)
+      await delay(400)
+      extension = await switchToWindowWithUrlThatMatches(driver, /notification.html/, windowHandles)
+      await delay(400)
+
+      await closeAllWindowHandlesExcept(driver, [extension, dapp])
+      await switchToWindowWithUrlThatMatches(driver, /notification.html/, [extension, dapp])
+      const approveButton = await driver.wait(until.elementLocated(By.xpath(`//button[contains(text(), 'APPROVE')]`)), 10000)
+      await approveButton.click()
     })
 
     it('navigates to create token contract link', async function () {
+      await delay(400)
+      await switchToWindowWithTitle(driver, 'Token Factory', windowHandles)
+      await delay(400)
+
       const createToken = await driver.findElement(By.css('#bs-example-navbar-collapse-1 > ul > li:nth-child(3) > a'))
       await createToken.click()
     })
