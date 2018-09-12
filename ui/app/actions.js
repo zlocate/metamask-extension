@@ -320,7 +320,6 @@ var actions = {
   approveProviderRequest,
   rejectProviderRequest,
   clearApprovedOrigins,
-  CLOSE_POPUP: 'CLOSE_POPUP',
 }
 
 module.exports = actions
