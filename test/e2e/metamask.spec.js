@@ -254,9 +254,9 @@ describe('Metamask popup page', function () {
     let dapp
 
     it('navigates to token factory', async function () {
-      await driver.get('https://token-factory-qwyoijhnvt.now.sh')
+      await driver.get('http://token-factory-qwyoijhnvt.now.sh')
 
-      await delay(1000)
+      await delay(5000)
 
       await waitUntilXWindowHandles(driver, 2)
       windowHandles = await driver.getAllWindowHandles()
