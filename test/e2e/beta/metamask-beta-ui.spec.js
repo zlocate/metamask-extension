@@ -426,22 +426,23 @@ describe('MetaMask', function () {
 
       await waitUntilXWindowHandles(driver, 3)
       windowHandles = await driver.getAllWindowHandles()
-       extension = windowHandles[0]
+
+      extension = windowHandles[0]
       popup = await switchToWindowWithTitle(driver, 'MetaMask Notification', windowHandles)
       dapp = windowHandles.find(handle => handle !== extension && handle !== popup)
-       await delay(regularDelayMs)
+
+      await delay(regularDelayMs)
       const approveButton = await findElement(driver, By.xpath(`//button[contains(text(), 'Approve')]`), 10000)
       await approveButton.click()
     })
 
     it('initiates a send from the dapp', async () => {
-
       await driver.switchTo().window(dapp)
       await delay(regularDelayMs)
 
       const send3eth = await findElement(driver, By.xpath(`//button[contains(text(), 'Send')]`), 10000)
       await send3eth.click()
-      await delay(regularDelayMs)
+      await delay(30000)
 
       windowHandles = await driver.getAllWindowHandles()
       await switchToWindowWithTitle(driver, 'MetaMask Notification', windowHandles)
