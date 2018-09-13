@@ -54,6 +54,8 @@ function setupStreams () {
   const pluginPort = extension.runtime.connect({ name: 'contentscript' })
   const pluginStream = new PortStream(pluginPort)
 
+  // Until this origin is approved, cut-off publicConfig stream writes at the content
+  // script level so malicious sites can't snoop on the currently-selected address
   pageStream._write = function (data, encoding, cb) {
     if (typeof data === 'object' && data.name && data.name === 'publicConfig' && !originApproved) {
       cb()
@@ -107,7 +109,9 @@ function setupStreams () {
 
 /**
  * Establishes listeners for requests to fully-enable the provider from the dapp context
- * and for full-provider approvals and rejections from the background script context
+ * and for full-provider approvals and rejections from the background script context. Dapps
+ * should not post messages directly and should instead call provider.enable(), which
+ * handles posting these messages automatically.
  */
 function listenForProviderRequest () {
   window.addEventListener('message', (event) => {

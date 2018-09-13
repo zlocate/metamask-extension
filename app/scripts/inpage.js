@@ -22,6 +22,7 @@ var metamaskStream = new LocalMessageDuplexStream({
 // compose the inpage provider
 var inpageProvider = new MetamaskInpageProvider(metamaskStream)
 
+// Augment the provider with its enable method
 inpageProvider.enable = function () {
   return new Promise((resolve, reject) => {
     window.addEventListener('ethereumprovider', ({ detail }) => {

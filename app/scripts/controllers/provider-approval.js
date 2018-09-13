@@ -16,7 +16,7 @@ class ProviderApprovalController {
     this.platform = platform
     this.publicConfigStore = publicConfigStore
     this.approvedOrigins = {}
-     platform && platform.addMessageListener && platform.addMessageListener(({ action, origin }) => {
+    platform && platform.addMessageListener && platform.addMessageListener(({ action, origin }) => {
       action && action === 'init-provider-request' && this.handleProviderRequest(origin)
     })
   }
@@ -51,7 +51,7 @@ class ProviderApprovalController {
   }
 
   /**
-   * Called when a tab rejects access to an Ethereum provider API
+   * Called when a tab rejects access to a full Ethereum provider API
    *
    * @param {string} origin - Origin of the target window to reject provider access
    */
