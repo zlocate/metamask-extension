@@ -442,7 +442,7 @@ describe('MetaMask', function () {
 
       const send3eth = await findElement(driver, By.xpath(`//button[contains(text(), 'Send')]`), 10000)
       await send3eth.click()
-      await delay(30000)
+      await delay(5000)
 
       windowHandles = await driver.getAllWindowHandles()
       await switchToWindowWithTitle(driver, 'MetaMask Notification', windowHandles)
