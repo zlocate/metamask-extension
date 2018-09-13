@@ -25,12 +25,12 @@ var inpageProvider = new MetamaskInpageProvider(metamaskStream)
 inpageProvider.enable = function () {
   return new Promise((resolve, reject) => {
     window.addEventListener('ethereumprovider', ({ detail }) => {
-      if (detail.error) {
+      if (typeof detail.error !== 'undefined') {
         reject(detail.error)
       } else {
         inpageProvider.publicConfigStore.once('update', () => {
           resolve(inpageProvider.send({ method: 'eth_accounts' }).result)
-        }) 
+        })
       }
     })
     window.postMessage({ type: 'ETHEREUM_ENABLE_PROVIDER' }, '*')

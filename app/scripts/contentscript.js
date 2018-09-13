@@ -123,6 +123,7 @@ function listenForProviderRequest () {
     if (!action) { return }
     switch (action) {
       case 'approve-provider-request':
+        originApproved = true
         injectScript(`window.dispatchEvent(new CustomEvent('ethereumprovider', { detail: {}}))`)
         break
       case 'reject-provider-request':
