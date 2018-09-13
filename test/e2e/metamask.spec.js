@@ -4,7 +4,6 @@ const { By, Key, until } = require('selenium-webdriver')
 const { delay, createModifiedTestBuild, setupBrowserAndExtension, verboseReportOnFailure } = require('./func')
 const {
   closeAllWindowHandlesExcept,
-  waitUntilXWindowHandles,
   switchToWindowWithTitle,
   switchToWindowWithUrlThatMatches,
 } = require('./beta/helpers')
