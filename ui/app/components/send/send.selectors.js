@@ -5,11 +5,7 @@ const {
 } = require('../../conversion-util')
 const {
   estimateGasPriceFromRecentBlocks,
-  calcGasTotal,
 } = require('./send.utils')
-import {
-  getAveragePriceEstimateInHexWEI,
-} from '../../selectors/custom-gas'
 
 const selectors = {
   accountsWithSendEtherInfoSelector,
@@ -128,11 +124,11 @@ function getForceGasMin (state) {
 }
 
 function getGasLimit (state) {
-  return state.metamask.send.gasLimit || '0'
+  return state.metamask.send.gasLimit
 }
 
 function getGasPrice (state) {
-  return state.metamask.send.gasPrice || getAveragePriceEstimateInHexWEI(state)
+  return state.metamask.send.gasPrice
 }
 
 function getGasPriceFromRecentBlocks (state) {
@@ -140,7 +136,7 @@ function getGasPriceFromRecentBlocks (state) {
 }
 
 function getGasTotal (state) {
-  return calcGasTotal(getGasLimit(state), getGasPrice(state))
+  return state.metamask.send.gasTotal
 }
 
 function getPrimaryCurrency (state) {

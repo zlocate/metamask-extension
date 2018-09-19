@@ -1,5 +1,9 @@
 import { pipe, partialRight } from 'ramda'
 import {
+  getConversionRate,
+  getGasLimit,
+} from '../components/send/send.selectors'
+import {
   conversionUtil,
   multiplyCurrencies,
 } from '../conversion-util'
@@ -9,12 +13,6 @@ import {
 import {
   formatCurrency,
 } from '../helpers/confirm-transaction/util'
-import {
-  decEthToConvertedCurrency as ethTotalToConvertedCurrency,
-} from '../helpers/conversions.util'
-import {
-  formatETHFee,
-} from '../helpers/formatters'
 import {
   calcGasTotal,
 } from '../components/send/send.utils'
@@ -27,9 +25,6 @@ const selectors = {
   getCustomGasTotal,
   getRenderableBasicEstimateData,
   getBasicGasEstimateLoadingStatus,
-  getAveragePriceEstimateInHexWEI,
-  getDefaultActiveButtonIndex,
-  priceEstimateToWei,
 }
 
 module.exports = selectors
@@ -54,16 +49,6 @@ function getBasicGasEstimateLoadingStatus (state) {
   return state.gas.basicEstimateIsLoading
 }
 
-function getAveragePriceEstimateInHexWEI (state) {
-  const averagePriceEstimate = state.gas.basicEstimates.average
-  return getGasPriceInHexWei(averagePriceEstimate || '0x0')
-}
-
-function getDefaultActiveButtonIndex (gasButtonInfo, customGasPriceInHex, gasPrice) {
-  return gasButtonInfo.findIndex(({ priceInHexWei }) => {
-    return priceInHexWei === addHexPrefix(customGasPriceInHex || gasPrice)
-  })
-}
 
 function apiEstimateModifiedToGWEI (estimate) {
   return multiplyCurrencies(estimate, 0.10, {
@@ -81,6 +66,21 @@ function basicPriceEstimateToETHTotal (estimate, gasLimit) {
     fromDenomination: 'GWEI',
     numberOfDecimals: 9,
   })
+}
+
+function ethTotalToConvertedCurrency (ethTotal, convertedCurrency, conversionRate) {
+  return conversionUtil(ethTotal, {
+    fromNumericBase: 'dec',
+    toNumericBase: 'dec',
+    fromCurrency: 'ETH',
+    toCurrency: convertedCurrency,
+    numberOfDecimals: 2,
+    conversionRate,
+  })
+}
+
+function formatETHFee (ethFee) {
+  return ethFee + ' ETH'
 }
 
 function getRenderableEthFee (estimate, gasLimit) {
@@ -150,8 +150,9 @@ function getRenderableBasicEstimateData (state) {
   if (getBasicGasEstimateLoadingStatus(state)) {
     return []
   }
-  const gasLimit = state.metamask.send.gasLimit || getCustomGasLimit(state)
-  const conversionRate = state.metamask.conversionRate
+
+  const gasLimit = getGasLimit(state)
+  const conversionRate = getConversionRate(state)
   const currentCurrency = getCurrentCurrency(state)
   const {
     gas: {

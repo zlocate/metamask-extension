@@ -73,10 +73,10 @@ export default class SendTransactionScreen extends PersistentForm {
       selectedAddress,
       selectedToken = {},
       to: currentToAddress,
-      updateAndSetGasLimit,
+      updateAndSetGasTotal,
     } = this.props
 
-    updateAndSetGasLimit({
+    updateAndSetGasTotal({
       blockGasLimit,
       editingTransactionId,
       gasLimit,
@@ -165,9 +165,6 @@ export default class SendTransactionScreen extends PersistentForm {
 
   componentDidMount () {
     this.props.fetchGasEstimates()
-    .then(() => {
-      this.updateGas()
-    })
   }
 
   componentWillMount () {
@@ -177,12 +174,12 @@ export default class SendTransactionScreen extends PersistentForm {
       tokenContract,
       updateSendTokenBalance,
     } = this.props
-
     updateSendTokenBalance({
       selectedToken,
       tokenContract,
       address,
     })
+    this.updateGas()
 
     // Show QR Scanner modal  if ?scan=true
     if (window.location.search === '?scan=true') {

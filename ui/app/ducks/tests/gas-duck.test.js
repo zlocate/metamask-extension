@@ -47,8 +47,8 @@ describe('Gas Duck', () => {
   }
   const initState = {
     customData: {
-      price: null,
-      limit: '0x5208',
+      price: 0,
+      limit: 21000,
     },
     basicEstimates: {
       average: null,

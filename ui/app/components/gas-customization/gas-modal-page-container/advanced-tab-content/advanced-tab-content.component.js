@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import {
+  MIN_GAS_PRICE_DEC,
+  MIN_GAS_LIMIT_DEC,
+} from '../../../send/send.constants'
 import TimeRemaining from './time-remaining'
 
 export default class AdvancedTabContent extends Component {
@@ -72,8 +76,8 @@ export default class AdvancedTabContent extends Component {
   renderGasEditRows (customGasPrice, updateCustomGasPrice, customGasLimit, updateCustomGasLimit) {
     return (
       <div className="advanced-tab__gas-edit-rows">
-        { this.renderGasEditRow('gasPriceNoDenom', customGasPrice, updateCustomGasPrice, customGasPrice, 9, true) }
-        { this.renderGasEditRow('gasLimit', customGasLimit, updateCustomGasLimit, customGasLimit, 0) }
+        { this.renderGasEditRow('gasPriceNoDenom', customGasPrice, updateCustomGasPrice, MIN_GAS_PRICE_DEC, 9, true) }
+        { this.renderGasEditRow('gasLimit', customGasLimit, updateCustomGasLimit, MIN_GAS_LIMIT_DEC, 0) }
       </div>
     )
   }
