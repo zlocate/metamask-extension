@@ -29,19 +29,18 @@ var metamaskStream = new LocalMessageDuplexStream({
 var inpageProvider = new MetamaskInpageProvider(metamaskStream)
 
 // Augment the provider with its enable method
-inpageProvider.enable = function (options = {}) {
+inpageProvider.enable = function () {
   return new Promise((resolve, reject) => {
-    if (options.mockRejection) {
-      reject('User rejected account access')
-    } else {
-      inpageProvider.sendAsync({ method: 'eth_accounts', params: [] }, (error, response) => {
-        if (error) {
-          reject(error)
-        } else {
-          resolve(response.result)
-        }
-      })
-    }
+    window.addEventListener('ethereumprovider', ({ detail }) => {
+      if (typeof detail.error !== 'undefined') {
+        reject(detail.error)
+      } else {
+        inpageProvider.publicConfigStore.once('update', () => {
+          resolve(inpageProvider.send({ method: 'eth_accounts' }).result)
+        })
+      }
+    })
+    window.postMessage({ type: 'ETHEREUM_ENABLE_PROVIDER' }, '*')
   })
 }
 
