@@ -12,6 +12,7 @@ const ComposableObservableStore = require('./lib/ComposableObservableStore')
 const asStream = require('obs-store/lib/asStream')
 const AccountTracker = require('./lib/account-tracker')
 const RpcEngine = require('json-rpc-engine')
+const createScaffoldMiddleware = require('json-rpc-engine/src/createScaffoldMiddleware')
 const debounce = require('debounce')
 const createEngineStream = require('json-rpc-middleware-stream/engineStream')
 const createFilterMiddleware = require('eth-json-rpc-filters')
@@ -36,6 +37,7 @@ const TransactionController = require('./controllers/transactions')
 const BalancesController = require('./controllers/computed-balances')
 const TokenRatesController = require('./controllers/token-rates')
 const DetectTokensController = require('./controllers/detect-tokens')
+const PluginController = require('./controllers/plugin')
 const nodeify = require('./lib/nodeify')
 const accountImporter = require('./account-import-strategies')
 const getBuyEthUrl = require('./lib/buy-eth-url')
@@ -83,6 +85,9 @@ module.exports = class MetamaskController extends EventEmitter {
 
     // network store
     this.networkController = new NetworkController(initState.NetworkController)
+
+    // plugin controller
+    this.pluginController = new PluginController({ initState: initState.PluginController })
 
     // preferences controller
     this.preferencesController = new PreferencesController({
@@ -219,11 +224,13 @@ module.exports = class MetamaskController extends EventEmitter {
       NoticeController: this.noticeController.store,
       ShapeShiftController: this.shapeshiftController.store,
       NetworkController: this.networkController.store,
+      PluginController: this.pluginController.store,
       InfuraController: this.infuraController.store,
     })
 
     this.memStore = new ComposableObservableStore(null, {
       NetworkController: this.networkController.store,
+      PluginController: this.pluginController.store,
       AccountTracker: this.accountTracker.store,
       TxController: this.txController.memStore,
       BalancesController: this.balancesController.store,
@@ -1250,6 +1257,7 @@ module.exports = class MetamaskController extends EventEmitter {
       blockTracker: this.blockTracker,
     })
 
+
     engine.push(createOriginMiddleware({ origin }))
     engine.push(createLoggerMiddleware({ origin }))
     engine.push(filterMiddleware)
@@ -1257,6 +1265,10 @@ module.exports = class MetamaskController extends EventEmitter {
     engine.push(this.createTypedDataMiddleware('eth_signTypedData', 'V1').bind(this))
     engine.push(this.createTypedDataMiddleware('eth_signTypedData_v1', 'V1').bind(this))
     engine.push(this.createTypedDataMiddleware('eth_signTypedData_v3', 'V3', true).bind(this))
+    engine.push(createScaffoldMiddleware([
+      'meta_addPlugin': this.pluginController.addPluginMiddleware.bind(this.pluginController),
+      'meta_injectPlugin': this.pluginController.injectPluginMiddleware.bind(this.pluginController),
+    ]))
     engine.push(createProviderMiddleware({ provider: this.provider }))
 
     // setup connection
