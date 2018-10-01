@@ -1265,10 +1265,10 @@ module.exports = class MetamaskController extends EventEmitter {
     engine.push(this.createTypedDataMiddleware('eth_signTypedData', 'V1').bind(this))
     engine.push(this.createTypedDataMiddleware('eth_signTypedData_v1', 'V1').bind(this))
     engine.push(this.createTypedDataMiddleware('eth_signTypedData_v3', 'V3', true).bind(this))
-    engine.push(createScaffoldMiddleware([
+    engine.push(createScaffoldMiddleware({
       'meta_addPlugin': this.pluginController.addPluginMiddleware.bind(this.pluginController),
       'meta_injectPlugin': this.pluginController.injectPluginMiddleware.bind(this.pluginController),
-    ]))
+    }))
     engine.push(createProviderMiddleware({ provider: this.provider }))
 
     // setup connection

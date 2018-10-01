@@ -1,6 +1,7 @@
 const ObservableStore = require('obs-store')
 const EventEmitter = require('events')
 const extend = require('xtend')
+const MetaPlugin = require('./metaplugin')
 
 class PluginController extends EventEmitter {
 
@@ -8,16 +9,32 @@ class PluginController extends EventEmitter {
     super()
 
     const initState = extend({
-      plugins: [],
+      plugins: {
+        sampleApi: {
+          script: `
+            window.onmessage = function(e){
+                if (e.data == 'hello') {
+                    alert('It works!');
+                    window.parent.postMessage('PONG FROM PLUGIN', '*')
+                }
+            };
+          `,
+        },
+      },
     }, opts.initState)
     this.store = new ObservableStore(initState)
+
+    this.plugins = Object.keys(initState.plugins).reduce((result, key) => {
+      result[key] = new MetaPlugin(initState.plugins[key])
+      return result
+    }, {})
   }
 
-  addPluginMiddleware (req, res, next end) {
+  addPluginMiddleware (req, res, next, end) {
     return end('Added!')
   }
 
-  injectPluginMiddleware (req, res, next end) {
+  injectPluginMiddleware (req, res, next, end) {
     return end('Injected!')
   }
 

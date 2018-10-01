@@ -155,8 +155,8 @@ try {
 // based on a UI a user can use to add directories or URLs.
 // We DO NOT want to have to add dependencies to MetaMask for plugins,
 // but for now, I did, just to get the gulp build system working properly.
-plugins.GUN = require('gun/gun.min.js'); // TODO: Need way to escape window context.
-plugins.SEA = require('gun/sea.js'); // TODO: Need 2 SEA's, 1 for window that communicates to extension, and 1 for extension. MetaMask already has this working, I know, just IDK how to access / do it. Hack for now.
+plugins.GUN = {} //require('gun/gun.min.js'); // TODO: Need way to escape window context.
+plugins.SEA = {} //require('gun/sea.js'); // TODO: Need 2 SEA's, 1 for window that communicates to extension, and 1 for extension. MetaMask already has this working, I know, just IDK how to access / do it. Hack for now.
 console.log('MetaMask plugins:', plugins);
 
 /* delete this... temporary test for demo purposes */
