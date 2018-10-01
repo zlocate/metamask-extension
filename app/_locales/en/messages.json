@@ -2,6 +2,9 @@
   "accept": {
     "message": "Accept"
   },
+  "accessingYourCamera": {
+    "message": "Accesing your camera..."
+  },
   "account": {
     "message": "Account"
   },
@@ -14,6 +17,9 @@
   "accountSelectionRequired": {
     "message": "You need to select an account!"
   },
+  "activityLog": {
+    "message": "activity log"
+  },
   "address": {
     "message": "Address"
   },
@@ -25,6 +31,9 @@
   },
   "addTokens": {
     "message": "Add Tokens"
+  },
+  "addSuggestedTokens": {
+    "message": "Add Suggested Tokens"
   },
   "addAcquiredTokens": {
     "message": "Add the tokens you've acquired using MetaMask"
@@ -51,6 +60,12 @@
   },
   "attemptingConnect": {
     "message": "Attempting to connect to blockchain."
+  },
+  "attemptToCancel": {
+    "message": "Attempt to Cancel?"
+  },
+  "attemptToCancelDescription": {
+    "message": "Attempting to cancel does not guarantee your original transaction will be cancelled. If cancelled, you are still required to pay a transaction fee to the network."
   },
   "attributions": {
     "message": "Attributions"
@@ -96,7 +111,7 @@
     "message": "Buy on Coinbase"
   },
   "buyCoinbaseExplainer": {
-    "message": "Coinbase is the world’s most popular way to buy and sell bitcoin, ethereum, and litecoin."
+    "message": "Coinbase is the world’s most popular way to buy and sell Bitcoin, Ethereum, and Litecoin."
   },
   "bytes": {
     "message": "Bytes"
@@ -107,6 +122,12 @@
   "cancel": {
     "message": "Cancel"
   },
+  "cancelAttempt": {
+    "message": "Cancel Attempt"
+  },
+  "cancellationGasFee": {
+    "message": "Cancellation Gas Fee"
+  },
   "classicInterface": {
     "message": "Use classic interface"
   },
@@ -116,8 +137,8 @@
   "close": {
     "message": "Close"
   },
-  "chromeRequiredForTrezor":{
-    "message": "You need to use Metamask on Google Chrome in order to connect to your TREZOR device."
+  "chromeRequiredForHardwareWallets":{
+    "message": "You need to use MetaMask on Google Chrome in order to connect to your Hardware Wallet."
   },
   "confirm": {
     "message": "Confirm"
@@ -143,14 +164,11 @@
   "connecting": {
     "message": "Connecting..."
   },
+  "connectToLedger": {
+    "message": "Connect to Ledger"
+  },
   "connectToTrezor": {
     "message": "Connect to Trezor"
-  },
-  "connectToTrezorHelp": {
-    "message": "Metamask is able to access your TREZOR ethereum accounts. First make sure your device is connected and unlocked."
-  },
-  "connectToTrezorTrouble": {
-    "message": "If you are having trouble, please make sure you are using the latest version of the TREZOR firmware."
   },
   "continue": {
     "message": "Continue"
@@ -209,6 +227,9 @@
   },
   "currentConversion": {
     "message": "Current Conversion"
+  },
+  "currentLanguage": {
+    "message": "Current Language"
   },
   "currentNetwork": {
     "message": "Current Network"
@@ -286,8 +307,8 @@
   "downloadStateLogs": {
     "message": "Download State Logs"
   },
-  "dontHaveATrezorWallet": {
-    "message": "Don't have a TREZOR hardware wallet?"
+  "dontHaveAHardwareWallet": {
+    "message": "Don’t have a hardware wallet?"
   },
   "dropped": {
     "message": "Dropped"
@@ -423,11 +444,11 @@
   "hardwareWalletConnected": {
     "message": "Hardware wallet connected"
   },
-  "hardwareSupport": {
-    "message": "Hardware Support"
+  "hardwareWallets": {
+    "message": "Connect a hardware wallet"
   },
-  "hardwareSupportMsg": {
-    "message": "You can now view your Hardware accounts in MetaMask!  Scroll down and read how it works."
+  "hardwareWalletsMsg": {
+    "message": "Select a hardware wallet you'd like to use with MetaMask"
   },
   "havingTroubleConnecting": {
     "message": "Having trouble connecting?"
@@ -450,6 +471,9 @@
   },
   "hideTokenPrompt": {
     "message": "Hide Token?"
+  },
+  "history": {
+    "message": "History"
   },
   "howToDeposit": {
     "message": "How would you like to deposit Ether?"
@@ -535,6 +559,9 @@
   "learnMore": {
     "message": "Learn more"
   },
+  "ledgerAccountRestriction": {
+    "message": "You need to make use your last account before you can add a new one."
+  },
   "lessThanMax": {
     "message": "must be less than or equal to $1.",
     "description": "helper for inputting hex as decimal input"
@@ -583,6 +610,9 @@
   },
   "metamaskSeedWords": {
     "message": "MetaMask Seed Words"
+  },
+  "metamaskVersion": {
+    "message": "MetaMask Version"
   },
   "min": {
     "message": "Minimum"
@@ -648,13 +678,19 @@
     "message": "No transaction history."
   },
   "noTransactions": {
-    "message": "No Transactions"
+    "message": "You have no transactions"
   },
   "notFound": {
     "message": "Not Found"
   },
   "notStarted": {
     "message": "Not Started"
+  },
+  "noWebcamFoundTitle": {
+    "message": "Webcam not found"
+  },
+  "noWebcamFound": {
+    "message": "Your computer's webcam was not found. Please try again."
   },
   "oldUI": {
     "message": "Old UI"
@@ -693,6 +729,9 @@
   "pasteSeed": {
     "message": "Paste your seed phrase here!"
   },
+  "pending": {
+    "message": "pending"
+  },
   "personalAddressDetected": {
     "message": "Personal address detected. Input the token contract address."
   },
@@ -720,6 +759,9 @@
   },
   "qrCode": {
     "message": "Show QR Code"
+  },
+  "queue": {
+    "message": "Queue"
   },
   "readdToken": {
     "message": "You can add this token back in the future by going go to “Add token” in your accounts options menu."
@@ -836,6 +878,9 @@
   "save": {
     "message": "Save"
   },
+  "speedUp": {
+    "message": "speed up"
+  },
   "speedUpTitle": {
     "message": "Speed Up Transaction"
   },
@@ -861,6 +906,12 @@
   "secretPhrase": {
     "message": "Enter your secret twelve word phrase here to restore your vault."
   },
+  "showHexData": {
+    "message": "Show Hex Data"
+  },
+  "showHexDataDescription": {
+    "message": "Select this to show the hex data field on the send screen"
+  },
   "newPassword8Chars": {
     "message": "New Password (min 8 chars)"
   },
@@ -872,6 +923,9 @@
   },
   "selectCurrency": {
     "message": "Select Currency"
+  },
+  "selectLocale": {
+    "message": "Select Locale"
   },
   "selectService": {
     "message": "Select Service"
@@ -888,6 +942,12 @@
   "sendTokens": {
     "message": "Send Tokens"
   },
+  "sentEther": {
+    "message": "sent ether"
+  },
+  "sentTokens": {
+    "message": "sent tokens"
+  },
   "separateEachWord": {
     "message": "Separate each word with a single space"
   },
@@ -899,7 +959,10 @@
     "description": "displays token symbol"
   },
   "orderOneHere": {
-    "message": "Order one here."
+    "message": "Order a Trezor or Ledger and keep your funds in cold storage"
+  },
+  "outgoing": {
+    "message": "Outgoing"
   },
   "searchTokens": {
     "message": "Search Tokens"
@@ -911,7 +974,13 @@
     "message": "Select an Account"
   },
   "selectAnAccountHelp": {
-    "message": "These are the accounts available in your hardware wallet. Select the one you’d like to use in MetaMask."
+    "message": "Select the account to view in MetaMask"
+  },
+  "selectHdPath": {
+    "message": "Select HD Path"
+  },
+  "selectPathHelp": {
+    "message": "If you don't see your existing Ledger accounts below, try switching paths to \"Legacy (MEW / MyCrypto)\""
   },
   "sendTokensAnywhere": {
     "message": "Send Tokens to anyone with an Ethereum account"
@@ -940,6 +1009,12 @@
   "info": {
   "message": "Info"
   },
+  "scanInstructions": {
+    "message": "Place the QR code in front of your camera"
+  },
+  "scanQrCode": {
+    "message": "Scan QR Code"
+  },
   "shapeshiftBuy": {
     "message": "Buy with Shapeshift"
   },
@@ -951,6 +1026,9 @@
   },
   "sign": {
     "message": "Sign"
+  },
+  "signatureRequest": {
+    "message": "Signature Request"
   },
   "signed": {
     "message": "Signed"
@@ -1004,7 +1082,7 @@
     "message": "Test Faucet"
   },
   "to": {
-    "message": "To: "
+    "message": "To"
   },
   "toETHviaShapeShift": {
     "message": "$1 to ETH via ShapeShift",
@@ -1034,6 +1112,30 @@
   "total": {
     "message": "Total"
   },
+  "transaction": {
+    "message": "transaction"
+  },
+  "transactionConfirmed": {
+    "message": "Transaction confirmed on $2."
+  },
+  "transactionCreated": {
+    "message": "Transaction created with a value of $1 on $2."
+  },
+  "transactionWithNonce": {
+    "message": "Transaction $1"
+  },
+  "transactionDropped": {
+    "message": "Transaction dropped on $2."
+  },
+  "transactionSubmitted": {
+    "message": "Transaction submitted on $2."
+  },
+  "transactionUpdated": {
+    "message": "Transaction updated on $2."
+  },
+  "transactionUpdatedGas": {
+    "message": "Transaction updated with a gas price of $1 on $2."
+  },
   "transactions": {
     "message": "transactions"
   },
@@ -1059,6 +1161,9 @@
     "message": "We had trouble loading your token balances. You can view them ",
     "description": "Followed by a link (here) to view token balances"
   },
+  "tryAgain": {
+    "message": "Try again"
+  },
   "twelveWords": {
     "message": "These 12 words are the only way to restore your MetaMask accounts.\nSave them somewhere safe and secret."
   },
@@ -1069,13 +1174,16 @@
     "message": "Welcome to the New UI (Beta)"
   },
   "uiWelcomeMessage": {
-    "message": "You are now using the new Metamask UI."
+    "message": "You are now using the new MetaMask UI."
   },
   "unapproved": {
     "message": "Unapproved"
   },
   "unavailable": {
     "message": "Unavailable"
+  },
+  "units": {
+    "message": "units"
   },
   "unknown": {
     "message": "Unknown"
@@ -1089,11 +1197,23 @@
   "unknownNetworkId": {
     "message": "Unknown network ID"
   },
+  "unknownQrCode": {
+    "message": "Error: We couldn't identify that QR code"
+  },
+  "unknownCameraErrorTitle": {
+    "message": "Ooops! Something went wrong...."
+  },
+  "unknownCameraError": {
+    "message": "There was an error while trying to access you camera. Please try again..."
+  },
   "unlock": {
     "message": "Unlock"
   },
   "unlockMessage": {
     "message": "The decentralized web awaits"
+  },
+  "updatedWithDate": {
+    "message": "Updated $1"
   },
   "uriErrorMsg": {
     "message": "URIs require the appropriate HTTP/HTTPS prefix."
@@ -1134,6 +1254,12 @@
   },
   "whatsThis": {
     "message": "What's this?"
+  },
+  "yesLetsTry": {
+    "message": "Yes, let's try"
+  },
+  "youNeedToAllowCameraAccess": {
+    "message": "You need to allow camera access to use this feature."
   },
   "yourSigRequested": {
     "message": "Your signature is being requested"

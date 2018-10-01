@@ -39,11 +39,13 @@ proxyquire('../send.container.js', {
     getSelectedToken: (s) => `mockSelectedToken:${s}`,
     getSelectedTokenContract: (s) => `mockTokenContract:${s}`,
     getSelectedTokenToFiatRate: (s) => `mockTokenToFiatRate:${s}`,
+    getSendHexDataFeatureFlagState: (s) => `mockSendHexDataFeatureFlagState:${s}`,
     getSendAmount: (s) => `mockAmount:${s}`,
     getSendTo: (s) => `mockTo:${s}`,
     getSendEditingTransactionId: (s) => `mockEditingTransactionId:${s}`,
     getSendFromObject: (s) => `mockFrom:${s}`,
     getTokenBalance: (s) => `mockTokenBalance:${s}`,
+    getQrCodeData: (s) => `mockQrCodeData:${s}`,
   },
   '../../actions': actionSpies,
   '../../ducks/send.duck': duckActionSpies,
@@ -72,10 +74,12 @@ describe('send container', () => {
         recentBlocks: 'mockRecentBlocks:mockState',
         selectedAddress: 'mockSelectedAddress:mockState',
         selectedToken: 'mockSelectedToken:mockState',
+        showHexData: 'mockSendHexDataFeatureFlagState:mockState',
         to: 'mockTo:mockState',
         tokenBalance: 'mockTokenBalance:mockState',
         tokenContract: 'mockTokenContract:mockState',
         tokenToFiatRate: 'mockTokenToFiatRate:mockState',
+        qrCodeData: 'mockQrCodeData:mockState',
       })
     })
 

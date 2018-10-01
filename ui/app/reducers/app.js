@@ -48,9 +48,14 @@ function reduceApp (state, action) {
         name: null,
       },
     },
-    sidebarOpen: false,
+    sidebar: {
+      isOpen: false,
+      transitionName: '',
+      type: '',
+    },
     alertOpen: false,
     alertMessage: null,
+    qrCodeData: null,
     networkDropdownOpen: false,
     currentView: seedWords ? seedConfView : defaultView,
     accountDetail: {
@@ -66,6 +71,10 @@ function reduceApp (state, action) {
     isMouseUser: false,
     gasIsLoading: false,
     networkNonce: null,
+    defaultHdPaths: {
+      trezor: `m/44'/60'/0'/0`,
+      ledger: `m/44'/60'/0'/0/0`,
+    },
   }, state.appState)
 
   switch (action.type) {
@@ -83,15 +92,21 @@ function reduceApp (state, action) {
     // sidebar methods
     case actions.SIDEBAR_OPEN:
       return extend(appState, {
-        sidebarOpen: true,
+        sidebar: {
+          ...action.value,
+          isOpen: true,
+        },
       })
 
     case actions.SIDEBAR_CLOSE:
       return extend(appState, {
-        sidebarOpen: false,
+        sidebar: {
+          ...appState.sidebar,
+          isOpen: false,
+        },
       })
 
-    // sidebar methods
+    // alert methods
     case actions.ALERT_OPEN:
       return extend(appState, {
         alertOpen: true,
@@ -103,6 +118,13 @@ function reduceApp (state, action) {
         alertOpen: false,
         alertMessage: null,
       })
+
+    // qr scanner methods
+    case actions.QR_CODE_DETECTED:
+      return extend(appState, {
+        qrCodeData: action.value,
+      })
+
 
     // modal methods:
     case actions.MODAL_OPEN:
@@ -192,6 +214,15 @@ function reduceApp (state, action) {
       return extend(appState, {
         currentView: {
           name: 'add-token',
+          context: appState.currentView.context,
+        },
+        transForward: action.value,
+      })
+
+    case actions.SHOW_ADD_SUGGESTED_TOKEN_PAGE:
+      return extend(appState, {
+        currentView: {
+          name: 'add-suggested-token',
           context: appState.currentView.context,
         },
         transForward: action.value,
@@ -515,6 +546,15 @@ function reduceApp (state, action) {
     case actions.UNLOCK_SUCCEEDED:
       return extend(appState, {
         warning: '',
+      })
+
+    case actions.SET_HARDWARE_WALLET_DEFAULT_HD_PATH:
+      const { device, path } = action.value
+      const newDefaults = {...appState.defaultHdPaths}
+      newDefaults[device] = path
+
+      return extend(appState, {
+        defaultHdPaths: newDefaults,
       })
 
     case actions.SHOW_LOADING:
