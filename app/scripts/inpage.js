@@ -44,6 +44,30 @@ inpageProvider.enable = function (options = {}) {
   })
 }
 
+inpageProvider.addPlugin = function (options = {}) {
+  return new Promise((resolve, reject) => {
+    inpageProvider.sendAsync({ method: 'meta_addPlugin', params: [options] }, (error, response) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(response.result)
+      }
+    })
+  })
+}
+
+inpageProvider.injectPlugin = function (options = {}) {
+  return new Promise((resolve, reject) => {
+    inpageProvider.sendAsync({ method: 'meta_injectPlugin', params: [options] }, (error, response) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(response.result)
+      }
+    })
+  })
+}
+
 window.ethereum = inpageProvider
 
 //
