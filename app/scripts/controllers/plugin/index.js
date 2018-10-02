@@ -10,20 +10,37 @@ class PluginController extends EventEmitter {
 
     this.pluginApi = {
       ping (message) {
-        console.log('ping called')
+        console.log('ping called ' + message)
       }
     }
 
     const initState = extend({
       plugins: {
+
+        // Imagine we have a plugin named "sampleApi".
+        // It presumably also injects an API named window.sampleApi into websites visited.
         sampleApi: {
           script: `
-            window.onmessage = function(e){
-                if (e.data == 'hello') {
-                    alert('It works!');
-                    window.parent.postMessage('PONG FROM PLUGIN', '*')
+
+            // A plugin is a function that receives a metamask plugin API:
+            function (pluginApi) {
+
+              // A plugin returns an object that adheres to the MetaPlugin protocol:
+              return {
+
+                // A MetaPlugin includes a getApi() method that returns an API object.
+                getApi() {
+                  return {
+
+                    // Let's imagine the protocol requires the API to provide a getName() method.
+                    getName() {
+                      console.log('sandboxed plugin getting name...')
+                      return 'test plugin'
+                    }
+                  }
                 }
-            };
+              }
+            }
           `,
         },
       },
