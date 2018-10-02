@@ -8,6 +8,12 @@ class PluginController extends EventEmitter {
   constructor (opts = {}) {
     super()
 
+    this.pluginApi = {
+      ping (message) {
+        console.log('ping called')
+      }
+    }
+
     const initState = extend({
       plugins: {
         sampleApi: {
@@ -25,7 +31,7 @@ class PluginController extends EventEmitter {
     this.store = new ObservableStore(initState)
 
     this.plugins = Object.keys(initState.plugins).reduce((result, key) => {
-      result[key] = new MetaPlugin(initState.plugins[key])
+      result[key] = new MetaPlugin(initState.plugins[key], this.pluginApi)
       return result
     }, {})
   }
