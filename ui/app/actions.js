@@ -322,6 +322,7 @@ var actions = {
   approveProviderRequest,
   rejectProviderRequest,
   clearApprovedOrigins,
+  forceInjection,
 }
 
 module.exports = actions
@@ -2467,5 +2468,11 @@ function rejectProviderRequest (origin) {
 function clearApprovedOrigins () {
   return (dispatch) => {
     background.clearApprovedOrigins()
+  }
+}
+
+function forceInjection () {
+  return (dispatch) => {
+    background.forceInjection()
   }
 }

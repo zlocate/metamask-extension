@@ -51,6 +51,7 @@ const mapDispatchToProps = dispatch => {
     setHexDataFeatureFlag: shouldShow => dispatch(setFeatureFlag('sendHexData', shouldShow)),
     showResetAccountConfirmationModal: () => dispatch(showModal({ name: 'CONFIRM_RESET_ACCOUNT' })),
     showClearApprovalModal: () => dispatch(showModal({ name: 'CLEAR_APPROVED_ORIGINS' })),
+    showForceInjectionModal: () => dispatch(showModal({ name: 'FORCE_INJECTION' })),
   }
 }
 
