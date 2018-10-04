@@ -48,6 +48,19 @@ inpageProvider.enable = function () {
   })
 }
 
+inpageProvider.isEnabled = function () {
+  return new Promise((resolve, reject) => {
+    window.addEventListener('ethereumproviderstatus', ({ detail }) => {
+      if (typeof detail.error !== 'undefined') {
+        reject(detail.error)
+      } else {
+        resolve(detail.isEnabled)
+      }
+    })
+    window.postMessage({ type: 'ETHEREUM_PROVIDER_STATUS' }, '*')
+  })
+}
+
 // Work around for web3@1.0 deleting the bound `sendAsync` but not the unbound
 // `sendAsync` method on the prototype, causing `this` reference issues with drizzle
 const proxiedInpageProvider = new Proxy(inpageProvider, {
@@ -57,6 +70,7 @@ const proxiedInpageProvider = new Proxy(inpageProvider, {
 })
 
 window.ethereum = proxiedInpageProvider
+
 
 //
 // setup web3
