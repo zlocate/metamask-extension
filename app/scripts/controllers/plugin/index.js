@@ -24,6 +24,7 @@ class PluginController extends EventEmitter {
 
             // A plugin is a function that receives a metamask plugin API:
             function (pluginApi) {
+              console.log('calling plugin func!')
 
               // A plugin returns an object that adheres to the MetaPlugin protocol:
               return {

@@ -9,9 +9,32 @@ class MetaPlugin {
   }
 
   setupSandbox () {
+    const csp = [
+      //"'strict-dynamic'",
+      "'unsafe-inline'",
+      //"'nonce-1234'",
+    ]
+    const cspString = csp.join(' ')
+    console.log('creating sandbox with csp: ' + cspString)
 
-    const sandbox = Sandbox.create(this.api, {frameContainer: 'body', frameClassName: 'metaplugin'})
+    const sandboxOpts = {
+      frameContainer: 'body',
+      frameClassName: 'metaplugin',
+      frameContent: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <meta http-equiv="Content-Security-Policy" content="script-src ${cspString}; default-src self; "frame-ancestors 'self'">
+        </head>
+        <body></body>
+        </html>
+      `,
+      sandboxAdditionalAttributes: 'allow-popups allow-popups-to-escape-sandbox',
+    }
+    const sandbox = Sandbox.create(this.api, sandboxOpts)
     this.sandbox = sandbox
+    console.log('waiting for sandbox construction\n' + sandboxOpts.frameContent)
 
     sandbox.promise.then(() => {
       console.log('Sandbox is created. Trying to run code inside');
@@ -38,7 +61,8 @@ class MetaPlugin {
       console.log('Calling sandboxedMethod...');
       return sandbox.connection.remote.sandboxedMethod('hello from host');
     })
-    .then(res => console.log('Call was successful:', res));
+    .then(res => console.log('Call was successful:', res))
+    .catch(err => console.error('sandbox setup failed', err))
 
   }
 
