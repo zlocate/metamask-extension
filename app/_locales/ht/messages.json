@@ -1,4 +1,10 @@
 {
+    "privacyMode": {
+        "message": "Mòd Privacy"
+    },
+    "privacyModeDescription": {
+        "message": "Sou sit entènèt yo dwe mande aksè pou wè enfòmasyon kont ou."
+    },
     "accept": {
         "message": "Aksepte"
     },
