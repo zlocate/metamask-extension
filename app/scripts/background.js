@@ -320,6 +320,9 @@ function setupController (initState, initLangCode) {
     }
   }
 
+
+  
+
   //
   // connect to other contexts
   //
@@ -346,6 +349,7 @@ function setupController (initState, initLangCode) {
    * @typedef Port
    * @type Object
    */
+
 
   /**
    * Connects a Port to the MetaMask controller via a multiplexed duplex stream.
@@ -435,6 +439,34 @@ function setupController (initState, initLangCode) {
     extension.browserAction.setBadgeBackgroundColor({ color: '#506F8B' })
   }
 
+  // Chrome Ports error logging / handling
+  function handleSuspension (port) {
+    const processName = port.name
+    if (metamaskBlacklistedPorts.includes(processName)) {
+      return false
+    }
+    log.debug(`Port ${processName} got suspended`, extension.runtime.lastError)
+    sentry.captureMessage(`Port ${processName} got suspended`, {
+      // "extra" key is required by Sentry
+      lastError: extension.runtime.lastError || 'unknown',
+    })
+  }
+
+  function handleDisconnection (port) {
+    const processName = port.name
+    if (metamaskBlacklistedPorts.includes(processName)) {
+      return false
+    }
+    log.debug(`Port ${processName} got disconnected`, extension.runtime.lastError)
+    sentry.captureMessage(`Port ${processName} got disconnected`, {
+      // "extra" key is required by Sentry
+      lastError: extension.runtime.lastError || 'unknown',
+    })
+  }
+
+  extension.runtime.onSuspend.addListener(handleSuspension)
+  extension.runtime.onSuspend.addListener(handleDisconnection)
+
   return Promise.resolve()
 }
 
@@ -472,3 +504,5 @@ function openPopup () {
     }
   )
 }
+
+
