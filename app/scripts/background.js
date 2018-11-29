@@ -41,6 +41,7 @@ const {
 const firstTimeState = Object.assign({}, rawFirstTimeState, global.METAMASK_TEST_CONFIG)
 
 const STORAGE_KEY = 'metamask-config'
+const METAMASK_DEBUG = process.env.METAMASK_DEBUG
 
 log.setDefaultLevel(process.env.METAMASK_DEBUG ? 'debug' : 'warn')
 
@@ -320,14 +321,35 @@ function setupController (initState, initLangCode) {
     }
   }
 
-
-  
-
   //
   // connect to other contexts
   //
   extension.runtime.onConnect.addListener(connectRemote)
   extension.runtime.onConnectExternal.addListener(connectExternal)
+  extension.runtime.onSuspend.addListener(handleSuspension)
+
+  // Chrome Ports error logging / handling
+  function handleSuspension (port) {
+    const processName = port.name
+    if (metamaskBlacklistedPorts.includes(processName)) {
+      return false
+    }
+    log.debug(`Port ${processName} got suspended`, extension.runtime.lastError)
+    sentry.captureMessage(`Port ${processName} got suspended`, {
+      lastError: extension.runtime.lastError || 'unknown',
+    })
+  }
+
+  function handleDisconnection (port) {
+    const processName = port.name
+    if (metamaskBlacklistedPorts.includes(processName)) {
+      return false
+    }
+    log.debug(`Port ${processName} got disconnected`, extension.runtime.lastError)
+    sentry.captureMessage(`Port ${processName} got disconnected`, {
+      lastError: extension.runtime.lastError || 'unknown',
+    })
+  }
 
   const metamaskInternalProcessHash = {
     [ENVIRONMENT_TYPE_POPUP]: true,
@@ -363,6 +385,9 @@ function setupController (initState, initLangCode) {
     if (metamaskBlacklistedPorts.includes(remotePort.name)) {
       return false
     }
+
+    remotePort.onDisconnect.addListener(handleDisconnection)
+
 
     if (isMetaMaskInternalProcess) {
       const portStream = new PortStream(remotePort)
@@ -439,34 +464,6 @@ function setupController (initState, initLangCode) {
     extension.browserAction.setBadgeBackgroundColor({ color: '#506F8B' })
   }
 
-  // Chrome Ports error logging / handling
-  function handleSuspension (port) {
-    const processName = port.name
-    if (metamaskBlacklistedPorts.includes(processName)) {
-      return false
-    }
-    log.debug(`Port ${processName} got suspended`, extension.runtime.lastError)
-    sentry.captureMessage(`Port ${processName} got suspended`, {
-      // "extra" key is required by Sentry
-      lastError: extension.runtime.lastError || 'unknown',
-    })
-  }
-
-  function handleDisconnection (port) {
-    const processName = port.name
-    if (metamaskBlacklistedPorts.includes(processName)) {
-      return false
-    }
-    log.debug(`Port ${processName} got disconnected`, extension.runtime.lastError)
-    sentry.captureMessage(`Port ${processName} got disconnected`, {
-      // "extra" key is required by Sentry
-      lastError: extension.runtime.lastError || 'unknown',
-    })
-  }
-
-  extension.runtime.onSuspend.addListener(handleSuspension)
-  extension.runtime.onSuspend.addListener(handleDisconnection)
-
   return Promise.resolve()
 }
 
@@ -505,4 +502,10 @@ function openPopup () {
   )
 }
 
+// On first install, open a new tab with MetaMask
+extension.runtime.onInstalled.addListener(({reason}) => {
+  if ((reason === 'install') && (!METAMASK_DEBUG)) {
+    platform.openExtensionInBrowser()
+  }
+})
 
