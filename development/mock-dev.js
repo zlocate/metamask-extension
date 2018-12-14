@@ -15,6 +15,7 @@
 const render = require('react-dom').render
 const h = require('react-hyperscript')
 const Root = require('../ui/app/root')
+const SelectedApp = require('../ui/app/select-app')
 const configureStore = require('../ui/app/store')
 const actions = require('../ui/app/actions')
 const states = require('./states')
@@ -42,7 +43,7 @@ if (routerPath) {
   queryString = qs.parse(routerPath.split('?')[1])
 }
 
-selectedView = queryString.view || 'send new ui'
+selectedView = 'first time'|| queryString.view
 const firstState = states[selectedView]
 updateQueryParams(selectedView)
 
@@ -119,36 +120,36 @@ function startApp () {
   render(
     h('.super-dev-container', [
 
-      h('button', {
-        onClick: (ev) => {
-          ev.preventDefault()
-          store.dispatch(actions.update('terms'))
-        },
-        style: {
-          margin: '19px 19px 0px 19px',
-        },
-      }, 'Reset State'),
+      // h('button', {
+      //   onClick: (ev) => {
+      //     ev.preventDefault()
+      //     store.dispatch(actions.update('terms'))
+      //   },
+      //   style: {
+      //     margin: '19px 19px 0px 19px',
+      //   },
+      // }, 'Reset State'),
 
-      h(Selector, {
-        actions,
-        selectedKey: selectedView,
-        states,
-        store,
-        modifyBackgroundConnection,
-        backGroundConnectionModifiers,
-      }),
+      // h(Selector, {
+      //   actions,
+      //   selectedKey: selectedView,
+      //   states,
+      //   store,
+      //   modifyBackgroundConnection,
+      //   backGroundConnectionModifiers,
+      // }),
 
       h('#app-content', {
         style: {
-          height: '500px',
-          width: '360px',
+          // height: '500px',
+          // width: '360px',
           boxShadow: 'grey 0px 2px 9px',
           margin: '20px',
         },
       }, [
-        h(Root, {
-         store: store,
-        }),
+        h(Root, { store }, [
+          h(SelectedApp),
+        ]),
       ]),
 
     ]

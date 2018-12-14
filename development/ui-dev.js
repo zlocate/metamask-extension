@@ -18,6 +18,7 @@
 const render = require('react-dom').render
 const h = require('react-hyperscript')
 const Root = require('../ui/app/root')
+const SelectedApp = require('../ui/app/select-app')
 const configureStore = require('./uiStore')
 const states = require('./states')
 const Selector = require('./selector')
@@ -75,19 +76,19 @@ function startApp () {
   render(
     h('.super-dev-container', [
 
-      h(Selector, { actions, selectedKey: selectedView, states, store }),
+      // h(Selector, { actions, selectedKey: selectedView, states, store }),
 
       h('#app-content', {
         style: {
-          height: '500px',
-          width: '360px',
+          // height: '500px',
+          // width: '360px',
           boxShadow: 'grey 0px 2px 9px',
           margin: '20px',
         },
       }, [
-        h(Root, {
-         store: store,
-        }),
+        h(Root, {store},
+          h(SelectedApp),
+          ),
       ]),
 
     ]
