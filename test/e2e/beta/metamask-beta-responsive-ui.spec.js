@@ -278,7 +278,7 @@ describe('MetaMask', function () {
 
       const inputValue = await inputAmount.getAttribute('value')
       assert.equal(inputValue, '1')
-      await delay(regularDelayMs)
+      await delay(largeDelayMs)
     })
 
     it('opens and closes the gas modal', async function () {
