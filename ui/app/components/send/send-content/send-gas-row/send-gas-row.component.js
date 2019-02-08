@@ -14,8 +14,8 @@ export default class SendGasRow extends Component {
     gasLoadingError: PropTypes.bool,
     gasTotal: PropTypes.string,
     showCustomizeGasModal: PropTypes.func,
-    setGasPrice: PropTypes.func,
-    setGasLimit: PropTypes.func,
+    setAdvancedGasPrice: PropTypes.func,
+    setAdvancedGasLimit: PropTypes.func,
     gasPriceButtonGroupProps: PropTypes.object,
     gasButtonGroupShown: PropTypes.bool,
     advancedInlineGasShown: PropTypes.bool,
@@ -47,8 +47,8 @@ export default class SendGasRow extends Component {
       gasButtonGroupShown,
       advancedInlineGasShown,
       resetGasButtons,
-      setGasPrice,
-      setGasLimit,
+      setAdvancedGasPrice,
+      setAdvancedGasLimit,
       gasPrice,
       gasLimit,
       insufficientBalance,
@@ -72,8 +72,8 @@ export default class SendGasRow extends Component {
     />
     const advancedGasInputs = <div>
       <AdvancedGasInputs
-        updateCustomGasPrice={newGasPrice => setGasPrice(newGasPrice, gasLimit)}
-        updateCustomGasLimit={newGasLimit => setGasLimit(newGasLimit, gasPrice)}
+        updateCustomGasPrice={newGasPrice => setAdvancedGasPrice(newGasPrice, gasLimit)}
+        updateCustomGasLimit={newGasLimit => setAdvancedGasLimit(newGasLimit, gasPrice)}
         customGasPrice={gasPrice}
         customGasLimit={gasLimit}
         insufficientBalance={insufficientBalance}

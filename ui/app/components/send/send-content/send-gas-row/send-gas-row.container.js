@@ -79,13 +79,14 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     showCustomizeGasModal: () => dispatch(showModal({ name: 'CUSTOMIZE_GAS', hideBasic: true })),
-    setGasPrice: (newPrice, gasLimit) => {
+    setGasPrice: newPrice => dispatch(setGasPrice(newPrice)),
+    setAdvancedGasPrice: (newPrice, gasLimit) => {
       newPrice = decGWEIToHexWEI(newPrice)
       dispatch(setGasPrice(newPrice))
       dispatch(setCustomGasPrice(addHexPrefix(newPrice)))
       dispatch(setGasTotal(calcGasTotal(gasLimit, newPrice)))
     },
-    setGasLimit: (newLimit, gasPrice) => {
+    setAdvancedGasLimit: (newLimit, gasPrice) => {
       newLimit = decimalToHex(newLimit)
       dispatch(setGasLimit(newLimit))
       dispatch(setCustomGasLimit(addHexPrefix(newLimit.toString(16))))
