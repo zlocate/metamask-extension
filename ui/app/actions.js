@@ -316,6 +316,7 @@ var actions = {
   updatePreferences,
   UPDATE_PREFERENCES: 'UPDATE_PREFERENCES',
   setUseNativeCurrencyAsPrimaryCurrencyPreference,
+  setShowFiatConversionOnTestnetsPreference,
 
   // Migration of users to new UI
   setCompletedUiMigration,
@@ -2452,6 +2453,10 @@ function updatePreferences (value) {
 
 function setUseNativeCurrencyAsPrimaryCurrencyPreference (value) {
   return setPreference('useNativeCurrencyAsPrimaryCurrency', value)
+}
+
+function setShowFiatConversionOnTestnetsPreference (value) {
+  return setPreference('showFiatInTestnets', value)
 }
 
 function setCompletedOnboarding () {
