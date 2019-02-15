@@ -1,20 +1,15 @@
-/*global ethereum */
-const EventEmitter = require('events')
-
-/**
- * This class exposes the standard Ethereum provider API as per
- * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1193.md
- */
-class EthereumProvider extends EventEmitter {
+class StandardProvider {
   _isConnected
+  _provider
 
-  constructor () {
-    super()
+  constructor (provider) {
+    this._provider = provider
     this._onMessage('ethereumpingerror', this._onClose.bind(this))
     this._onMessage('ethereumpingsuccess', this._onConnect.bind(this))
     window.addEventListener('load', () => {
       this._subscribe()
       this._ping()
+      setInterval(() => { this._ping() }, 10000)
     })
   }
 
@@ -26,7 +21,7 @@ class EthereumProvider extends EventEmitter {
   }
 
   _onClose () {
-    (this._isConnected === undefined || this._isConnected) && this.emit('close', {
+    (this._isConnected === undefined || this._isConnected) && this._provider.emit('close', {
       code: 1011,
       reason: 'Network connection error',
     })
@@ -34,13 +29,13 @@ class EthereumProvider extends EventEmitter {
   }
 
   _onConnect () {
-    !this._isConnected && this.emit('connect')
+    !this._isConnected && this._provider.emit('connect')
     this._isConnected = true
   }
 
   async _ping () {
     try {
-      await this.send('eth_blockNumber')
+      await this.send('eth_blockNumber', undefined, true)
       window.postMessage({ type: 'ethereumpingsuccess' }, '*')
     } catch (error) {
       window.postMessage({ type: 'ethereumpingerror' }, '*')
@@ -48,11 +43,9 @@ class EthereumProvider extends EventEmitter {
   }
 
   _subscribe () {
-    ethereum.on('networkChanged', data => { this.emit('networkChanged', data) })
-    ethereum.on('accountsChanged', data => { this.emit('accountsChanged', data) })
-    ethereum.on('data', (error, { method, params }) => {
+    this._provider.on('data', (error, { method, params }) => {
       if (!error && method === 'eth_subscription') {
-        this.emit('notification', params.result)
+        this._provider.emit('notification', params.result)
       }
     })
   }
@@ -65,11 +58,11 @@ class EthereumProvider extends EventEmitter {
    * @returns {Promise<*>} Promise resolving to the result if successful
    */
   send (method, params = []) {
-    if (method === 'eth_requestAccounts') return ethereum.enable()
+    if (method === 'eth_requestAccounts') return this._provider.enable()
 
     return new Promise((resolve, reject) => {
       try {
-        ethereum.sendAsync({ method, params, beta: true }, (error, response) => {
+        this._provider.sendAsync({ method, params, beta: true }, (error, response) => {
           error = error || response.error
           error ? reject(error) : resolve(response)
         })
@@ -81,4 +74,18 @@ class EthereumProvider extends EventEmitter {
   }
 }
 
-window.ethereumBeta = new EthereumProvider()
+/**
+ * Converts a legacy provider into an EIP-1193-compliant standard provider
+ * @param {Object} provider - Legacy provider to convert
+ * @returns {Object} Standard provider
+ */
+export default function createStandardProvider (provider) {
+  const standardProvider = new StandardProvider(provider)
+  const sendSync = provider.send
+  provider.send = (payload, callback, beta) => {
+    return beta ?
+      standardProvider.send(payload.method, payload.params) :
+      sendSync.call(provider, payload, callback)
+  }
+  return provider
+}
