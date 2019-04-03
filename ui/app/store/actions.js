@@ -356,6 +356,20 @@ var actions = {
 
   setFirstTimeFlowType,
   SET_FIRST_TIME_FLOW_TYPE: 'SET_FIRST_TIME_FLOW_TYPE',
+
+  // Plugins
+  SET_SELECTED_PLUGIN_UID: 'SET_SELECTED_PLUGIN_UID',
+  setSelectedPluginUid,
+  REGISTER_PLUGIN_SCRIPT: 'REGISTER_PLUGIN_SCRIPT',
+  registerPluginScript,
+  SHOW_ADD_PLUGIN_PAGE: 'SHOW_ADD_PLUGIN_PAGE',
+//  SHOW_ADD_SUGGESTED_PLUGIN_PAGE: 'SHOW_ADD_SUGGESTED_PLUGIN_PAGE',
+  showAddPluginPage,
+//  showAddSuggestedPluginPage,
+  addPlugin,
+  removePlugin,
+  updatePlugins,
+  UPDATE_PLUGINS: 'UPDATE_PLUGINS',  
 }
 
 module.exports = actions
@@ -2761,5 +2775,75 @@ function setFirstTimeFlowType (type) {
       type: actions.SET_FIRST_TIME_FLOW_TYPE,
       value: type,
     })
+  }
+}
+
+
+function setSelectedPluginUid (pluginUid) {
+  return {
+    type: actions.SET_SELECTED_PLUGIN_UID,
+    value: pluginUid || null,
+  }
+}
+function showAddPluginPage (transitionForward = true) {
+  return {
+    type: actions.SHOW_ADD_PLUGIN_PAGE,
+    value: transitionForward,
+  }
+}
+
+ function showAddSuggestedPluginPage (transitionForward = true) {
+  return {
+    type: actions.SHOW_ADD_SUGGESTED_PLUGIN_PAGE,
+    value: transitionForward,
+  }
+}
+
+function addPlugin (plugin) {
+  return new Promise((resolve, reject) => {
+    background.addPlugin(plugin, (err, plugins) => {
+      if (err) {
+        reject(err)
+      }
+      resolve(plugins)
+    })
+  })
+}
+
+ function registerPluginScript(plugin, pluginScript){
+  console.log("REGISTERING PLUGIN SCRIPT", plugin, pluginScript)
+  return {
+    type: actions.REGISTER_PLUGIN_SCRIPT,
+    value: {plugin, pluginScript},
+  }
+}
+
+ function removePlugin (authorAddress) {
+  return (dispatch) => {
+    dispatch(actions.showLoadingIndication())
+    return new Promise((resolve, reject) => {
+      background.removePlugin(authorAddress, (err, plugins) => {
+        dispatch(actions.hideLoadingIndication())
+        if (err) {
+          dispatch(actions.displayWarning(err.message))
+          reject(err)
+        }
+        dispatch(actions.updatePlugins(plugins))
+        resolve(plugins)
+      })
+    })
+  }
+}
+
+ function updatePlugins (newPlugins) {
+  return {
+    type: actions.UPDATE_PLUGINS,
+    newPlugins,
+  }
+}
+
+ function clearPendingPlugins () {
+  return {
+    type: actions.CLEAR_PENDING_PLUGINS,
   }
 }

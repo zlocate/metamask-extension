@@ -11,7 +11,7 @@ class PreferencesController {
    * @typedef {Object} PreferencesController
    * @param {object} opts Overrides the defaults for the initial state of this.store
    * @property {object} store The stored object containing a users preferences, stored in local storage
-	 * @property {array} store.frequentRpcList A list of custom rpcs to provide the user
+   * @property {array} store.frequentRpcList A list of custom rpcs to provide the user
    * @property {string} store.currentAccountTab Indicates the selected tab in the ui
    * @property {array} store.tokens The tokens the user wants display in their token lists
    * @property {object} store.accountTokens The tokens stored per account and then per network type
@@ -33,6 +33,7 @@ class PreferencesController {
       accountTokens: {},
       assetImages: {},
       tokens: [],
+      plugins: [],
       suggestedTokens: {},
       useBlockie: false,
 
@@ -70,7 +71,7 @@ class PreferencesController {
       return this.setFeatureFlag(key, value)
     }
   }
-// PUBLIC METHODS
+  // PUBLIC METHODS
 
   /**
    * Sets the {@code forgottenPassword} state property
@@ -131,9 +132,9 @@ class PreferencesController {
    * @param {String} type Indicates the type of first time flow - create or import - the user wishes to follow
    *
    */
-   setFirstTimeFlowType (type) {
-     this.store.updateState({ firstTimeFlowType: type })
-   }
+  setFirstTimeFlowType (type) {
+    this.store.updateState({ firstTimeFlowType: type })
+  }
 
 
   getSuggestedTokens () {
@@ -178,17 +179,17 @@ class PreferencesController {
     if (req.method === 'metamask_watchAsset' || req.method === 'wallet_watchAsset') {
       const { type, options } = req.params
       switch (type) {
-        case 'ERC20':
-          const result = await this._handleWatchAssetERC20(options)
-          if (result instanceof Error) {
-            end(result)
-          } else {
-            res.result = result
-            end()
-          }
-          break
-        default:
-          end(new Error(`Asset of type ${type} not supported`))
+      case 'ERC20':
+        const result = await this._handleWatchAssetERC20(options)
+        if (result instanceof Error) {
+          end(result)
+        } else {
+          res.result = result
+          end()
+        }
+        break
+      default:
+        end(new Error(`Asset of type ${type} not supported`))
       }
     } else {
       next()
@@ -709,6 +710,70 @@ class PreferencesController {
     }
     if (!isValidAddress(rawAddress)) throw new Error(`Invalid address ${rawAddress}`)
   }
+
+
+
+  /**
+   * Adds a new Plugin
+   */
+
+  async addPlugin (plugin) {
+    console.log("Background Preferences add Plugin DEBUG", plugin)
+
+    // Compute ENS hash from plugin name
+    const pluginUid = plugin.uid
+    // Fetch plugin's metadata from ENS
+
+    const pluginAuthorAddress = normalizeAddress(plugin.authorAddress)
+    const pluginName = plugin.name
+    const pluginScriptUrl = plugin.scriptUrl
+    const personaPath = plugin.personaPath
+    const newEntry = {uid: pluginUid,
+		      authorAddress: pluginAuthorAddress,
+		      name: pluginName,
+		      personaPath, 
+		      scriptUrl: pluginScriptUrl}
+    let plugins = this.getPlugins()
+    const previousEntry = plugins.find((plugin, index) => {
+      return (plugin.uid === pluginUid)
+    })
+    const previousIndex = plugins.indexOf(previousEntry)
+
+    if (previousEntry) {
+      plugins[previousIndex] = newEntry
+    } else {
+      plugins.push(newEntry)
+    }
+
+    this.store.updateState({ plugins })
+    return Promise.resolve(plugins)
+  }
+
+  // /**
+  //  * Removes a specified plugin from the tokens array.
+  //  *
+  //  * @param {string} 
+  //  * @returns {Promise<array>} 
+  //  *
+  //  */
+  removePlugin (pluginUid) {
+    const plugins = this.store.getState().plugins
+    const updatedPlugins = plugins.filter(plugin => plugin.uid !== pluginUid)
+    console.log(updatedPlugins)
+    this.store.updateState({ plugins: updatedPlugins })
+    return Promise.resolve(updatedPlugins)
+  }
+
+  /**
+   * A getter for the `plugins` property
+   *
+   * @returns {array} The current array of plugins objects
+   *
+   */
+  getPlugins () {
+    return this.store.getState().plugins
+  }
+  
 }
 
 module.exports = PreferencesController

@@ -27,6 +27,8 @@ function reduceMetamask (state, action) {
     tokenExchangeRates: {},
     tokens: [],
     pendingTokens: {},
+    plugins: [],
+    pluginsScripts: [],      
     send: {
       gasLimit: null,
       gasPrice: null,
@@ -172,6 +174,23 @@ function reduceMetamask (state, action) {
         selectedTokenAddress: action.value,
       })
 
+    case actions.SET_SELECTED_PLUGIN_UID:
+      return extend(metamaskState, {
+        selectedPluginUid: action.value,
+      })
+
+     case actions.REGISTER_PLUGIN_SCRIPT:
+      let pluginsScripts = {}
+      if (metamaskState.pluginsScripts) pluginsScripts = metamaskState.pluginsScripts
+      pluginsScripts[action.value.plugin.uid] = action.value.pluginScript
+      return extend(metamaskState, {
+        pluginsScripts: pluginsScripts
+      })
+    case actions.UPDATE_PLUGINS:
+      return extend(metamaskState, {
+        plugins: action.newPlugins,
+      })
+    
     case actions.SET_ACCOUNT_LABEL:
       const account = action.value.account
       const name = action.value.label

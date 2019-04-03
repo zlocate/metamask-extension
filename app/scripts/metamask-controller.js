@@ -313,7 +313,7 @@ module.exports = class MetamaskController extends EventEmitter {
       appKey_eth_signTransaction: this.appKey_eth_signTransaction.bind(this),
       appKey_eth_signMessage: this.appKey_eth_signMessage.bind(this),
       appKey_eth_signTypedMessage: this.appKey_eth_signTypedMessage.bind(this),
-      appKey_stark_signMessage: this.appKey_stark_signMessage.bind(this),      
+      appKey_stark_signMessage: this.appKey_stark_signMessage.bind(this),
 
     }
     const providerProxy = this.networkController.initializeProvider(providerOpts)
@@ -442,6 +442,7 @@ module.exports = class MetamaskController extends EventEmitter {
       completeUiMigration: nodeify(preferencesController.completeUiMigration, preferencesController),
       completeOnboarding: nodeify(preferencesController.completeOnboarding, preferencesController),
       addKnownMethodData: nodeify(preferencesController.addKnownMethodData, preferencesController),
+      addPlugin: nodeify(preferencesController.addPlugin, preferencesController),      
 
       // BlacklistController
       whitelistPhishingDomain: this.whitelistPhishingDomain.bind(this),

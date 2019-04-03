@@ -48,6 +48,8 @@ const selectors = {
   getNumberOfAccounts,
   getNumberOfTokens,
   isEthereumNetwork,
+  getSelectedPluginUid,
+  getSelectedPluginScript,    
 }
 
 module.exports = selectors
@@ -310,4 +312,15 @@ function preferencesSelector ({ metamask }) {
 
 function getAdvancedInlineGasShown (state) {
   return Boolean(state.metamask.featureFlags.advancedInlineGas)
+}
+
+function getSelectedPluginUid (state) {
+  return state.metamask.selectedPluginUid
+}
+
+ function getSelectedPluginScript (state) {
+  const pluginsScripts = state.metamask.pluginsScripts || []
+  const selectedPluginUid = state.metamask.selectedPluginUid
+  const selectedPluginScript = pluginsScripts[selectedPluginUid]
+  return selectedPluginScript
 }

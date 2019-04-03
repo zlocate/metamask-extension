@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom'
 import WalletView from '../../components/app/wallet-view'
 import TransactionView from '../../components/app/transaction-view'
 import ProviderApproval from '../provider-approval'
+import PluginView from '../../components/app/plugin-view'
 
 import {
   INITIALIZE_SEED_PHRASE_ROUTE,
@@ -40,6 +41,12 @@ export default class Home extends PureComponent {
     }
   }
 
+  showPluginOrTxView(){
+    if (this.props.selectedPluginUid) return <PluginView />
+      else return <TransactionView />
+  }
+  
+  
   render () {
     const {
       forgottenPassword,
@@ -69,7 +76,8 @@ export default class Home extends PureComponent {
             query="(min-width: 576px)"
             render={() => <WalletView />}
           />
-          <TransactionView />
+        <TransactionView />
+	{this.showPluginOrTxView()}	
         </div>
       </div>
     )

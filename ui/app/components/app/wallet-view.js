@@ -15,8 +15,11 @@ const actions = require('../../store/actions')
 import BalanceComponent from '../ui/balance'
 const TokenList = require('./token-list')
 const selectors = require('../../selectors/selectors')
-const { ADD_TOKEN_ROUTE } = require('../../helpers/constants/routes')
+const { ADD_TOKEN_ROUTE, ADD_PLUGIN_ROUTE } = require('../../helpers/constants/routes')
 
+const PluginList = require('./plugin-list')
+
+import AddPluginButton from './add-plugin-button'
 import AddTokenButton from './add-token-button'
 
 module.exports = compose(
@@ -44,6 +47,7 @@ function mapStateToProps (state) {
     selectedAddress: selectors.getSelectedAddress(state),
     selectedAccount: selectors.getSelectedAccount(state),
     selectedTokenAddress: state.metamask.selectedTokenAddress,
+    plugins: state.metamask.plugins,
   }
 }
 
@@ -125,6 +129,24 @@ WalletView.prototype.renderAddToken = function () {
   })
 }
 
+
+WalletView.prototype.renderAddPlugin = function () {
+  const {
+    sidebarOpen,
+    hideSidebar,
+    history,
+  } = this.props
+
+  return h(AddPluginButton, {
+    onClick () {
+      history.push(ADD_PLUGIN_ROUTE)
+      if (sidebarOpen) {
+        hideSidebar()
+      }
+    },
+  })
+}
+
 WalletView.prototype.render = function () {
   const {
     responsiveDisplayClassname,
@@ -134,6 +156,7 @@ WalletView.prototype.render = function () {
     hideSidebar,
     identities,
     network,
+    history    
   } = this.props
   // temporary logs + fake extra wallets
 
@@ -232,6 +255,10 @@ WalletView.prototype.render = function () {
     h(TokenList),
 
     this.renderAddToken(),
+
+    h(PluginList),
+    this.renderAddPlugin(),
+    
   ])
 }
 

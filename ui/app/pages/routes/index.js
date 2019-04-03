@@ -50,6 +50,8 @@ import {
   submittedPendingTransactionsSelector,
 } from '../../selectors/transactions'
 
+const AddPluginPage = require('../add-plugin')
+
 // Routes
 import {
   DEFAULT_ROUTE,
@@ -68,6 +70,7 @@ import {
   INITIALIZE_ROUTE,
   INITIALIZE_UNLOCK_ROUTE,
   NOTICE_ROUTE,
+  ADD_PLUGIN_ROUTE,  
 } from '../../helpers/constants/routes'
 
 // enums
@@ -117,6 +120,7 @@ class Routes extends Component {
         <Authenticated path={CONFIRM_ADD_SUGGESTED_TOKEN_ROUTE} component={ConfirmAddSuggestedTokenPage} exact />
         <Authenticated path={NEW_ACCOUNT_ROUTE} component={CreateAccountPage} />
         <Authenticated path={DEFAULT_ROUTE} component={Home} exact />
+	<Authenticated path={ADD_PLUGIN_ROUTE} component={AddPluginPage} exact />	
       </Switch>
     )
   }

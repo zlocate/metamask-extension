@@ -45,6 +45,9 @@ const CONFIRM_TRANSFER_FROM_PATH = '/transfer-from'
 const CONFIRM_TOKEN_METHOD_PATH = '/token-method'
 const SIGNATURE_REQUEST_PATH = '/signature-request'
 
+const ADD_PLUGIN_ROUTE = '/add-plugin'
+
+
 module.exports = {
   DEFAULT_ROUTE,
   UNLOCK_ROUTE,
@@ -90,4 +93,5 @@ module.exports = {
   COMPANY_ROUTE,
   GENERAL_ROUTE,
   ABOUT_US_ROUTE,
+  ADD_PLUGIN_ROUTE,  
 }
