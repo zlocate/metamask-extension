@@ -443,6 +443,7 @@ module.exports = class MetamaskController extends EventEmitter {
       completeOnboarding: nodeify(preferencesController.completeOnboarding, preferencesController),
       addKnownMethodData: nodeify(preferencesController.addKnownMethodData, preferencesController),
       addPlugin: nodeify(preferencesController.addPlugin, preferencesController),      
+      removePlugin: nodeify(preferencesController.removePlugin, preferencesController),      
 
       // BlacklistController
       whitelistPhishingDomain: this.whitelistPhishingDomain.bind(this),

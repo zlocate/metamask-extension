@@ -74,24 +74,29 @@ function mapDispatchToProps(dispatch) {
 //    this.props.plugins.map((plugin)=>this.createFreshPluginWrapper(plugin))
   }
 
-   createFreshPluginWrapper(plugin) {
+   async createFreshPluginWrapper(plugin) {
 
      if (!global.ethereumProvider) return
-    const { userAddress, registerPluginScript } = this.props
-
+     const { userAddress, registerPluginScript } = this.props
+     
      console.log("PLUGIN WRAPPER", plugin)
 
      this.wrapper = new PluginWrapper({
-      userAddress,
-      provider: global.ethereumProvider,
-      plugin: plugin,
-      pollingInterval: 8000,
-      networkId: this.props.network,
-    })
+       userAddress,
+       provider: global.ethereumProvider,
+       plugin: plugin,
+       pollingInterval: 8000,
+       networkId: this.props.network,
+     })
 
      // TODO ADAPT HERE
-    console.log("REGISTER CALLED IN Plugin LIST", this.wrapper.plugin)
-    registerPluginScript(this.wrapper.plugin, this.wrapper.pluginScript)
+     console.log("REGISTER CALLED IN Plugin LIST", this.wrapper.plugin)
+     const pluginScript = await this.wrapper.getPluginScript()
+     console.log(pluginScript)
+     registerPluginScript(this.wrapper.plugin, pluginScript)
+
+
+
 
      // Set up listener instances for cleaning up
     // this.balanceUpdater = this.updateBalances.bind(this)
