@@ -92,8 +92,8 @@ function mapDispatchToProps(dispatch) {
      // TODO ADAPT HERE
      console.log("REGISTER CALLED IN Plugin LIST", this.wrapper.plugin)
      const pluginScript = await this.wrapper.getPluginScript()
-     console.log(pluginScript)
-     registerPluginScript(this.wrapper.plugin, pluginScript)
+     //console.log(pluginScript)
+     //registerPluginScript(this.wrapper.plugin, pluginScript)
 
 
 
