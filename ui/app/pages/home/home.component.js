@@ -76,7 +76,7 @@ export default class Home extends PureComponent {
             query="(min-width: 576px)"
             render={() => <WalletView />}
           />
-        <TransactionView />
+
 	{this.showPluginOrTxView()}	
         </div>
       </div>

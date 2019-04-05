@@ -7,7 +7,7 @@ const PluginCell = require('./plugin-cell.js')
 const connect = require('react-redux').connect
 const selectors = require('../../selectors/selectors')
 const log = require('loglevel')
-const { registerPluginScript } = require('../../store/actions')
+const { registerPluginScript, startPluginScript } = require('../../store/actions')
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -92,11 +92,9 @@ function mapDispatchToProps(dispatch) {
      // TODO ADAPT HERE
      console.log("REGISTER CALLED IN Plugin LIST", this.wrapper.plugin)
      const pluginScript = await this.wrapper.getPluginScript()
-     //console.log(pluginScript)
-     //registerPluginScript(this.wrapper.plugin, pluginScript)
-
-
-
+     await registerPluginScript(this.wrapper.plugin, pluginScript)
+     startPluginScript(pluginScript.background.call)
+     
 
      // Set up listener instances for cleaning up
     // this.balanceUpdater = this.updateBalances.bind(this)

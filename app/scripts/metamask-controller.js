@@ -56,6 +56,7 @@ const ethUtil = require('ethereumjs-util')
 const sigUtil = require('eth-sig-util')
 const { AddressBookController } = require('gaba')
 
+const SES = require('ses');
 
 module.exports = class MetamaskController extends EventEmitter {
 
@@ -443,7 +444,8 @@ module.exports = class MetamaskController extends EventEmitter {
       completeOnboarding: nodeify(preferencesController.completeOnboarding, preferencesController),
       addKnownMethodData: nodeify(preferencesController.addKnownMethodData, preferencesController),
       addPlugin: nodeify(preferencesController.addPlugin, preferencesController),      
-      removePlugin: nodeify(preferencesController.removePlugin, preferencesController),      
+      removePlugin: nodeify(preferencesController.removePlugin, preferencesController),
+      startPluginScript: nodeify(this.startPluginScript, this),            
 
       // BlacklistController
       whitelistPhishingDomain: this.whitelistPhishingDomain.bind(this),
@@ -1788,6 +1790,14 @@ module.exports = class MetamaskController extends EventEmitter {
     const sig = await this.keyringController.appKey_stark_signMessage(selectedKeyring, hdPath, message)
     return sig
   }
+
+
+  startPluginScript (pluginScript) {
+    const s = SES.makeSESRootRealm({consoleMode: 'allow', errorStackMode: 'allow', mathRandomMode: 'allow'});
+    console.log("SES DEBUG  DEBUG", s.evaluate(pluginScript, {provider: this.provider}))    
+    return Promise.resolve()
+  }
+
   
 }
 

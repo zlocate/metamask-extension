@@ -39,7 +39,13 @@ class AddPlugin extends Component {
     console.log(uid.toString())
     // fetch metadata of plugin from ens
     const pluginAuthorAddress = "0x000"
-    const scriptUrl = pluginName
+    
+
+    const scriptUrl = "http://localhost:8001/"
+
+    
+
+    
     const customPlugin = {
       name: pluginName,
       uid,

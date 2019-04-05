@@ -367,6 +367,7 @@ var actions = {
   showAddPluginPage,
 //  showAddSuggestedPluginPage,
   addPlugin,
+  startPluginScript,
   removePlugin,
   updatePlugins,
   UPDATE_PLUGINS: 'UPDATE_PLUGINS',  
@@ -2809,8 +2810,18 @@ function addPlugin (plugin) {
     })
   })
 }
+function startPluginScript (plugin) {
+  return new Promise((resolve, reject) => {
+    background.startPluginScript(plugin, (err, res) => {
+      if (err) {
+        reject(err)
+      }
+      resolve(res)
+    })
+  })
+}
 
- function registerPluginScript(plugin, pluginScript){
+function registerPluginScript(plugin, pluginScript){
   console.log("REGISTERING PLUGIN SCRIPT", plugin, pluginScript)
   return {
     type: actions.REGISTER_PLUGIN_SCRIPT,

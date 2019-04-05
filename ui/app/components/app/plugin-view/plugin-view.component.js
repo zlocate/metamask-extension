@@ -10,79 +10,80 @@ const BN = require('ethereumjs-util').BN
 
 
 
- /**
- * React component which renders the given content into an iframe.
- * Additionally an array of stylesheet urls can be passed. They will 
- * also be loaded into the iframe.
- */
-class IFrameContainer extends React.Component {
+// /**
+//  * React component which renders the given content into an iframe.
+//  * Additionally an array of stylesheet urls can be passed. They will 
+//  * also be loaded into the iframe.
+//  */
+// class IFrameContainer extends React.Component {
 
-     static propTypes = {
-        content: React.PropTypes.string.isRequired,
-        stylesheets: React.PropTypes.arrayOf(React.PropTypes.string),
-    };
+//   static propTypes = {
+//     content: React.PropTypes.string.isRequired,
+//     stylesheets: React.PropTypes.arrayOf(React.PropTypes.string),
+//   };
 
-     /**
-     * Called after mounting the component. Triggers initial update of
-     * the iframe
-     */
-    componentDidMount() {
-      this._updateIframe()
-    }
+//   /**
+//    * Called after mounting the component. Triggers initial update of
+//    * the iframe
+//    */
+//   componentDidMount() {
+// //    this._updateIframe()
+//   }
 
-   componentDidUpdate() {
-      this._updateIframe()    
-    }
+//   componentDidUpdate() {
+// //    this._updateIframe()    
+//   }
 
-     /**
-     * Updates the iframes content and inserts stylesheets.
-     * TODO: Currently stylesheets are just added for proof of concept. Implement
-     * and algorithm which updates the stylesheets properly.
-     */
-    _updateIframe() {
-      const iframe = this.refs.iframe;
-      const document = iframe.contentDocument;
-      document.body.innerHTML = this.props.content;
-    }
+//   /**
+//    * Updates the iframes content and inserts stylesheets.
+//    * TODO: Currently stylesheets are just added for proof of concept. Implement
+//    * and algorithm which updates the stylesheets properly.
+//    */
+//   _updateIframe() {
+//     const iframe = this.refs.iframe;
+//     const document = iframe.contentDocument;
+//     document.body.innerHTML = this.props.content;
+//   }
 
-     /**
-     * This component renders just and iframe
-     */
-    render() {
-        return <iframe ref="iframe"/>
-    }
-}
-
-
+//   /**
+//    * This component renders just and iframe
+//    */
+//   render() {
+//     return <iframe ref="iframe"/>
+//   }
+// }
 
 
 
- export default class PluginView extends PureComponent {
+
+
+export default class PluginView extends PureComponent {
   static contextTypes = {
     t: PropTypes.func,
     showDepositModal: PropTypes.func,
     history: PropTypes.object,
   }
 
-   constructor (props) {
+  constructor (props) {
     super(props)
     this.paramValues = []
   }
 
-   renderPluginButtons () {
+  renderPluginButtons () {
     if (!this.props.selectedPluginScript){ return }
     let elements = []
-    const script = this.props.selectedPluginScript
+    const pluginInterface = this.props.selectedPluginScript
+    console.log(pluginInterface)
 
-     for (var k = 0; k < script.pluginInterface.actions.length; k++){
+    for (var k = 0; k < pluginInterface.actions.length; k++){
       const index = k
       if (!this.paramValues[index]){
 	this.paramValues.push([])
 	console.log("def paramValues")
       }
-      for (var i = 0; i < script.pluginInterface.actions[index].params.length; i++){
+      for (var i = 0; i < pluginInterface.actions[index].params.length; i++){
 	const subIndex = i
-	const param = script.pluginInterface.actions[index].params[subIndex]
+	const param = pluginInterface.actions[index].params[subIndex]
 	elements.push(h('input', {
 	  key: "input" + index + subIndex,
 	  className: 'customize-gas-input',
@@ -94,31 +95,31 @@ class IFrameContainer extends React.Component {
 	  },
 	}))
 
-       }
+      }
 
-       elements.push(<Button
-		   key={"button"+k}
-		   type="primary"
-		   className="plugin-view__button"
-		   onClick={() => {
-		     console.log(script.pluginInterface)
-		     script.pluginInterface.actions[index].call(this.paramValues[index])}
-			   }
-		   >
-		   {script.pluginInterface.actions[index].name}
+      elements.push(<Button
+		    key={"button"+k}
+		    type="primary"
+		    className="plugin-view__button"
+		    onClick={() => {
+		      console.log(pluginInterface)
+		      pluginInterface.actions[index].call(this.paramValues[index])}
+			    }
+		    >
+		    {pluginInterface.actions[index].name}
 		    </Button>)
 
-     }
+    }
     return elements
   }
 
 
 
-   componentDidMount() {
-      window.addEventListener('message', this.handleIframeFunction);
+  componentDidMount() {
+//    window.addEventListener('message', this.handleIframeFunction);
   }
 
-   handleIframeFunction(e) {
+  handleIframeFunction(e) {
     console.log(e)
     if (e.origin !== 'https://localhost:3000/') {
       return;
@@ -130,18 +131,18 @@ class IFrameContainer extends React.Component {
     }
   }
 
-   renderDelegatedUI(){
+  renderDelegatedUI(){
     if (this.props.selectedPluginScript){    
       return this.props.selectedPluginScript.renderUI()
     }
   }
 
-   render () {
+  render () {
     console.log("PROPS in plugin view", this.props)
     if (this.props.selectedPluginScript){
       console.log(this.props.selectedPluginScript.pluginInterface)
     }
-    const content = this.renderDelegatedUI.bind(this)()
+    //    const content = this.renderDelegatedUI.bind(this)()
     //`<h1>Title</h1><button class="btn btn-primary">Test</button>`
     return (
 	<div>
@@ -149,9 +150,12 @@ class IFrameContainer extends React.Component {
 	<div> plugin uid: {this.props.selectedPluginUid}    </div>
 	<div> {this.renderPluginButtons.bind(this)()} </div>
         <div>
-        <IFrameContainer content={content}/>
+
         </div>
 	</div>	
     )    
   }
 }
+
+
+	//        <IFrameContainer content={content}/>

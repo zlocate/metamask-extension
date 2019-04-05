@@ -764,6 +764,7 @@ class PreferencesController {
     return Promise.resolve(updatedPlugins)
   }
 
+
   /**
    * A getter for the `plugins` property
    *
