@@ -81,6 +81,7 @@ function createAppKeySubProvider (appKey_eth_getPublicKey,
   function prepareHdPath(origin, hdSubPath){
     // beginning of Path using BIP 43 and arachnid eth subpurpose space
     // Would prefer to use m/BIPNUMBER' once the app key eip is submitted as a bip
+    console.log("ORIGIN", origin)
     const beginningPath = "m/43'/60'/1775'"
 
     // personaPath should be some option selected in Metamask itself

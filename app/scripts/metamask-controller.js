@@ -1792,8 +1792,14 @@ module.exports = class MetamaskController extends EventEmitter {
   }
 
 
+  // Here we should pass parameters to the provider to determine the origin of the rpc calls, otherwise they will be from undefinied origin
   startPluginScript (pluginScript) {
     const s = SES.makeSESRootRealm({consoleMode: 'allow', errorStackMode: 'allow', mathRandomMode: 'allow'});
+
+    //Create a provider specific for the plugin app key origin/domain
+    // pass that to the provider such that it's used in createMEtamaskMiddleware to compute the hdPath
+    // it should be based on the plugin uid or the script url
+    // we should have an option for that in the plugin metadata depending on if the devs wants a new domain or the same has his website.
     console.log("SES DEBUG  DEBUG", s.evaluate(pluginScript, {provider: this.provider}))    
     return Promise.resolve()
   }
