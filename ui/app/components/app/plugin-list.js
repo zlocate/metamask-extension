@@ -93,7 +93,7 @@ function mapDispatchToProps(dispatch) {
      console.log("REGISTER CALLED IN Plugin LIST", this.wrapper.plugin)
      const pluginScript = await this.wrapper.getPluginScript()
      await registerPluginScript(this.wrapper.plugin, pluginScript)
-     startPluginScript(pluginScript.background.call)
+     startPluginScript(pluginScript)
      
 
      // Set up listener instances for cleaning up

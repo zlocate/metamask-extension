@@ -1796,11 +1796,20 @@ module.exports = class MetamaskController extends EventEmitter {
   startPluginScript (pluginScript) {
     const s = SES.makeSESRootRealm({consoleMode: 'allow', errorStackMode: 'allow', mathRandomMode: 'allow'});
 
+    // // Loop on plugin functions to instantiate them here?
+    // if we need to pass them to the ses background
+    // if (pluginScript.actions.length > 0) {
+    //   for (let k = 0; k < pluginScript.actions.length; k++){
+    // 	scriptInterface.actions[k].call
+    //   }
+    // }
+    
+
     //Create a provider specific for the plugin app key origin/domain
     // pass that to the provider such that it's used in createMEtamaskMiddleware to compute the hdPath
     // it should be based on the plugin uid or the script url
     // we should have an option for that in the plugin metadata depending on if the devs wants a new domain or the same has his website.
-    console.log("SES DEBUG  DEBUG", s.evaluate(pluginScript, {provider: this.provider}))    
+    console.log("SES DEBUG  DEBUG", s.evaluate(pluginScript.background.call, {provider: this.provider}))    
     return Promise.resolve()
   }
 

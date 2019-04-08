@@ -102,9 +102,9 @@ export default class PluginView extends PureComponent {
 		    type="primary"
 		    className="plugin-view__button"
 		    onClick={() => {
-		      console.log(pluginInterface)
-		      pluginInterface.actions[index].call(this.paramValues[index])}
-			    }
+		      console.log(this.paramValues[index])
+		      pluginInterface.actions[index].call(...this.paramValues[index])
+		    }}
 		    >
 		    {pluginInterface.actions[index].name}
 		    </Button>)
