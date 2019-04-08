@@ -1809,7 +1809,9 @@ module.exports = class MetamaskController extends EventEmitter {
     // pass that to the provider such that it's used in createMEtamaskMiddleware to compute the hdPath
     // it should be based on the plugin uid or the script url
     // we should have an option for that in the plugin metadata depending on if the devs wants a new domain or the same has his website.
-    console.log("SES DEBUG  DEBUG", s.evaluate(pluginScript.background.call, {provider: this.provider}))    
+
+    // see also in wrappers, we should do similar thing for pluginApi
+    console.log("SES DEBUG  DEBUG", s.evaluate(pluginScript.background.call, {provider: this.provider, pluginApi: pluginScript.pluginApi}))    
     return Promise.resolve()
   }
 

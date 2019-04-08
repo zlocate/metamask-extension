@@ -6,52 +6,49 @@ import Button from '../../ui/button'
 const h = require('react-hyperscript')
 import { DEPOSIT_PLUGIN_ROUTE } from '../../../helpers/constants/routes'
 
-const BN = require('ethereumjs-util').BN
-
-
 
 // /**
 //  * React component which renders the given content into an iframe.
 //  * Additionally an array of stylesheet urls can be passed. They will 
 //  * also be loaded into the iframe.
 //  */
-// class IFrameContainer extends React.Component {
+class IFrameContainer extends React.Component {
 
-//   static propTypes = {
-//     content: React.PropTypes.string.isRequired,
-//     stylesheets: React.PropTypes.arrayOf(React.PropTypes.string),
-//   };
+  static propTypes = {
+    content: React.PropTypes.string.isRequired,
+    stylesheets: React.PropTypes.arrayOf(React.PropTypes.string),
+  };
 
-//   /**
-//    * Called after mounting the component. Triggers initial update of
-//    * the iframe
-//    */
-//   componentDidMount() {
-// //    this._updateIframe()
-//   }
+  /**
+   * Called after mounting the component. Triggers initial update of
+   * the iframe
+   */
+  componentDidMount() {
+    this._updateIframe()
+  }
 
-//   componentDidUpdate() {
-// //    this._updateIframe()    
-//   }
+  componentDidUpdate() {
+    this._updateIframe()    
+  }
 
-//   /**
-//    * Updates the iframes content and inserts stylesheets.
-//    * TODO: Currently stylesheets are just added for proof of concept. Implement
-//    * and algorithm which updates the stylesheets properly.
-//    */
-//   _updateIframe() {
-//     const iframe = this.refs.iframe;
-//     const document = iframe.contentDocument;
-//     document.body.innerHTML = this.props.content;
-//   }
+  /**
+   * Updates the iframes content and inserts stylesheets.
+   * TODO: Currently stylesheets are just added for proof of concept. Implement
+   * and algorithm which updates the stylesheets properly.
+   */
+  _updateIframe() {
+    const iframe = this.refs.iframe;
+    const document = iframe.contentDocument;
+    document.body.innerHTML = this.props.content;
+  }
 
-//   /**
-//    * This component renders just and iframe
-//    */
-//   render() {
-//     return <iframe ref="iframe"/>
-//   }
-// }
+  /**
+   * This component renders just and iframe
+   */
+  render() {
+    return <iframe ref="iframe"/>
+  }
+}
 
 
 
@@ -116,46 +113,28 @@ export default class PluginView extends PureComponent {
 
 
   componentDidMount() {
-//    window.addEventListener('message', this.handleIframeFunction);
-  }
-
-  handleIframeFunction(e) {
-    console.log(e)
-    if (e.origin !== 'https://localhost:3000/') {
-      return;
-    }
-    if (e.data === 'iFrameFunction') {
-      // this.setState({
-      // 	activeStep: 3,
-      // });
-    }
-  }
-
-  renderDelegatedUI(){
-    if (this.props.selectedPluginScript){    
-      return this.props.selectedPluginScript.renderUI()
-    }
   }
 
   render () {
     console.log("PROPS in plugin view", this.props)
+    let html = ""
     if (this.props.selectedPluginScript){
-      console.log(this.props.selectedPluginScript.pluginInterface)
+      html = this.props.selectedPluginScript.ui.html
     }
-    //    const content = this.renderDelegatedUI.bind(this)()
-    //`<h1>Title</h1><button class="btn btn-primary">Test</button>`
     return (
 	<div>
-	<div> ------------------------------------------------------------------------------   Plugin view  ---------------------------------------------------------------------------------  </div>
+	<div> ----------------------------------------------------------------------------   Plugin view  -------------------------------------------------------------------------------  </div>
 	<div> plugin uid: {this.props.selectedPluginUid}    </div>
 	<div> {this.renderPluginButtons.bind(this)()} </div>
         <div>
 
         </div>
+	<div dangerouslySetInnerHTML = {{ __html: html}} /> 
 	</div>	
     )    
   }
 }
 
+//	<IFrameContainer content={html}/>	
+    //`<h1>Title</h1><button class="btn btn-primary">Test</button>`
 
-	//        <IFrameContainer content={content}/>

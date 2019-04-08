@@ -95,8 +95,7 @@ function mapDispatchToProps(dispatch) {
      await registerPluginScript(this.wrapper.plugin, pluginScript)
      startPluginScript(pluginScript)
      
-
-     // Set up listener instances for cleaning up
+    // Set up listener instances for cleaning up
     // this.balanceUpdater = this.updateBalances.bind(this)
     // this.showError = (error) => {
     //   this.setState({ error, isLoading: false })
