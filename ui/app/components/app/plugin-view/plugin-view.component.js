@@ -4,7 +4,8 @@ import Media from 'react-media'
 import MenuBar from '../menu-bar'
 import Button from '../../ui/button'
 const h = require('react-hyperscript')
-import { DEPOSIT_PLUGIN_ROUTE } from '../../../helpers/constants/routes'
+
+const SES = require('ses');
 
 
 // /**
@@ -12,43 +13,43 @@ import { DEPOSIT_PLUGIN_ROUTE } from '../../../helpers/constants/routes'
 //  * Additionally an array of stylesheet urls can be passed. They will 
 //  * also be loaded into the iframe.
 //  */
-class IFrameContainer extends React.Component {
+// class IFrameContainer extends React.Component {
 
-  static propTypes = {
-    content: React.PropTypes.string.isRequired,
-    stylesheets: React.PropTypes.arrayOf(React.PropTypes.string),
-  };
+//   static propTypes = {
+//     content: React.PropTypes.string.isRequired,
+//     stylesheets: React.PropTypes.arrayOf(React.PropTypes.string),
+//   };
 
-  /**
-   * Called after mounting the component. Triggers initial update of
-   * the iframe
-   */
-  componentDidMount() {
-    this._updateIframe()
-  }
+//   /**
+//    * Called after mounting the component. Triggers initial update of
+//    * the iframe
+//    */
+//   componentDidMount() {
+//     this._updateIframe()
+//   }
 
-  componentDidUpdate() {
-    this._updateIframe()    
-  }
+//   componentDidUpdate() {
+//     this._updateIframe()    
+//   }
 
-  /**
-   * Updates the iframes content and inserts stylesheets.
-   * TODO: Currently stylesheets are just added for proof of concept. Implement
-   * and algorithm which updates the stylesheets properly.
-   */
-  _updateIframe() {
-    const iframe = this.refs.iframe;
-    const document = iframe.contentDocument;
-    document.body.innerHTML = this.props.content;
-  }
+//   /**
+//    * Updates the iframes content and inserts stylesheets.
+//    * TODO: Currently stylesheets are just added for proof of concept. Implement
+//    * and algorithm which updates the stylesheets properly.
+//    */
+//   _updateIframe() {
+//     const iframe = this.refs.iframe;
+//     const document = iframe.contentDocument;
+//     document.body.innerHTML = this.props.content;
+//   }
 
-  /**
-   * This component renders just and iframe
-   */
-  render() {
-    return <iframe ref="iframe"/>
-  }
-}
+//   /**
+//    * This component renders just and iframe
+//    */
+//   render() {
+//     return <iframe ref="iframe"/>
+//   }
+// }
 
 
 
@@ -110,6 +111,14 @@ export default class PluginView extends PureComponent {
     return elements
   }
 
+  renderSandboxedUi(){
+
+    // Pass Purecomponent ?
+    // create render function in hosted js
+
+    const s = SES.makeSESRootRealm({consoleMode: 'allow', errorStackMode: 'allow', mathRandomMode: 'allow'});    
+    return s.evaluate(this.props.selectedPluginScript.ui.call, {React, provider: this.provider, pluginApi: this.props.selectedPluginScript.pluginApi})
+  }
 
 
   componentDidMount() {
@@ -125,16 +134,21 @@ export default class PluginView extends PureComponent {
 	<div>
 	<div> ----------------------------------------------------------------------------   Plugin view  -------------------------------------------------------------------------------  </div>
 	<div> plugin uid: {this.props.selectedPluginUid}    </div>
+	<div> Metamask generated UI    </div>	
 	<div> {this.renderPluginButtons.bind(this)()} </div>
-        <div>
 
+        <div id="pluginIframe" ref="pluginIframe">
+
+
+	{this.renderSandboxedUi.bind(this)()}
         </div>
-	<div dangerouslySetInnerHTML = {{ __html: html}} /> 
+
 	</div>	
     )    
   }
 }
 
+//	<div dangerouslySetInnerHTML = {{ __html: html}} /> 
 //	<IFrameContainer content={html}/>	
     //`<h1>Title</h1><button class="btn btn-primary">Test</button>`
 
