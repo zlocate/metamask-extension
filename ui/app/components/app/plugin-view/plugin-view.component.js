@@ -7,54 +7,6 @@ const h = require('react-hyperscript')
 
 const SES = require('ses');
 
-
-// /**
-//  * React component which renders the given content into an iframe.
-//  * Additionally an array of stylesheet urls can be passed. They will 
-//  * also be loaded into the iframe.
-//  */
-// class IFrameContainer extends React.Component {
-
-//   static propTypes = {
-//     content: React.PropTypes.string.isRequired,
-//     stylesheets: React.PropTypes.arrayOf(React.PropTypes.string),
-//   };
-
-//   /**
-//    * Called after mounting the component. Triggers initial update of
-//    * the iframe
-//    */
-//   componentDidMount() {
-//     this._updateIframe()
-//   }
-
-//   componentDidUpdate() {
-//     this._updateIframe()    
-//   }
-
-//   /**
-//    * Updates the iframes content and inserts stylesheets.
-//    * TODO: Currently stylesheets are just added for proof of concept. Implement
-//    * and algorithm which updates the stylesheets properly.
-//    */
-//   _updateIframe() {
-//     const iframe = this.refs.iframe;
-//     const document = iframe.contentDocument;
-//     document.body.innerHTML = this.props.content;
-//   }
-
-//   /**
-//    * This component renders just and iframe
-//    */
-//   render() {
-//     return <iframe ref="iframe"/>
-//   }
-// }
-
-
-
-
-
 export default class PluginView extends PureComponent {
   static contextTypes = {
     t: PropTypes.func,
@@ -147,8 +99,4 @@ export default class PluginView extends PureComponent {
     )    
   }
 }
-
-//	<div dangerouslySetInnerHTML = {{ __html: html}} /> 
-//	<IFrameContainer content={html}/>	
-    //`<h1>Title</h1><button class="btn btn-primary">Test</button>`
 
