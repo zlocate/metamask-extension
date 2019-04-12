@@ -7,6 +7,7 @@ import MultipleNotifications from '../../components/app/multiple-notifications'
 import WalletView from '../../components/app/wallet-view'
 import TransactionView from '../../components/app/transaction-view'
 import ProviderApproval from '../provider-approval'
+import PermissionApproval from '../permission-approval'
 
 import {
   RESTORE_VAULT_ROUTE,
@@ -45,6 +46,7 @@ export default class Home extends PureComponent {
     shouldShowSeedPhraseReminder: PropTypes.bool,
     rejectProviderRequestByOrigin: PropTypes.func,
     isPopup: PropTypes.bool,
+    permissionRequests: PropTypes.array,
   }
 
   componentWillMount () {
@@ -84,6 +86,7 @@ export default class Home extends PureComponent {
       shouldShowSeedPhraseReminder,
       rejectProviderRequestByOrigin,
       isPopup,
+      permissionRequests,
     } = this.props
 
     if (forgottenPassword) {
@@ -95,6 +98,13 @@ export default class Home extends PureComponent {
         <ProviderApproval providerRequest={providerRequests[0]} />
       )
     }
+
+    if (permissionRequests && permissionRequests.length > 0) {
+      return (
+        <PermissionApproval permissionRequest={permissionRequests[0]} />
+      )
+    }
+
     return (
       <div className="main-container">
         <div className="account-and-transaction-details">

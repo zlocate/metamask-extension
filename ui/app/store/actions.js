@@ -352,6 +352,10 @@ var actions = {
   forceApproveProviderRequestByOrigin,
   clearApprovedOrigins,
 
+  // Permissions
+  approvePermissionRequest,
+  rejectPermissionRequest,
+
   setFirstTimeFlowType,
   SET_FIRST_TIME_FLOW_TYPE: 'SET_FIRST_TIME_FLOW_TYPE',
 
@@ -2658,6 +2662,20 @@ function rejectProviderRequestByOrigin (origin) {
 function clearApprovedOrigins () {
   return () => {
     background.clearApprovedOrigins()
+  }
+}
+
+// Permissions
+
+function approvePermissionRequest (requestId) {
+  return (dispatch) => {
+    background.approvePermissionRequest(requestId)
+  }
+}
+
+function rejectPermissionRequest (requestId) {
+  return (dispatch) => {
+    background.rejectPermissionRequest(requestId)
   }
 }
 

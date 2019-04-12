@@ -1,7 +1,6 @@
 import { NETWORK_TYPES } from '../helpers/constants/common'
 import { stripHexPrefix, addHexPrefix } from 'ethereumjs-util'
 
-
 const abi = require('human-standard-token-abi')
 import {
   transactionsSelector,
@@ -57,6 +56,7 @@ const selectors = {
   getKnownMethodData,
   getAddressBookEntry,
   getAddressBookEntryName,
+  getPermissionsDescriptions,
 }
 
 module.exports = selectors
@@ -367,4 +367,8 @@ function getKnownMethodData (state, data) {
   const { knownMethodData } = state.metamask
 
   return knownMethodData && knownMethodData[fourBytePrefix]
+}
+
+function getPermissionsDescriptions (state) {
+  return state.metamask.requests.permissionsDescriptions
 }
