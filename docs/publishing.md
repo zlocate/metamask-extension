@@ -2,6 +2,13 @@
 
 When publishing a new version of MetaMask, we follow this procedure:
 
+## Overview
+
+The below diagram outlines our process for design, development, and release. Building MetaMask is a community affair, and many steps of the process invite participation from external contributors as indicated. All QA, code review, and release of new versions is done by members of the core MetaMask team.
+
+<img width="664" alt="mm-dev-process" src="https://user-images.githubusercontent.com/1016190/56308059-36906000-60fb-11e9-8e61-6655bca0c54f.png">
+
+
 ## Preparation
 
 We try to ensure certain criteria are met before deploying:
@@ -35,3 +42,5 @@ With each pull request, the @MetaMaskBot will comment with a build of that new p
 4. Publish to [Opera store](https://addons.opera.com/en/extensions/details/metamask/).
 5. Post on [Github releases](https://github.com/MetaMask/metamask-extension/releases) page.
 6. Run the `npm run announce` script, and post that announcement in our public places.
+
+
