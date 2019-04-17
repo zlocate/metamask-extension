@@ -19,54 +19,51 @@ export default class PluginView extends PureComponent {
     this.paramValues = []
   }
 
-  renderPluginButtons () {
-    if (!this.props.selectedPluginScript){ return }
-    let elements = []
-    const pluginInterface = this.props.selectedPluginScript
-    console.log(pluginInterface)
+  // renderPluginButtons () {
+  //   if (!this.props.selectedPluginScript){ return }
+  //   let elements = []
+  //   const pluginInterface = this.props.selectedPluginScript
+  //   console.log(pluginInterface)
 
-    for (var k = 0; k < pluginInterface.actions.length; k++){
-      const index = k
-      if (!this.paramValues[index]){
-	this.paramValues.push([])
-	console.log("def paramValues")
-      }
-      for (var i = 0; i < pluginInterface.actions[index].params.length; i++){
-	const subIndex = i
-	const param = pluginInterface.actions[index].params[subIndex]
-	elements.push(h('input', {
-	  key: "input" + index + subIndex,
-	  className: 'customize-gas-input',
-	  placeholder: param.name,
-	  type: param.type,
-	  onChange: e => {
-	    console.log("changed")
-	    this.paramValues[index][subIndex] = e.target.value
-	  },
-	}))
+  //   for (var k = 0; k < pluginInterface.actions.length; k++){
+  //     const index = k
+  //     if (!this.paramValues[index]){
+  // 	this.paramValues.push([])
+  // 	console.log("def paramValues")
+  //     }
+  //     for (var i = 0; i < pluginInterface.actions[index].params.length; i++){
+  // 	const subIndex = i
+  // 	const param = pluginInterface.actions[index].params[subIndex]
+  // 	elements.push(h('input', {
+  // 	  key: "input" + index + subIndex,
+  // 	  className: 'customize-gas-input',
+  // 	  placeholder: param.name,
+  // 	  type: param.type,
+  // 	  onChange: e => {
+  // 	    console.log("changed")
+  // 	    this.paramValues[index][subIndex] = e.target.value
+  // 	  },
+  // 	}))
 
-      }
+  //     }
 
-      elements.push(<Button
-		    key={"button"+k}
-		    type="primary"
-		    className="plugin-view__button"
-		    onClick={() => {
-		      console.log(this.paramValues[index])
-		      pluginInterface.actions[index].call(...this.paramValues[index])
-		    }}
-		    >
-		    {pluginInterface.actions[index].name}
-		    </Button>)
+  //     elements.push(<Button
+  // 		    key={"button"+k}
+  // 		    type="primary"
+  // 		    className="plugin-view__button"
+  // 		    onClick={() => {
+  // 		      console.log(this.paramValues[index])
+  // 		      pluginInterface.actions[index].call(...this.paramValues[index])
+  // 		    }}
+  // 		    >
+  // 		    {pluginInterface.actions[index].name}
+  // 		    </Button>)
 
-    }
-    return elements
-  }
+  //   }
+  //   return elements
+  // }
 
   renderSandboxedUi(){
-
-    // Pass Purecomponent ?
-    // create render function in hosted js
 
     const s = SES.makeSESRootRealm({consoleMode: 'allow', errorStackMode: 'allow', mathRandomMode: 'allow'});    
     return s.evaluate(this.props.selectedPluginScript.ui.call, {React, provider: this.provider, pluginApi: this.props.selectedPluginScript.pluginApi})
@@ -86,17 +83,21 @@ export default class PluginView extends PureComponent {
 	<div>
 	<div> ----------------------------------------------------------------------------   Plugin view  -------------------------------------------------------------------------------  </div>
 	<div> plugin uid: {this.props.selectedPluginUid}    </div>
-	<div> Metamask generated UI    </div>	
-	<div> {this.renderPluginButtons.bind(this)()} </div>
+
+
 
         <div id="pluginIframe" ref="pluginIframe">
 
 
 	{this.renderSandboxedUi.bind(this)()}
-        </div>
+      </div>
 
 	</div>	
     )    
   }
 }
+
+
+//	<div> Metamask generated UI    </div>	
+//	<div> {this.renderPluginButtons.bind(this)()} </div>
 
