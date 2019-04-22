@@ -33,10 +33,12 @@ constructor (opts) {
     this.keyOperations = new Proxy({}, {
       get: (_, k) => {
         if (k === 'getCurve') return () => keys.curve
-        if (k === 'getKeys') return () =>  new Proxy(keys, {
+        if (k === 'getKeys') {
+ return () => new Proxy(keys, {
             set: () => { throw new TypeError('Writes not allowed') },
-            get: (obj, k) => obj[k]
+            get: (obj, k) => obj[k],
         })
+}
 
         return (...args) => ssbKeys[k](keys, ...args)
       },
@@ -44,7 +46,7 @@ constructor (opts) {
       set: (_, k, v) => {
         if (forbiddenWrites) throw new Error(`Write Acess Error: writing to keys.${k} is not allowed`)
         return keys[k] = v
-      }
+      },
     })
   }
 

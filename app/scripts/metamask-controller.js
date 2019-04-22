@@ -37,6 +37,7 @@ const BalancesController = require('./controllers/computed-balances')
 const TokenRatesController = require('./controllers/token-rates')
 const DetectTokensController = require('./controllers/detect-tokens')
 const ProviderApprovalController = require('./controllers/provider-approval')
+const SsbController = require('./controllers/ssb')
 const nodeify = require('./lib/nodeify')
 const accountImporter = require('./account-import-strategies')
 const getBuyEthUrl = require('./lib/buy-eth-url')
@@ -64,7 +65,7 @@ module.exports = class MetamaskController extends EventEmitter {
    */
    constructor (opts) {
     super()
-
+    this.ssbController = new SsbController({ encryptor: opts.encryptor})
     this.defaultMaxListeners = 20
 
     this.sendUpdate = debounce(this.privateSendUpdate.bind(this), 200)
