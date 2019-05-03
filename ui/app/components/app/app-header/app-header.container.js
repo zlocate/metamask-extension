@@ -7,22 +7,14 @@ const actions = require('../../../store/actions')
 
 const mapStateToProps = state => {
   const { appState, metamask } = state
-  const { networkDropdownOpen } = appState
-  const {
-    network,
-    provider,
-    selectedAddress,
-    isUnlocked,
-    isAccountMenuOpen,
-  } = metamask
 
   return {
-    networkDropdownOpen,
-    network,
-    provider,
-    selectedAddress,
-    isUnlocked,
-    isAccountMenuOpen,
+    networkDropdownOpen: appState.networkDropdownOpen,
+    network: metamask.network,
+    provider: metamask.provider,
+    selectedAddress: metamask.selectedAddress,
+    isUnlocked: metamask.isUnlocked,
+    isAccountMenuOpen: metamask.isAccountMenuOpen,
   }
 }
 
