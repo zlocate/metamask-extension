@@ -191,7 +191,7 @@ class TransactionController extends EventEmitter {
     }
     txUtils.validateTxParams(normalizedTxParams)
     // construct txMeta
-    const { transactionCategory, code } = await this._determineTransactionCategory(txParams)
+    const { transactionCategory, getCodeResponse } = await this._determineTransactionCategory(txParams)
     let txMeta = this.txStateManager.generateTxMeta({
       txParams: normalizedTxParams,
       type: TRANSACTION_TYPE_STANDARD,
@@ -204,7 +204,7 @@ class TransactionController extends EventEmitter {
       // check whether recipient account is blacklisted
       recipientBlacklistChecker.checkAccount(txMeta.metamaskNetworkId, normalizedTxParams.to)
       // add default tx params
-      txMeta = await this.addTxGasDefaults(txMeta, code)
+      txMeta = await this.addTxGasDefaults(txMeta, getCodeResponse)
     } catch (error) {
       log.warn(error)
       txMeta.loadingDefaults = false
@@ -224,7 +224,7 @@ class TransactionController extends EventEmitter {
   @param txMeta {Object} - the txMeta object
   @returns {Promise<object>} resolves with txMeta
 */
-  async addTxGasDefaults (txMeta, code) {
+  async addTxGasDefaults (txMeta, getCodeResponse) {
     const txParams = txMeta.txParams
     // ensure value
     txParams.value = txParams.value ? ethUtil.addHexPrefix(txParams.value) : '0x0'
@@ -235,7 +235,7 @@ class TransactionController extends EventEmitter {
     }
     txParams.gasPrice = ethUtil.addHexPrefix(gasPrice.toString(16))
     // set gasLimit
-    return await this.txGasUtil.analyzeGasUsage(txMeta, code)
+    return await this.txGasUtil.analyzeGasUsage(txMeta, getCodeResponse)
   }
 
   /**
@@ -582,7 +582,7 @@ class TransactionController extends EventEmitter {
     ].find(tokenMethodName => tokenMethodName === name && name.toLowerCase())
 
     let result
-    let code = 'default'
+    let getCodeResponse = 'notCalled'
     if (!txParams.data) {
       result = SEND_ETHER_ACTION_KEY
     } else if (tokenMethodName) {
@@ -591,18 +591,18 @@ class TransactionController extends EventEmitter {
       result = DEPLOY_CONTRACT_ACTION_KEY
     } else {
       try {
-        code = await this.query.getCode(to)
+        getCodeResponse = await this.query.getCode(to)
       } catch (e) {
-        code = null
+        getCodeResponse = null
         log.warn(e)
       }
       // For an address with no code, geth will return '0x', and ganache-core v2.2.1 will return '0x0'
-      const codeIsEmpty = !code || code === '0x' || code === '0x0'
+      const codeIsEmpty = !getCodeResponse || getCodeResponse === '0x' || getCodeResponse === '0x0'
 
       result = codeIsEmpty ? SEND_ETHER_ACTION_KEY : CONTRACT_INTERACTION_KEY
     }
 
-    return { transactionCategory: result, code }
+    return { transactionCategory: result, getCodeResponse }
   }
 
   /**
