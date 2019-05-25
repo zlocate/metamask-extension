@@ -1,19 +1,29 @@
 import PropTypes from 'prop-types'
-import React, {PureComponent} from 'react'
+import React, { Component } from 'react'
 import { PermissionPageContainerContent, PermissionPageContainerHeader } from '.'
 import { PageContainerFooter } from '../../ui/page-container'
 
-export default class PermissionPageContainer extends PureComponent {
+export default class PermissionPageContainer extends Component {
+
   static propTypes = {
-    approvePermissionRequest: PropTypes.func.isRequired,
-    rejectPermissionRequest: PropTypes.func.isRequired,
-    request: PropTypes.object.isRequired,
+    approvePermissionsRequest: PropTypes.func.isRequired,
+    rejectPermissionsRequest: PropTypes.func.isRequired,
+    selectedIdentity: PropTypes.object.isRequired,
+    permissionsDescriptions: PropTypes.array.isRequired,
+    requests: PropTypes.array.isRequired,
   };
 
   static contextTypes = {
     t: PropTypes.func,
     metricsEvent: PropTypes.func,
   };
+
+  constructor (props) {
+    super(props)
+    this.state = {
+      selectedAccount: props.selectedIdentity,
+    }
+  }
 
   componentDidMount () {
     this.context.metricsEvent({
@@ -26,29 +36,47 @@ export default class PermissionPageContainer extends PureComponent {
   }
 
   onCancel = () => {
-    const { request, rejectPermissionRequest } = this.props
-    const { id } = request.metadata
-    rejectPermissionRequest(id)
+    const { requests, rejectPermissionsRequest } = this.props
+    const id = requests[0].metadata.id
+    rejectPermissionsRequest(id)
   }
 
   onSubmit = () => {
-    const { request, approvePermissionRequest } = this.props
-    const { id } = request.metadata
-    approvePermissionRequest(id)
+
+    // sanity validation
+    if (!this.state.selectedAccount) {
+      throw new Error(
+        'Fatal: no account selected'
+      )
+    }
+
+    const { requests, approvePermissionsRequest } = this.props
+
+    if ('eth_accounts' in requests[0].permissions) {
+      requests[0].permissions.eth_accounts = {
+        caveats: [
+          { type: 'filterResponse', value: [this.state.selectedAccount.address] },
+        ],
+      }
+    }
+    approvePermissionsRequest(requests[0])
+  }
+
+  onAccountSelect = selectedAccount => {
+    this.setState({ selectedAccount })
   }
 
   render () {
-    const { request } = this.props
-    const { origin, siteImage, siteTitle } = request
+    const { requests, permissionsDescriptions } = this.props
 
     return (
       <div className="page-container permission-approval-container">
         <PermissionPageContainerHeader />
         <PermissionPageContainerContent
-          request={request}
-          origin={origin}
-          siteImage={siteImage}
-          siteTitle={siteTitle}
+          requests={requests}
+          onAccountSelect={this.onAccountSelect}
+          selectedAccount={this.state.selectedAccount}
+          permissionsDescriptions={permissionsDescriptions}
         />
         <PageContainerFooter
           onCancel={() => this.onCancel()}

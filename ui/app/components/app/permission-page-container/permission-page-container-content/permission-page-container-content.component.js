@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types'
 import React, {PureComponent} from 'react'
 import Identicon from '../../../ui/identicon'
+import AccountDropdownMini from '../../../ui/account-dropdown-mini'
 
 export default class PermissionPageContainerContent extends PureComponent {
   static propTypes = {
-    request: PropTypes.object.isRequired,
-    selectedIdentity: PropTypes.object.isRequired,
+    requests: PropTypes.array.isRequired,
+    selectedAccount: PropTypes.object.isRequired,
     permissionsDescriptions: PropTypes.array.isRequired,
+    onAccountSelect: PropTypes.func.isRequired,
   }
 
   static contextTypes = {
@@ -14,54 +16,65 @@ export default class PermissionPageContainerContent extends PureComponent {
   };
 
   renderConnectVisual = () => {
-    const { request, selectedIdentity } = this.props
-    const { origin, siteImage, siteTitle } = request.metadata
+    const { requests, selectedAccount, onAccountSelect } = this.props
+    const { origin, site } = requests[0].metadata
+
+    // const { t } = this.context
 
     return (
       <div className="permission-approval-visual">
         <section>
-          {siteImage ? (
+          {site.icon ? (
             <img
               className="permission-approval-visual__identicon"
-              src={siteImage}
+              src={site.icon}
             />
           ) : (
             <i className="permission-approval-visual__identicon--default">
-              {siteTitle.charAt(0).toUpperCase()}
+              {site.name.charAt(0).toUpperCase()}
             </i>
           )}
-          <h1>{siteTitle}</h1>
+          <h1>{site.name}</h1>
           <h2>{origin}</h2>
         </section>
         <span className="permission-approval-visual__check" />
         <section>
           <Identicon
             className="permission-approval-visual__identicon"
-            address={selectedIdentity.address}
+            address={selectedAccount.address}
             diameter={64}
           />
-          <h1>{selectedIdentity.name}</h1>
+          <AccountDropdownMini
+            className="permission-approval-container__content"
+            onSelect={onAccountSelect}
+            selectedAccount={selectedAccount}
+          />
         </section>
       </div>
     )
   }
 
   renderRequestedPermissions () {
-    const { request, permissionsDescriptions } = this.props
-    const { options } = request
-    const { t } = this.context
-    const optsArr = Object.keys(options)
+    const { requests, permissionsDescriptions } = this.props
 
-    const items = optsArr.map((funcName) => {
-      const matchingFuncs = permissionsDescriptions.filter(perm => perm.method === funcName)
+    const request = requests[0]
+
+    const requestedMethods = Object.keys(request.permissions)
+
+    const items = requestedMethods.map((methodName) => {
+
+      const matchingFuncs = permissionsDescriptions.filter((perm) => {
+        return perm.method === methodName
+      })
+
       const match = matchingFuncs[0]
       if (!match) {
-        throw new Error('Requested unknown permission.')
+        throw new Error('Requested unknown permission: ' + methodName)
       }
       return (
         <li
           className="permission-requested"
-          key={funcName}
+          key={methodName}
           >
           {match.description}
         </li>
@@ -70,15 +83,14 @@ export default class PermissionPageContainerContent extends PureComponent {
 
     return (
       <ul className="permissions-requested">
-        <h4>{t('permissionsRequest')}</h4>
         {items}
       </ul>
     )
   }
 
   render () {
-    const { request } = this.props
-    const { siteTitle } = request.metadata
+    const { requests } = this.props
+    const { site } = requests[0].metadata
     const { t } = this.context
 
     return (
@@ -86,9 +98,9 @@ export default class PermissionPageContainerContent extends PureComponent {
         <section>
           <h2>{t('connectRequest')}</h2>
           {this.renderConnectVisual()}
-          <h1>{t('permissionRequest', [siteTitle])}</h1>
-          <p>
-            <br/>
+          <section>
+            <h1>{site.name}</h1>
+            <h2>{'Would like to:'}</h2>
             {this.renderRequestedPermissions()}
             <br/>
             <a
@@ -98,7 +110,7 @@ export default class PermissionPageContainerContent extends PureComponent {
             >
               {t('learnMore')}.
             </a>
-          </p>
+          </section>
         </section>
         <section className="secure-badge">
           <img src="/images/mm-secure.svg" />

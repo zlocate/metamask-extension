@@ -51,6 +51,8 @@ const selectors = {
   getNumberOfAccounts,
   getNumberOfTokens,
   isEthereumNetwork,
+  getPermissionsDescriptions,
+  getPermissionsRequests,
   getMetaMetricState,
   getRpcPrefsForCurrentProvider,
   getKnownMethodData,
@@ -339,6 +341,14 @@ function getAdvancedInlineGasShown (state) {
   return Boolean(state.metamask.featureFlags.advancedInlineGas)
 }
 
+function getPermissionsDescriptions (state) {
+  return state.metamask.permissionsDescriptions
+}
+
+function getPermissionsRequests (state) {
+  return state.metamask.permissionsRequests
+}
+
 function getMetaMetricState (state) {
   return {
     network: getCurrentNetworkId(state),
@@ -367,8 +377,4 @@ function getKnownMethodData (state, data) {
   const { knownMethodData } = state.metamask
 
   return knownMethodData && knownMethodData[fourBytePrefix]
-}
-
-function getPermissionsDescriptions (state) {
-  return state.metamask.requests.permissionsDescriptions
 }

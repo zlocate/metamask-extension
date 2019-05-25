@@ -61,17 +61,39 @@ const inpageProvider = new MetamaskInpageProvider(metamaskStream)
 // set a high max listener count to avoid unnecesary warnings
 inpageProvider.setMaxListeners(100)
 
-// augment the provider with its enable method
-inpageProvider.enable = function ({ force } = {}) {
+// augment the provider with its enable method, using the permissions
+// architecture
+inpageProvider.enable = function () {
+
+  const promiseCallback = (resolve, reject) => (error, response) => {
+    if (error || response.error) {
+      reject(error || response.error)
+    } else {
+      resolve(response.result)
+    }
+  }
+
   return new Promise((resolve, reject) => {
-    inpageProvider.sendAsync({ method: 'eth_requestAccounts', params: [force] }, (error, response) => {
-      if (error || response.error) {
-        reject(error || response.error)
-      } else {
-        resolve(response.result)
-      }
+    inpageProvider.sendAsync(
+      {
+        jsonrpc: '2.0',
+        method: 'wallet_requestPermissions',
+        params: [{ eth_accounts: {} }],
+      },
+      promiseCallback(resolve, reject)
+    )
+  })
+  .then(() => {
+    return new Promise((resolve, reject) => {
+      inpageProvider.sendAsync(
+        {
+          method: 'eth_accounts',
+        },
+        promiseCallback(resolve, reject)
+      )
     })
   })
+  .catch(error => error)
 }
 
 // give the dapps control of a refresh they can toggle this off on the window.ethereum

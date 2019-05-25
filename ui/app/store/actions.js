@@ -347,14 +347,16 @@ var actions = {
   createCancelTransaction,
   createSpeedUpTransaction,
 
+  // Provider
   approveProviderRequestByOrigin,
   rejectProviderRequestByOrigin,
   forceApproveProviderRequestByOrigin,
   clearApprovedOrigins,
 
   // Permissions
-  approvePermissionRequest,
-  rejectPermissionRequest,
+  approvePermissionsRequest,
+  rejectPermissionsRequest,
+  clearPermissions,
 
   setFirstTimeFlowType,
   SET_FIRST_TIME_FLOW_TYPE: 'SET_FIRST_TIME_FLOW_TYPE',
@@ -2641,11 +2643,7 @@ function setPendingTokens (pendingTokens) {
   }
 }
 
-function approveProviderRequestByOrigin (origin) {
-  return () => {
-    background.approveProviderRequestByOrigin(origin)
-  }
-}
+// Provider
 
 function forceApproveProviderRequestByOrigin (origin) {
   return () => {
@@ -2659,25 +2657,38 @@ function rejectProviderRequestByOrigin (origin) {
   }
 }
 
-function clearApprovedOrigins () {
-  return () => {
-    background.clearApprovedOrigins()
-  }
-}
-
 // Permissions
 
-function approvePermissionRequest (requestId) {
-  return (dispatch) => {
-    background.approvePermissionRequest(requestId)
+/**
+ * Approves the permission requests with the given IDs.
+ * @param {Array} requestId
+ */
+function approvePermissionsRequest (requestId) {
+  return () => {
+    background.approvePermissionsRequest(requestId)
   }
 }
 
-function rejectPermissionRequest (requestId) {
-  return (dispatch) => {
-    background.rejectPermissionRequest(requestId)
+/**
+ * Rejects the permission requests with the given IDs.
+ * @param {Array} requestId
+ */
+function rejectPermissionsRequest (requestId) {
+  return () => {
+    background.rejectPermissionsRequest(requestId)
   }
 }
+
+/**
+ * Clears all permissions for all domains.
+ */
+function clearPermissions () {
+  return () => {
+    background.clearPermissions()
+  }
+}
+
+// ////
 
 function setFirstTimeFlowType (type) {
   return (dispatch) => {

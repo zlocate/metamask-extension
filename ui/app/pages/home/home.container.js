@@ -27,11 +27,10 @@ const mapStateToProps = state => {
     } = {},
     seedPhraseBackedUp,
     tokens,
-    requests,
+    permissionsRequests,
   } = metamask
   const accountBalance = getCurrentEthBalance(state)
   const { forgottenPassword } = appState
-  const permissionRequests = requests.permissionsRequests || []
 
   const isUnconnected = Boolean(
     activeTab &&
@@ -52,7 +51,7 @@ const mapStateToProps = state => {
     viewingUnconnectedDapp: isUnconnected && isPopup,
     shouldShowSeedPhraseReminder: !seedPhraseBackedUp && (parseInt(accountBalance, 16) > 0 || tokens.length > 0),
     isPopup,
-    permissionRequests,
+    permissionsRequests,
   }
 }
 

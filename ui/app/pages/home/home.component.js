@@ -6,7 +6,6 @@ import HomeNotification from '../../components/app/home-notification'
 import MultipleNotifications from '../../components/app/multiple-notifications'
 import WalletView from '../../components/app/wallet-view'
 import TransactionView from '../../components/app/transaction-view'
-import ProviderApproval from '../provider-approval'
 import PermissionApproval from '../permission-approval'
 
 import {
@@ -46,7 +45,7 @@ export default class Home extends PureComponent {
     shouldShowSeedPhraseReminder: PropTypes.bool,
     rejectProviderRequestByOrigin: PropTypes.func,
     isPopup: PropTypes.bool,
-    permissionRequests: PropTypes.array,
+    permissionsRequests: PropTypes.array,
   }
 
   componentWillMount () {
@@ -77,7 +76,6 @@ export default class Home extends PureComponent {
     const {
       activeTab,
       forgottenPassword,
-      providerRequests,
       history,
       showPrivacyModeNotification,
       unsetMigratedPrivacyMode,
@@ -86,22 +84,17 @@ export default class Home extends PureComponent {
       shouldShowSeedPhraseReminder,
       rejectProviderRequestByOrigin,
       isPopup,
-      permissionRequests,
+      permissionsRequests,
+      history,
     } = this.props
 
     if (forgottenPassword) {
       return <Redirect to={{ pathname: RESTORE_VAULT_ROUTE }} />
     }
 
-    if (providerRequests && providerRequests.length > 0) {
+    if (permissionsRequests && permissionsRequests.length > 0) {
       return (
-        <ProviderApproval providerRequest={providerRequests[0]} />
-      )
-    }
-
-    if (permissionRequests && permissionRequests.length > 0) {
-      return (
-        <PermissionApproval permissionRequest={permissionRequests[0]} />
+        <PermissionApproval permissionsRequests = {permissionsRequests}/>
       )
     }
 
