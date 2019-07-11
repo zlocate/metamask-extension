@@ -9,7 +9,7 @@ const { addHexPrefix } = require('ethereumjs-util')
 const { SEND_ETHER_ACTION_KEY } = require('../../../../ui/app/helpers/constants/transactions.js')
 const SIMPLE_GAS_COST = '0x5208' // Hex for 21000, cost of a simple send.
 
-import { TRANSACTION_NO_CONTRACT_ERROR_KEY } from '../../../../ui/app/helpers/constants/error-keys'
+const { TRANSACTION_NO_CONTRACT_ERROR_KEY } = require('../../../../ui/app/helpers/constants/error-keys')
 
 /**
 tx-gas-utils are gas utility methods for Transaction manager
