@@ -5,6 +5,7 @@ const SETTINGS_ROUTE = '/settings'
 const GENERAL_ROUTE = '/settings/general'
 const ADVANCED_ROUTE = '/settings/advanced'
 const SECURITY_ROUTE = '/settings/security'
+const PERMISSIONS_ROUTE = '/settings/permissions'
 const ABOUT_US_ROUTE = '/settings/about-us'
 const NETWORKS_ROUTE = '/settings/networks'
 const CONTACT_LIST_ROUTE = '/settings/contact-list'
@@ -81,6 +82,7 @@ module.exports = {
   INITIALIZE_METAMETRICS_OPT_IN_ROUTE,
   ADVANCED_ROUTE,
   SECURITY_ROUTE,
+  PERMISSIONS_ROUTE,
   GENERAL_ROUTE,
   ABOUT_US_ROUTE,
   CONTACT_LIST_ROUTE,
