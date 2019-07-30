@@ -358,7 +358,7 @@ module.exports = class MetamaskController extends EventEmitter {
     }
 
     async function selectPublicState ({
-      isUnlocked, completedOnboarding, network
+      isUnlocked, completedOnboarding, network,
       // network
     }) {
       const result = {
