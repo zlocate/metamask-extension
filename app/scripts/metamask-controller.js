@@ -1032,7 +1032,6 @@ module.exports = class MetamaskController extends EventEmitter {
     } else {
       return Promise.resolve(this.keyringController.signPersonalMessage(msgParams))
     }
-    return promise
   }
 
   /**
