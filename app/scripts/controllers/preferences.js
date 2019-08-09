@@ -54,7 +54,6 @@ class PreferencesController {
         useNativeCurrencyAsPrimaryCurrency: true,
       },
       completedOnboarding: false,
-      migratedPrivacyMode: false,
       metaMetricsId: null,
       metaMetricsSendCount: 0,
     }, opts.initState)
@@ -605,13 +604,6 @@ class PreferencesController {
   completeOnboarding () {
     this.store.updateState({ completedOnboarding: true })
     return Promise.resolve(true)
-  }
-
-  unsetMigratedPrivacyMode () {
-    this.store.updateState({
-      migratedPrivacyMode: false,
-    })
-    return Promise.resolve()
   }
 
   //

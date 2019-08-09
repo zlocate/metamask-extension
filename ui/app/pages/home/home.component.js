@@ -22,8 +22,6 @@ export default class Home extends PureComponent {
 
   static defaultProps = {
     activeTab: {},
-    unsetMigratedPrivacyMode: null,
-    forceApproveProviderRequestByOrigin: null,
   }
 
   static propTypes = {
@@ -37,13 +35,7 @@ export default class Home extends PureComponent {
     forgottenPassword: PropTypes.bool,
     suggestedTokens: PropTypes.object,
     unconfirmedTransactionsCount: PropTypes.number,
-    providerRequests: PropTypes.array,
-    showPrivacyModeNotification: PropTypes.bool.isRequired,
-    unsetMigratedPrivacyMode: PropTypes.func,
-    viewingUnconnectedDapp: PropTypes.bool.isRequired,
-    forceApproveProviderRequestByOrigin: PropTypes.func,
     shouldShowSeedPhraseReminder: PropTypes.bool,
-    rejectProviderRequestByOrigin: PropTypes.func,
     isPopup: PropTypes.bool,
     permissionsRequests: PropTypes.array,
   }
@@ -74,18 +66,11 @@ export default class Home extends PureComponent {
   render () {
     const { t } = this.context
     const {
-      activeTab,
       forgottenPassword,
       history,
-      showPrivacyModeNotification,
-      unsetMigratedPrivacyMode,
-      viewingUnconnectedDapp,
-      forceApproveProviderRequestByOrigin,
       shouldShowSeedPhraseReminder,
-      rejectProviderRequestByOrigin,
       isPopup,
       permissionsRequests,
-      history,
     } = this.props
 
     if (forgottenPassword) {
@@ -111,32 +96,6 @@ export default class Home extends PureComponent {
                 <MultipleNotifications
                   className
                   notifications={[
-                    {
-                      shouldBeRendered: showPrivacyModeNotification,
-                      component: <HomeNotification
-                        descriptionText={t('privacyModeDefault')}
-                        acceptText={t('learnMore')}
-                        onAccept={() => {
-                          window.open('https://medium.com/metamask/42549d4870fa', '_blank', 'noopener')
-                          unsetMigratedPrivacyMode()
-                        }}
-                        key="home-privacyModeDefault"
-                      />,
-                    },
-                    {
-                      shouldBeRendered: viewingUnconnectedDapp,
-                      component: <HomeNotification
-                        descriptionText={t('shareAddressToConnect', [activeTab.origin])}
-                        acceptText={t('shareAddress')}
-                        onAccept={() => {
-                          forceApproveProviderRequestByOrigin(activeTab.origin)
-                        }}
-                        ignoreText={t('dismiss')}
-                        onIgnore={() => rejectProviderRequestByOrigin(activeTab.origin)}
-                        infoText={t('shareAddressInfo', [activeTab.origin])}
-                        key="home-shareAddressToConnect"
-                      />,
-                    },
                     {
                       shouldBeRendered: shouldShowSeedPhraseReminder,
                       component: <HomeNotification

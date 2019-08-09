@@ -267,7 +267,6 @@ module.exports = class MetamaskController extends EventEmitter {
       InfuraController: this.infuraController.store,
       CachedBalancesController: this.cachedBalancesController.store,
       OnboardingController: this.onboardingController.store,
-      PermissionsController: this.permissionsController.store,
       PermissionsController: this.permissionsController.permissions,
     })
 
@@ -290,7 +289,6 @@ module.exports = class MetamaskController extends EventEmitter {
       ShapeshiftController: this.shapeshiftController,
       InfuraController: this.infuraController.store,
       OnboardingController: this.onboardingController.store,
-      PermissionsController: this.permissionsController.memStore,
       PermissionsController: this.permissionsController.permissions,
     })
     this.memStore.subscribe(this.sendUpdate.bind(this))
@@ -461,7 +459,6 @@ module.exports = class MetamaskController extends EventEmitter {
       setPreference: nodeify(preferencesController.setPreference, preferencesController),
       completeOnboarding: nodeify(preferencesController.completeOnboarding, preferencesController),
       addKnownMethodData: nodeify(preferencesController.addKnownMethodData, preferencesController),
-      unsetMigratedPrivacyMode: nodeify(preferencesController.unsetMigratedPrivacyMode, preferencesController),
 
       // BlacklistController
       whitelistPhishingDomain: this.whitelistPhishingDomain.bind(this),

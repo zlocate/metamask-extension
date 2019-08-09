@@ -82,8 +82,8 @@ class PermissionsController {
             id: uuid(),
             site: (
               req._siteMetadata
-              ? req._siteMetadata
-              : { name: null, icon: null }
+                ? req._siteMetadata
+                : { name: null, icon: null }
             ),
           },
         }
@@ -190,14 +190,14 @@ class PermissionsController {
           description: 'View Ethereum accounts',
           method: (_, res, __, end) => {
             this.keyringController.getAccounts()
-            .then((accounts) => {
-              res.result = accounts
-              end()
-            })
-            .catch((reason) => {
-              res.error = reason
-              end(reason)
-            })
+              .then((accounts) => {
+                res.result = accounts
+                end()
+              })
+              .catch((reason) => {
+                res.error = reason
+                end(reason)
+              })
           },
         },
 
